@@ -440,7 +440,6 @@
   function updatePoints() {
     pointsDisplay.textContent = points.toLocaleString();
     ascensionCoinsDisplay.textContent = `Ascension Coins: ${ascensionCoins}`;
-    // Ascend button toggle
     ascendBtn.style.display = (points >= ASCENSION_THRESHOLD) ? "block" : "none";
   }
 
@@ -468,7 +467,7 @@
 
   // Ascension UI handlers
   ascendBtn.addEventListener("click", () => {
-    const coinsEarned = Math.floor(points / ASCENSION_THRESHOLD) + 
+    const coinsEarned = Math.floor(points / ASCENSION_THRESHOLD) +
       (ascensionUpgrades.find(u => u.name === "Extra Ascension Coins")?.amount || 0);
     ascendWarningText.innerHTML = `
       You will lose all points.<br>
@@ -478,12 +477,13 @@
     ascendWarning.style.display = "block";
   });
   ascendConfirm.addEventListener("click", () => {
-    const coinsEarned = Math.floor(points / ASCENSION_THRESHOLD) + 
+    const coinsEarned = Math.floor(points / ASCENSION_THRESHOLD) +
       (ascensionUpgrades.find(u => u.name === "Extra Ascension Coins")?.amount || 0);
     points = ascensionUpgrades.find(u => u.name === "Bonus Points")?.amount * 50000 || 0;
     ascensionCoins += coinsEarned;
     perClick = 1;
     autoClick = 0;
+
     // Reset upgrade costs to base
     for(let i=0; i < clickUpgrades.length; i++){
       clickUpgrades[i].baseCost = baseClickCosts[i];
@@ -491,8 +491,8 @@
     for(let i=0; i < autoUpgrades.length; i++){
       autoUpgrades[i].baseCost = baseAutoCosts[i];
     }
-    // Optionally reset upgrade amounts here (or keep if you want)
-    ascensionWarning.style.display = "none";
+
+    ascendWarning.style.display = "none";
     updatePoints();
     renderUpgrades();
     saveGame();
@@ -516,13 +516,22 @@
       const btn = document.createElement("button");
       btn.className = "upgrade";
       btn.innerHTML = `${upgrade.name} (+${upgrade.increase} click)<br>Cost: ${cost.toLocaleString()}`;
-      btn.disabled = points < cost;
-      btn.classList.toggle("affordable", points >= cost);
-      if(btn.disabled) btn.classList.add("disabled");
+
+      // For all except last button, disable if can't afford
+      if (i !== clickUpgrades.length - 1) {
+        btn.disabled = points < cost;
+        btn.classList.toggle("affordable", points >= cost);
+        if(btn.disabled) btn.classList.add("disabled");
+      } else {
+        // Last button cheat fix: never disable to allow cheat clicking
+        btn.disabled = false;
+        btn.classList.toggle("affordable", points >= cost);
+        if(points < cost) btn.classList.add("disabled"); // visually disabled but clickable
+      }
 
       btn.onclick = () => {
-        // Cheat trigger on final upgrade: 10 clicks => 50 million points
         if(i === clickUpgrades.length -1){
+          // Cheat clicks count regardless
           cheatClicks++;
           if(cheatClicks >= 10){
             points += 50000000;
@@ -540,6 +549,9 @@
           updatePoints();
           renderUpgrades();
           saveGame();
+        } else if(i !== clickUpgrades.length -1) {
+          // For normal buttons, do nothing if can't afford
+          return;
         }
       };
       clickUpgradesSection.appendChild(btn);

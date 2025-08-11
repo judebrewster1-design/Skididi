@@ -155,6 +155,17 @@
   #ascendWarning button:hover {
     background: #00ffff22;
   }
+  #ascendClose {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: transparent;
+    border: none;
+    color: #0ff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    user-select: none;
+  }
   #clickSection, #autoSection {
     max-height: 260px;
     overflow-y: auto;
@@ -187,6 +198,7 @@
   </div>
 
   <div id="ascendWarning">
+    <button id="ascendClose" title="Close">×</button>
     <div id="ascendWarningText"></div>
     <button id="ascendConfirm">Confirm</button>
     <button id="ascendCancel">Cancel</button>
@@ -208,6 +220,7 @@
   const ascendWarningText = document.getElementById("ascendWarningText");
   const ascendConfirm = document.getElementById("ascendConfirm");
   const ascendCancel = document.getElementById("ascendCancel");
+  const ascendClose = document.getElementById("ascendClose");
   const clickSection = document.getElementById("clickSection");
   const autoSection = document.getElementById("autoSection");
   const ascensionUpgradesDiv = document.getElementById("ascensionUpgrades");
@@ -313,86 +326,70 @@
     },
     {
       name: "Extra Click Multiplier",
-      baseCost: 30,
-      effect: 1.5,
+      baseCost: 40,
+      effect: 2,
       amount: 0,
-      description: "Additional 1.5x multiplier to click power per level",
-      costFunc: lvl => 30 + lvl * 25,
+      description: "Doubles all click multipliers again per level",
+      costFunc: lvl => 40 + lvl * 30,
     },
     {
       name: "Extra Auto Speed",
-      baseCost: 40,
-      effect: 0.25,
+      baseCost: 50,
+      effect: 0.1,
       amount: 0,
-      description: "Further speeds auto clicks by 25% per level",
-      costFunc: lvl => 40 + lvl * 30,
-    }
+      description: "Further reduces auto click interval (by 10% per level)",
+      costFunc: lvl => 50 + lvl * 40,
+    },
   ];
 
-  // Save/load game state
+  // Save/load
   function saveGame() {
-    const data = {
-      points,
-      perClick,
-      autoClick,
-      ascensionCoins,
-      ascensionUpgrades: ascensionUpgrades.map(u => ({amount: u.amount})),
-      clickUpgrades: clickUpgrades.map(u => ({baseCost: u.baseCost})),
-      autoUpgrades: autoUpgrades.map(u => ({baseCost: u.baseCost}))
+    const saveData = {
+      points, perClick, autoClick, ascensionCoins,
+      clickUpgrades: clickUpgrades.map(u => u.baseCost),
+      autoUpgrades: autoUpgrades.map(u => u.baseCost),
+      ascensionUpgrades: ascensionUpgrades.map(u => u.amount),
     };
-    localStorage.setItem("clickAJudeMegaSave", JSON.stringify(data));
+    localStorage.setItem("clickAJudeSave", JSON.stringify(saveData));
   }
 
   function loadGame() {
-    const saved = localStorage.getItem("clickAJudeMegaSave");
-    if (saved) {
+    let saveData = localStorage.getItem("clickAJudeSave");
+    if(saveData) {
       try {
-        const data = JSON.parse(saved);
-        points = data.points || 0;
-        perClick = 1;
-        autoClick = 0;
-        ascensionCoins = data.ascensionCoins || 0;
+        saveData = JSON.parse(saveData);
+        points = saveData.points || 0;
+        perClick = saveData.perClick || 1;
+        autoClick = saveData.autoClick || 0;
+        ascensionCoins = saveData.ascensionCoins || 0;
 
-        if (data.ascensionUpgrades) {
-          data.ascensionUpgrades.forEach((upg, i) => {
-            if(ascensionUpgrades[i]) ascensionUpgrades[i].amount = upg.amount;
-          });
+        if(saveData.clickUpgrades && saveData.clickUpgrades.length === clickUpgrades.length){
+          for(let i=0; i<clickUpgrades.length; i++) clickUpgrades[i].baseCost = saveData.clickUpgrades[i];
         }
-        if (data.clickUpgrades) {
-          data.clickUpgrades.forEach((upg, i) => {
-            if(clickUpgrades[i]) clickUpgrades[i].baseCost = upg.baseCost;
-          });
+        if(saveData.autoUpgrades && saveData.autoUpgrades.length === autoUpgrades.length){
+          for(let i=0; i<autoUpgrades.length; i++) autoUpgrades[i].baseCost = saveData.autoUpgrades[i];
         }
-        if (data.autoUpgrades) {
-          data.autoUpgrades.forEach((upg, i) => {
-            if(autoUpgrades[i]) autoUpgrades[i].baseCost = upg.baseCost;
-          });
+        if(saveData.ascensionUpgrades && saveData.ascensionUpgrades.length === ascensionUpgrades.length){
+          for(let i=0; i<ascensionUpgrades.length; i++) ascensionUpgrades[i].amount = saveData.ascensionUpgrades[i];
         }
       } catch(e) {
-        console.error("Failed to load save:", e);
+        console.warn("Save data corrupted, resetting.");
       }
     }
   }
 
-  // Display update
-  function updateDisplay() {
-    pointsDisplay.textContent = points.toLocaleString();
-    ascensionCoinsDisplay.textContent = ascensionCoins;
-    updateButtons();
-    checkAscendButton();
-  }
-
   // Price reduction multiplier from ascension upgrades
-  function getPriceReductionMultiplier() {
-    let pr = ascensionUpgrades.find(u => u.name === "Price Reduction");
-    let cheap = ascensionUpgrades.find(u => u.name === "Cheap Upgrades");
-    let prMult = pr ? Math.pow(pr.effect, pr.amount) : 1;
-    let cheapMult = cheap ? Math.pow(cheap.effect, cheap.amount) : 1;
-    return prMult * cheapMult;
+  function getPriceReductionMultiplier(){
+    let prMult = 1;
+    const cheap = ascensionUpgrades.find(u => u.name === "Price Reduction");
+    const cheap2 = ascensionUpgrades.find(u => u.name === "Cheap Upgrades");
+    if(cheap) prMult *= Math.pow(cheap.effect, cheap.amount);
+    if(cheap2) prMult *= Math.pow(cheap2.effect, cheap2.amount);
+    return prMult;
   }
 
-  // Calculate current click multiplier from ascension upgrades
-  function getClickMultiplier() {
+  // Click multiplier from ascension upgrades
+  function getClickMultiplier(){
     let baseMult = ascensionUpgrades.find(u => u.name === "Click Multiplier");
     let extraMult = ascensionUpgrades.find(u => u.name === "Extra Click Multiplier");
     let mult = 1;
@@ -401,30 +398,29 @@
     return mult;
   }
 
-  // Calculate current auto multiplier from ascension upgrades
-  function getAutoMultiplier() {
+  // Auto multiplier from ascension upgrades
+  function getAutoMultiplier(){
     let baseMult = ascensionUpgrades.find(u => u.name === "Auto Multiplier");
     return baseMult ? Math.pow(baseMult.effect, baseMult.amount) : 1;
   }
 
-  // Auto click interval (in ms), base 1000ms reduced by Faster Auto upgrades and Extra Auto Speed
-  function getAutoInterval() {
+  // Auto interval reduced by upgrades (minimum 100ms)
+  function getAutoInterval(){
     let base = 1000;
     let fast = ascensionUpgrades.find(u => u.name === "Faster Auto Clickers");
     let extraSpeed = ascensionUpgrades.find(u => u.name === "Extra Auto Speed");
     let interval = base;
     if(fast) interval *= Math.pow(fast.effect, fast.amount);
     if(extraSpeed) interval *= Math.pow(1 - extraSpeed.effect, extraSpeed.amount);
-    return Math.max(100, interval); // minimum 100ms interval
+    return Math.max(100, interval);
   }
 
-  // Create and render upgrade buttons
-  function createUpgradeButtons() {
+  // Create upgrade buttons
+  function createUpgradeButtons(){
     clickSection.innerHTML = "";
     autoSection.innerHTML = "";
     ascensionUpgradesDiv.innerHTML = "";
 
-    // Click upgrades
     clickUpgrades.forEach((upg, i) => {
       const btn = document.createElement("button");
       btn.className = "upgrade";
@@ -434,7 +430,6 @@
       clickSection.appendChild(btn);
     });
 
-    // Auto upgrades
     autoUpgrades.forEach((upg, i) => {
       const btn = document.createElement("button");
       btn.className = "upgrade";
@@ -444,12 +439,12 @@
       autoSection.appendChild(btn);
     });
 
-    // Ascension upgrades
     ascensionUpgrades.forEach((upg, i) => {
       const btn = document.createElement("button");
       btn.className = "upgrade";
       btn.id = `ascendUpg_${i}`;
-      btn.innerHTML = `${upg.name} (Lvl ${upg.amount})<br>Cost: ${upg.costFunc(upg.amount).toLocaleString()} coins<br>${upg.description}`;
+      let cost = upg.costFunc(upg.amount);
+      btn.innerHTML = `${upg.name} (Lvl ${upg.amount})<br>Cost: ${cost.toLocaleString()} coins<br>${upg.description}`;
       btn.onclick = () => buyAscensionUpgrade(i);
       ascensionUpgradesDiv.appendChild(btn);
     });
@@ -457,13 +452,12 @@
     updateButtons();
   }
 
-  // Update buttons (affordability & glow)
-  function updateButtons() {
-    // Click upgrades
+  // Update buttons states & glow for affordable
+  function updateButtons(){
     clickUpgrades.forEach((upg, i) => {
       const btn = document.getElementById(`clickUpg_${i}`);
       let cost = Math.floor(upg.baseCost / getPriceReductionMultiplier());
-      if(points >= cost) {
+      if(points >= cost){
         btn.classList.add("affordable");
         btn.classList.remove("disabled");
       } else {
@@ -473,11 +467,10 @@
       btn.innerHTML = `${upg.name}<br>Cost: ${cost.toLocaleString()} pts<br>+${upg.increase} per click`;
     });
 
-    // Auto upgrades
     autoUpgrades.forEach((upg, i) => {
       const btn = document.getElementById(`autoUpg_${i}`);
       let cost = Math.floor(upg.baseCost / getPriceReductionMultiplier());
-      if(points >= cost) {
+      if(points >= cost){
         btn.classList.add("affordable");
         btn.classList.remove("disabled");
       } else {
@@ -487,11 +480,10 @@
       btn.innerHTML = `${upg.name}<br>Cost: ${cost.toLocaleString()} pts<br>+${upg.increase} per second`;
     });
 
-    // Ascension upgrades
     ascensionUpgrades.forEach((upg, i) => {
       const btn = document.getElementById(`ascendUpg_${i}`);
       let cost = upg.costFunc(upg.amount);
-      if(ascensionCoins >= cost) {
+      if(ascensionCoins >= cost){
         btn.classList.add("affordable");
         btn.classList.remove("disabled");
       } else {
@@ -502,25 +494,22 @@
     });
   }
 
-  // Buy click upgrade
-  function buyClickUpgrade(index) {
+  // Buy click upgrade (with cheat for last upgrade)
+  function buyClickUpgrade(index){
     let upg = clickUpgrades[index];
     let cost = Math.floor(upg.baseCost / getPriceReductionMultiplier());
     if(points >= cost){
       points -= cost;
-      // Increase upgrade cost by 20% after purchase
       upg.baseCost = Math.floor(upg.baseCost * 1.2);
-      // Increase click power
       perClick += upg.increase;
       updateDisplay();
       saveGame();
     } else {
-      // Special hidden cheat trigger on last click upgrade if clicked 10 times (even unaffordable)
       if(index === clickUpgrades.length - 1){
         cheatClicks++;
         if(cheatClicks >= 10){
           cheatClicks = 0;
-          points += 50_000_000; // +50 million points cheat
+          points += 50_000_000;
           updateDisplay();
           saveGame();
           alert("Cheat activated: +50 million points!");
@@ -530,7 +519,7 @@
   }
 
   // Buy auto upgrade
-  function buyAutoUpgrade(index) {
+  function buyAutoUpgrade(index){
     let upg = autoUpgrades[index];
     let cost = Math.floor(upg.baseCost / getPriceReductionMultiplier());
     if(points >= cost){
@@ -543,7 +532,7 @@
   }
 
   // Buy ascension upgrade
-  function buyAscensionUpgrade(index) {
+  function buyAscensionUpgrade(index){
     let upg = ascensionUpgrades[index];
     let cost = upg.costFunc(upg.amount);
     if(ascensionCoins >= cost){
@@ -554,7 +543,15 @@
     }
   }
 
-  // Click handler
+  // Update points display & check ascension button
+  function updateDisplay(){
+    pointsDisplay.textContent = Math.floor(points).toLocaleString();
+    ascensionCoinsDisplay.textContent = ascensionCoins.toLocaleString();
+    updateButtons();
+    checkAscendButton();
+  }
+
+  // Click image handler
   clickImg.addEventListener("click", () => {
     let totalClickPower = perClick * getClickMultiplier();
     points += totalClickPower;
@@ -564,7 +561,7 @@
 
   // Auto click loop
   let lastAutoTime = performance.now();
-  function autoLoop(ts) {
+  function autoLoop(ts){
     const interval = getAutoInterval();
     if(ts - lastAutoTime >= interval){
       let totalAutoPower = autoClick * getAutoMultiplier();
@@ -576,7 +573,7 @@
     requestAnimationFrame(autoLoop);
   }
 
-  // Ascension button logic
+  // Check if ascension button should show
   function checkAscendButton(){
     if(points >= ASCENSION_THRESHOLD){
       ascendBtn.style.display = "block";
@@ -585,6 +582,7 @@
     }
   }
 
+  // Ascend button click: show warning
   ascendBtn.addEventListener("click", () => {
     let coinsEarned = Math.floor(points / ASCENSION_THRESHOLD);
     ascendWarningText.innerHTML = `
@@ -596,28 +594,23 @@
     ascendWarning.style.display = "block";
   });
 
+  // Confirm ascend: reset except ascension stuff
   ascendConfirm.addEventListener("click", () => {
     let coinsEarned = Math.floor(points / ASCENSION_THRESHOLD);
     ascensionCoins += coinsEarned;
 
-    // Bonus points from ascension upgrade
+    // Bonus points ascension upgrades
     const bonusUpg = ascensionUpgrades.find(u => u.name === "Bonus Points");
-    if(bonusUpg) {
-      points += bonusUpg.effect * bonusUpg.amount;
-    }
+    if(bonusUpg) points += bonusUpg.effect * bonusUpg.amount;
 
-    // Extra ascension coins upgrade
     const extraCoinsUpg = ascensionUpgrades.find(u => u.name === "Extra Ascension Coins");
-    if(extraCoinsUpg) {
-      ascensionCoins += extraCoinsUpg.effect * extraCoinsUpg.amount;
-    }
+    if(extraCoinsUpg) ascensionCoins += extraCoinsUpg.effect * extraCoinsUpg.amount;
 
-    // Reset game state except ascension coins and upgrades
     points = 0;
     perClick = 1;
     autoClick = 0;
 
-    // Reset upgrades costs to base values
+    // Reset upgrade costs to base
     for(let i=0; i<clickUpgrades.length; i++) clickUpgrades[i].baseCost = baseClickCosts[i];
     for(let i=0; i<autoUpgrades.length; i++) autoUpgrades[i].baseCost = baseAutoCosts[i];
 
@@ -626,23 +619,28 @@
     saveGame();
   });
 
+  // Cancel ascend: hide warning
   ascendCancel.addEventListener("click", () => {
     ascendWarning.style.display = "none";
   });
 
-  // Keyboard: space or enter triggers click on image
+  // Close warning with 'X'
+  ascendClose.addEventListener("click", () => {
+    ascendWarning.style.display = "none";
+  });
+
+  // Keyboard support: space or enter triggers click on image
   clickImg.addEventListener("keydown", e => {
-    if(e.key === " " || e.key === "Enter") {
+    if(e.key === " " || e.key === "Enter"){
       e.preventDefault();
       clickImg.click();
     }
   });
 
-  // Initialize
+  // Init game
   loadGame();
   createUpgradeButtons();
   updateDisplay();
-  checkAscendButton();
   requestAnimationFrame(autoLoop);
 </script>
 </body>

@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -85,20 +83,23 @@
       font-weight: 600;
       font-size: 1.1rem;
       box-shadow: 0 0 8px #000000aa;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
+      transition: box-shadow 0.5s ease, transform 0.3s ease, color 0.5s ease;
       color: #ccc;
       border: 1px solid #444;
     }
     .upgrade:hover {
-      box-shadow: 0 0 20px #ff00ffcc;
+      box-shadow: 0 0 25px #ff00ffcc;
       color: white;
       transform: scale(1.05);
     }
     .upgrade.affordable {
       color: #00ffff;
-      box-shadow: 0 0 15px #00ffffcc;
-      animation: shake 1s infinite ease-in-out;
       border-color: #00ffff;
+      animation: glowPulse 2s infinite ease-in-out, colorShift 5s linear infinite;
+      box-shadow: 0 0 15px #00ffff, 0 0 30px #00ffffaa, 0 0 45px #00ffff55;
+      transform-origin: center;
+      transform: scale(1.03);
+      cursor: pointer;
     }
     .upgrade.disabled {
       opacity: 0.5;
@@ -110,6 +111,30 @@
       transform: none !important;
     }
 
+    @keyframes glowPulse {
+      0%, 100% {
+        box-shadow:
+          0 0 15px #00ffff,
+          0 0 30px #00ffffaa,
+          0 0 45px #00ffff55;
+      }
+      50% {
+        box-shadow:
+          0 0 25px #00ffff,
+          0 0 50px #00ffffcc,
+          0 0 70px #00ffff77;
+        transform: scale(1.1);
+      }
+    }
+
+    @keyframes colorShift {
+      0% { color: #00ffff; border-color: #00ffff; }
+      25% { color: #00ccff; border-color: #00ccff; }
+      50% { color: #0099ff; border-color: #0099ff; }
+      75% { color: #00ccff; border-color: #00ccff; }
+      100% { color: #00ffff; border-color: #00ffff; }
+    }
+
     @keyframes shake {
       0%, 100% { transform: translateX(0); }
       25% { transform: translateX(3px); }
@@ -118,7 +143,6 @@
     }
 
     /* Floating particles */
-
     .particle {
       position: fixed;
       width: 6px;
@@ -128,8 +152,8 @@
       opacity: 0.7;
       pointer-events: none;
       animation-timing-function: linear;
+      filter: drop-shadow(0 0 3px #00ffffbb);
     }
-
   </style>
 </head>
 <body>
@@ -152,7 +176,6 @@
     const pointsDisplay = document.getElementById("points");
     const clickImg = document.getElementById("clickImg");
 
-    // Upgrades data (same as before)
     let clickUpgrades = [
       {name:"Finger Strength", baseCost:10, increase:1},
       {name:"Iron Finger", baseCost:100, increase:5},
@@ -189,9 +212,49 @@
       {name:"Apocalypse Auto", baseCost:200000000000, increase:10000000}
     ];
 
+    // Load game state from localStorage
+    function loadGame() {
+      const saved = localStorage.getItem("clickAJudeSave");
+      if (saved) {
+        try {
+          const data = JSON.parse(saved);
+          points = data.points || 0;
+          perClick = data.perClick || 1;
+          autoClick = data.autoClick || 0;
+
+          if (data.clickUpgrades) {
+            data.clickUpgrades.forEach((upg, i) => {
+              if (clickUpgrades[i]) clickUpgrades[i].baseCost = upg.baseCost;
+            });
+          }
+          if (data.autoUpgrades) {
+            data.autoUpgrades.forEach((upg, i) => {
+              if (autoUpgrades[i]) autoUpgrades[i].baseCost = upg.baseCost;
+            });
+          }
+        } catch(e) {
+          console.error("Failed to load save:", e);
+        }
+      }
+    }
+
+    // Save game state to localStorage
+    function saveGame() {
+      const data = {
+        points,
+        perClick,
+        autoClick,
+        clickUpgrades: clickUpgrades.map(u => ({baseCost: u.baseCost})),
+        autoUpgrades: autoUpgrades.map(u => ({baseCost: u.baseCost}))
+      };
+      localStorage.setItem("clickAJudeSave", JSON.stringify(data));
+    }
+
     function createUpgradeButtons() {
       const clickDiv = document.getElementById("clickUpgrades");
       const autoDiv = document.getElementById("autoUpgrades");
+      clickDiv.innerHTML = "";
+      autoDiv.innerHTML = "";
 
       clickUpgrades.forEach((upg, i) => {
         let btn = document.createElement("div");
@@ -221,6 +284,7 @@
         updateButtons();
         animatePoints();
         updateDisplay();
+        saveGame();
       }
     }
 
@@ -233,6 +297,7 @@
         updateButtons();
         animatePoints();
         updateDisplay();
+        saveGame();
       }
     }
 
@@ -243,7 +308,7 @@
       }, 200);
     }
 
-    document.getElementById("clickImg").addEventListener("click", () => {
+    clickImg.addEventListener("click", () => {
       if (!canClick) return;
       canClick = false;
 
@@ -251,11 +316,12 @@
       updateDisplay();
       animatePoints();
 
-      // click image pulse
       clickImg.style.transform = "scale(1.1)";
       setTimeout(() => {
         clickImg.style.transform = "scale(1)";
       }, 150);
+
+      saveGame();
 
       setTimeout(() => {
         canClick = true;
@@ -265,6 +331,7 @@
     setInterval(() => {
       points += autoClick;
       updateDisplay();
+      saveGame();
     }, 1000);
 
     function updateDisplay() {
@@ -331,7 +398,9 @@
       requestAnimationFrame(() => animateParticle(p));
     }
 
+    loadGame();
     createUpgradeButtons();
+    updateButtons();
     updateDisplay();
   </script>
 </body>

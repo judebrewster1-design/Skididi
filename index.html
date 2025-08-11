@@ -1,18 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Hello World</title>
+  <meta charset="UTF-8">
+  <title>Rainbow Text</title>
   <style>
     body {
-      font-size: 67px;
-      color: rainbow;
-      text-align: center;
-      margin-top: 20%;
+      background-color: black;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 5rem;
       font-family: Arial, sans-serif;
+      background: linear-gradient(
+        270deg,
+        red,
+        orange,
+        yellow,
+        green,
+        cyan,
+        blue,
+        violet,
+        red
+      );
+      background-size: 1500% 1500%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: rainbow 5s ease infinite;
+    }
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
   </style>
 </head>
 <body>
- connor is gay
+  <h1>Conor is gay</h1>
 </body>
 </html>

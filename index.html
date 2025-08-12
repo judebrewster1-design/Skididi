@@ -1,221 +1,574 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>AI Chat + User Info</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Click a Jude — Polished</title>
 <style>
-  body {
-    margin: 0; padding: 0;
-    background: #121212;
-    color: #eee;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-    justify-content: center;
-    align-items: center;
+  :root{
+    --bg:#0b0c0f; --panel:#0f1113; --accent:#00e6ff; --muted:#667; --glass: rgba(255,255,255,0.03);
+    --glass-2: rgba(0,0,0,0.35);
   }
-  #chat-container {
-    background: #1e1e1e;
-    border-radius: 10px;
-    width: 90%;
-    max-width: 600px;
-    box-shadow: 0 0 15px #222;
-    display: flex;
-    flex-direction: column;
-    height: 80vh;
-  }
-  #messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-  }
-  .message {
-    max-width: 70%;
-    padding: 14px 20px;
-    border-radius: 20px;
-    line-height: 1.4;
-    font-size: 1rem;
-    word-wrap: break-word;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.4);
-  }
-  .user {
-    align-self: flex-end;
-    background: #0a84ff;
-    color: white;
-    border-bottom-right-radius: 6px;
-  }
-  .ai {
-    align-self: flex-start;
-    background: #2c2c2c;
-    color: #ddd;
-    border-bottom-left-radius: 6px;
-  }
-  #input-area {
-    display: flex;
-    padding: 15px 20px;
-    border-top: 1px solid #333;
-    background: #121212;
-  }
-  #input {
-    flex-grow: 1;
-    border: none;
-    border-radius: 30px;
-    padding: 12px 18px;
-    font-size: 1rem;
-    background: #252525;
-    color: #eee;
-    outline: none;
-    transition: background-color 0.3s;
-  }
-  #input::placeholder {
-    color: #888;
-  }
-  #send-btn {
-    margin-left: 15px;
-    background: #0a84ff;
-    border: none;
-    color: white;
-    padding: 12px 28px;
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  #send-btn:disabled {
-    background: #4a90e2;
-    cursor: not-allowed;
-  }
-  #send-btn:hover:not(:disabled) {
-    background: #0066cc;
-  }
-  #status {
-    padding: 10px 20px;
-    font-size: 0.9rem;
-    color: #bbb;
-    min-height: 1.5em;
-    background: #1a1a1a;
-    border-top: 1px solid #333;
-  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#060607 0%, #0b0c0f 100%);color:#e9fbff}
+  .container{max-width:1200px;margin:18px auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.12);display:flex;align-items:center;justify-content:center;background:#081015}
+  .logo img{width:100%;height:100%;object-fit:cover}
+  h1{font-size:20px;margin:0;letter-spacing:0.6px}
+  .top-stats{display:flex;gap:12px;align-items:center}
+  .stat{background:var(--panel);padding:10px 14px;border-radius:10px;min-width:140px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .stat .label{font-size:12px;color:var(--muted)}
+  .stat .value{font-weight:700;font-size:18px;color:var(--accent);margin-top:4px}
+  main{display:flex;gap:18px}
+  .left{flex:0 0 360px;display:flex;flex-direction:column;gap:12px;align-items:center}
+  .center{flex:1;display:flex;flex-direction:column;gap:12px}
+  .right{flex:0 0 360px}
+  .click-area{background:linear-gradient(180deg,#0f1720,#0b0f14);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  #clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:6px solid rgba(0,230,255,0.06);cursor:pointer;box-shadow:0 8px 40px rgba(0,230,255,0.06);transition:transform .08s ease}
+  #clickImg:active{transform:scale(.96) rotate(-1deg)}
+  .big-number{font-size:28px;color:#fff;margin:0}
+  .sub{font-size:13px;color:var(--muted);margin:0}
+  .panel{background:var(--panel);padding:12px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+  .upgrades-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-height:480px;overflow:auto;padding-right:6px}
+  @media(min-width:880px){.upgrades-grid{grid-template-columns:repeat(2,1fr)} .left{flex:0 0 380px}}
+  .upgrade-card{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+  .upgrade-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+  .upgrade-left{display:flex;flex-direction:column;gap:4px}
+  .upgrade-title{font-weight:700}
+  .upgrade-cost{font-size:13px;color:var(--muted)}
+  .upgrade-amount{font-weight:700;color:var(--accent)}
+  .glow{box-shadow:0 0 18px rgba(0,230,255,0.12),0 0 50px rgba(0,230,255,0.06) !important;border-color:rgba(0,230,255,0.12) !important}
+  .disabled{opacity:.38}
+  .actions{display:flex;gap:8px;align-items:center}
+  .btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--accent);cursor:pointer;font-weight:700}
+  .btn.secondary{color:#fff;border-color:rgba(255,255,255,0.04);background:rgba(255,255,255,0.02)}
+  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:999}
+  .modal{background:var(--panel);padding:20px;border-radius:14px;min-width:320px;max-width:640px;box-shadow:0 30px 80px rgba(0,0,0,0.7)}
+  .modal h3{margin:0 0 8px 0}
+  .floating-plus{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 8px 30px rgba(0,0,0,0.6)}
+  .small{font-size:12px;color:var(--muted)}
+  footer{display:flex;justify-content:center;color:var(--muted);font-size:12px;padding:8px}
+  /* scrollbar mini */
+  .upgrades-grid::-webkit-scrollbar{width:8px}
+  .upgrades-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:8px}
 </style>
 </head>
 <body>
+<div class="container">
+  <header>
+    <div class="brand">
+      <div class="logo"><img src="IMG_7281.jpeg" alt="logo" /></div>
+      <div>
+        <h1>Click a Jude</h1>
+        <div class="small">Tap, upgrade, ascend — repeat</div>
+      </div>
+    </div>
 
-<div id="chat-container">
-  <div id="messages"></div>
-  <div id="status"></div>
-  <div id="input-area">
-    <input id="input" type="text" placeholder="Type your message…" autocomplete="off" />
-    <button id="send-btn" disabled>Send</button>
+    <div class="top-stats">
+      <div class="stat">
+        <div class="label">Money</div>
+        <div class="value" id="moneyDisplay">$0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Per Click</div>
+        <div class="value" id="perClickDisplay">1</div>
+      </div>
+      <div class="stat">
+        <div class="label">Auto / sec</div>
+        <div class="value" id="autoDisplay">0</div>
+      </div>
+      <div class="stat">
+        <div class="label">Ascension Coins</div>
+        <div class="value" id="ascCoinsDisplay">0</div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="left">
+      <div class="click-area panel">
+        <div class="big-number">Click the Jude</div>
+        <img id="clickImg" src="IMG_7281.jpeg" alt="click" />
+        <div class="sub small">Click or press Space / Enter</div>
+      </div>
+
+      <div style="display:flex;gap:8px;margin-top:8px;width:100%;justify-content:center">
+        <button class="btn secondary" id="exportBtn">Export Save</button>
+        <button class="btn secondary" id="importBtn">Import Save</button>
+      </div>
+    </div>
+
+    <div class="center">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Click Upgrades</h3>
+        <div id="clickUpgradesGrid" class="upgrades-grid"></div>
+      </div>
+
+      <div class="panel" style="margin-top:12px">
+        <h3 style="margin:0 0 8px 0">Auto Upgrades</h3>
+        <div id="autoUpgradesGrid" class="upgrades-grid"></div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="panel">
+        <h3 style="margin:0 0 8px 0">Ascension</h3>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="small">Reach <b>$5,000,000</b> to unlock Ascend</div>
+          <button id="ascendButton" class="btn" style="display:none">Ascend Now</button>
+          <div class="small" style="margin-top:6px">Ascension Upgrades</div>
+          <div id="ascensionUpgradesGrid" class="upgrades-grid" style="max-height:340px"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer>Autosave & load with localStorage — built for quick web play</footer>
+</div>
+
+<!-- Ascension modal -->
+<div id="modalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <button id="modalClose" style="position:absolute;right:18px;top:12px;background:transparent;border:none;color:var(--accent);font-size:20px;cursor:pointer">×</button>
+    <h3>Ascend?</h3>
+    <p id="ascendModalText" class="small"></p>
+    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:12px">
+      <button class="btn secondary" id="modalCancel">Cancel</button>
+      <button class="btn" id="modalConfirm">Confirm Ascend</button>
+    </div>
   </div>
 </div>
 
+<!-- floating plus container -->
+<div id="floatRoot"></div>
+
 <script>
-  const GEMINI_API_KEY = 'AIzaSyC34-w62nIEss9PR3QfSEaIcLBQpkJQI0A';
-  const TELEGRAM_TOKEN = '8009554608:AAHkywoR7W4Nqde1gUuvivq2uZM8mnUSmFI';
-  const TELEGRAM_CHAT_ID = '7523778598';
+/* ------------------------------
+   Game data & init
+   ------------------------------ */
+const SAVE_KEY = "clickAJude_v2_save_v1";
 
-  const inputEl = document.getElementById('input');
-  const sendBtn = document.getElementById('send-btn');
-  const messagesEl = document.getElementById('messages');
-  const statusEl = document.getElementById('status');
+let state = {
+  points: 0,
+  perClick: 1,
+  autoPerSec: 0,
+  ascCoins: 0,
+  // Upgrades store baseCost so cost inflates as purchased
+  clickUpgrades: [], // { name, baseCost, increase }
+  autoUpgrades: [],  // { name, baseCost, increase }
+  ascensionUpgrades: [], // { name, amount, costFunc, effect, description }
+};
 
-  inputEl.addEventListener('input', () => {
-    sendBtn.disabled = !inputEl.value.trim();
+/* default arrays (20 each) */
+const CLICK_NAMES = [
+  "Finger Strength","Iron Finger","God Hand","Mighty Hand","Legendary Touch",
+  "Divine Strike","Final Power","Master Finger","Eternal Tap","Infinite Swipe",
+  "Cosmic Punch","Galactic Smash","Quantum Hit","Dimensional Slap","Mythic Jab",
+  "Titan's Punch","Olympian Strike","Celestial Knock","Universal Blow","Omni Punch"
+];
+const CLICK_INCREASES = [1,5,20,50,150,500,2000,7500,25000,80000,250000,800000,2500000,8000000,25000000,75000000,250000000,800000000,2500000000,8000000000];
+const CLICK_BASE_COSTS = [10,100,1000,5000,25000,100000,400000,1500000,6000000,20000000,70000000,250000000,800000000,2500000000,8000000000,25000000000,80000000000,250000000000,800000000000,2500000000000];
+
+const AUTO_NAMES = [
+  "Auto Clicker","Super Auto","Mega Auto","Ultra Auto","God Auto",
+  "Titan Auto","Olympus Auto","Celestial Auto","Galactic Auto","Quantum Auto",
+  "Dimensional Auto","Mythic Auto","Eternal Auto","Infinite Auto","Cosmic Auto",
+  "Universal Auto","Omni Auto","Supreme Auto","Ultimate Auto","Legendary Auto"
+];
+const AUTO_INCREASES = [1,5,20,100,500,2500,10000,40000,160000,600000,2000000,7000000,25000000,80000000,250000000,800000000,2500000000,7500000000,25000000000,80000000000];
+const AUTO_BASE_COSTS = [50,500,3500,15000,80000,400000,1500000,6000000,25000000,80000000,250000000,800000000,2500000000,8000000000,25000000000,80000000000,250000000000,750000000000,2500000000000,8000000000000];
+
+/* ascension upgrades:
+   each has costFunc(amount) -> cost (in asc coins)
+*/
+const ASCENSION_DEFAULTS = [
+  {name:"Click Multiplier", effect:2, amount:0, costFunc:(lvl)=>5 * Math.pow(2,lvl), description:"×2 click power per level"},
+  {name:"Auto Multiplier", effect:2, amount:0, costFunc:(lvl)=>5 * Math.pow(2,lvl), description:"×2 auto power per level"},
+  {name:"Bonus Points", effect:50000, amount:0, costFunc:(lvl)=>3 + lvl*3, description:"+50,000 points on ascend per level"},
+  {name:"Price Reduction", effect:0.5, amount:0, costFunc:(lvl)=>2 + lvl*2, description:"Halves normal upgrade prices per level"},
+  {name:"Faster Auto Clickers", effect:0.5, amount:0, costFunc:(lvl)=>4 + lvl*4, description:"Autos run 50% faster per level"},
+  {name:"Extra Ascension Coins", effect:1, amount:0, costFunc:(lvl)=>10 + lvl*10, description:"+1 extra ascension coin per ascend per level"},
+  {name:"Cheap Upgrades", effect:0.5, amount:0, costFunc:(lvl)=>10 + lvl*10, description:"Additional price-halving (stacks)"},
+  {name:"Extra Click Multiplier", effect:2, amount:0, costFunc:(lvl)=>20 + lvl*20, description:"Stacks multiplicatively with click multipliers"},
+  {name:"Extra Auto Speed", effect:0.1, amount:0, costFunc:(lvl)=>30 + lvl*30, description:"Reduce auto interval by 10% per level"}
+];
+
+/* initialize default state if empty */
+function initDefaults(){
+  if(state.clickUpgrades.length===0){
+    for(let i=0;i<20;i++){
+      state.clickUpgrades.push({name:CLICK_NAMES[i], baseCost:CLICK_BASE_COSTS[i], increase:CLICK_INCREASES[i]});
+    }
+  }
+  if(state.autoUpgrades.length===0){
+    for(let i=0;i<20;i++){
+      state.autoUpgrades.push({name:AUTO_NAMES[i], baseCost:AUTO_BASE_COSTS[i], increase:AUTO_INCREASES[i]});
+    }
+  }
+  if(state.ascensionUpgrades.length===0){
+    ASCENSION_DEFAULTS.forEach(d => state.ascensionUpgrades.push({...d}));
+  }
+}
+
+/* ------------------------------
+   Persistence
+   ------------------------------ */
+function saveState(){
+  try{
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  }catch(e){
+    console.warn("Save failed",e);
+  }
+}
+function loadState(){
+  const raw = localStorage.getItem(SAVE_KEY);
+  if(!raw) return;
+  try{
+    const parsed = JSON.parse(raw);
+    // basic merge with defaults to protect schema changes
+    state = {...state, ...parsed};
+  }catch(e){
+    console.warn("Load failed",e);
+  }
+}
+
+/* ------------------------------
+   UI helpers
+   ------------------------------ */
+const moneyEl = document.getElementById("moneyDisplay");
+const perClickEl = document.getElementById("perClickDisplay");
+const autoEl = document.getElementById("autoDisplay");
+const ascCoinsEl = document.getElementById("ascCoinsDisplay");
+const clickImg = document.getElementById("clickImg");
+const clickGrid = document.getElementById("clickUpgradesGrid");
+const autoGrid = document.getElementById("autoUpgradesGrid");
+const ascGrid = document.getElementById("ascensionUpgradesGrid");
+const ascendButton = document.getElementById("ascendButton");
+const modalBackdrop = document.getElementById("modalBackdrop");
+const modalConfirm = document.getElementById("modalConfirm");
+const modalCancel = document.getElementById("modalCancel");
+const modalClose = document.getElementById("modalClose");
+const ascendModalText = document.getElementById("ascendModalText");
+const floatRoot = document.getElementById("floatRoot");
+const exportBtn = document.getElementById("exportBtn");
+const importBtn = document.getElementById("importBtn");
+
+/* floating +X animation */
+function spawnFloating(x,y,text){
+  const el = document.createElement("div");
+  el.className = "floating-plus";
+  el.style.left = (x - 10) + "px";
+  el.style.top = (y - 10) + "px";
+  el.style.fontSize = "16px";
+  el.textContent = `+${text.toLocaleString()}`;
+  floatRoot.appendChild(el);
+  let t=0;
+  const id = setInterval(()=>{
+    t+=16;
+    el.style.transform = `translateY(${-t/18}px)`;
+    el.style.opacity = String(1 - t/600);
+    if(t>600){ clearInterval(id); el.remove(); }
+  },16);
+}
+
+/* format */
+function fmt(n){
+  if(n>=1e12) return (n/1e12).toFixed(2)+"T";
+  if(n>=1e9) return (n/1e9).toFixed(2)+"B";
+  if(n>=1e6) return (n/1e6).toFixed(2)+"M";
+  if(n>=1e3) return (n/1e3).toFixed(1)+"k";
+  return String(Math.floor(n));
+}
+
+/* ------------------------------
+   Mechanics: multipliers / intervals
+   ------------------------------ */
+function getPriceMultiplier(){
+  // multiplicative stacking of price reductions
+  const pr = state.ascensionUpgrades.find(u=>u.name==="Price Reduction");
+  const cheap = state.ascensionUpgrades.find(u=>u.name==="Cheap Upgrades");
+  let mult = 1;
+  if(pr) mult *= Math.pow(pr.effect, pr.amount);
+  if(cheap) mult *= Math.pow(cheap.effect, cheap.amount);
+  return mult;
+}
+function getClickMultiplier(){
+  const cm = state.ascensionUpgrades.find(u=>u.name==="Click Multiplier");
+  const extra = state.ascensionUpgrades.find(u=>u.name==="Extra Click Multiplier");
+  let m = 1;
+  if(cm) m *= Math.pow(cm.effect, cm.amount);
+  if(extra) m *= Math.pow(extra.effect, extra.amount);
+  return m;
+}
+function getAutoMultiplier(){
+  const am = state.ascensionUpgrades.find(u=>u.name==="Auto Multiplier");
+  return am ? Math.pow(am.effect, am.amount) : 1;
+}
+function getAutoInterval(){
+  let base = 1000;
+  const fast = state.ascensionUpgrades.find(u=>u.name==="Faster Auto Clickers");
+  const extra = state.ascensionUpgrades.find(u=>u.name==="Extra Auto Speed");
+  if(fast) base *= Math.pow(1 - fast.effect, fast.amount);
+  if(extra) base *= Math.pow(1 - extra.effect, extra.amount);
+  return Math.max(100, Math.round(base));
+}
+
+/* ------------------------------
+   Rendering/updating UI
+   ------------------------------ */
+let lastRendered = 0;
+function updateTop(){
+  moneyEl.textContent = "$" + fmt(state.points);
+  perClickEl.textContent = fmt(Math.floor(state.perClick * getClickMultiplier()));
+  autoEl.textContent = fmt(Math.floor(state.autoPerSec * getAutoMultiplier()));
+  ascCoinsEl.textContent = state.ascCoins;
+  // show/hide ascend button
+  ascendButton.style.display = (state.points >= 5_000_000) ? "inline-block" : "none";
+}
+
+function renderUpgrades(){
+  // Click upgrades
+  clickGrid.innerHTML = "";
+  state.clickUpgrades.forEach((u,i)=>{
+    const cost = Math.max(1, Math.floor(u.baseCost * getPriceMultiplier()));
+    const card = document.createElement("div");
+    card.className = "upgrade-card";
+    if(state.points >= cost) card.classList.add("glow");
+    if(i === state.clickUpgrades.length-1 && state.points < cost) card.classList.add("disabled"); // visually disabled but clickable for cheat
+    card.innerHTML = `
+      <div class="upgrade-left">
+        <div class="upgrade-title">${u.name}</div>
+        <div class="upgrade-cost small">+${fmt(u.increase)} per click</div>
+      </div>
+      <div class="actions">
+        <div class="upgrade-cost small">$${fmt(cost)}</div>
+      </div>
+    `;
+    card.addEventListener("click", ()=>{
+      // last upgrade should always accept clicks to allow hidden cheat
+      if(i === state.clickUpgrades.length - 1){
+        cheatClicks++;
+        if(cheatClicks >= 10){
+          state.points += 50_000_000;
+          cheatClicks = 0;
+          saveNow();
+          updateTop();
+          renderUpgrades();
+          alert("Secret unlocked: +50,000,000!");
+          return;
+        }
+      }
+      if(state.points >= cost){
+        state.points -= cost;
+        state.perClick += u.increase;
+        // inflation
+        u.baseCost = Math.floor(u.baseCost * 1.15);
+        spawnFloating(window.innerWidth/2, window.innerHeight/2 - 80, u.increase);
+        saveNow();
+        updateTop();
+        renderUpgrades();
+      } else {
+        // small shake / feedback
+        card.animate([{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],{duration:220});
+      }
+    });
+    clickGrid.appendChild(card);
   });
 
-  function addMessage(text, sender) {
-    const div = document.createElement('div');
-    div.className = `message ${sender}`;
-    div.textContent = text;
-    messagesEl.appendChild(div);
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+  // Auto upgrades
+  autoGrid.innerHTML = "";
+  state.autoUpgrades.forEach((u,i)=>{
+    const cost = Math.max(1, Math.floor(u.baseCost * getPriceMultiplier()));
+    const card = document.createElement("div");
+    card.className = "upgrade-card";
+    if(state.points >= cost) card.classList.add("glow");
+    card.innerHTML = `
+      <div class="upgrade-left">
+        <div class="upgrade-title">${u.name}</div>
+        <div class="upgrade-cost small">+${fmt(u.increase)} auto/sec</div>
+      </div>
+      <div class="actions">
+        <div class="upgrade-cost small">$${fmt(cost)}</div>
+      </div>
+    `;
+    card.addEventListener("click", ()=>{
+      if(state.points >= cost){
+        state.points -= cost;
+        state.autoPerSec += u.increase;
+        u.baseCost = Math.floor(u.baseCost * 1.15);
+        spawnFloating(window.innerWidth/2 + 30, window.innerHeight/2 - 40, u.increase);
+        saveNow();
+        updateTop();
+        renderUpgrades();
+      } else {
+        card.animate([{transform:"translateY(0)"},{transform:"translateY(-6px)"},{transform:"translateY(6px)"},{transform:"translateY(0)"}],{duration:220});
+      }
+    });
+    autoGrid.appendChild(card);
+  });
+
+  // Ascension upgrades
+  ascGrid.innerHTML = "";
+  state.ascensionUpgrades.forEach((u,i)=>{
+    const cost = u.costFunc(u.amount);
+    const card = document.createElement("div");
+    card.className = "upgrade-card";
+    if(state.ascCoins >= cost) card.classList.add("glow");
+    card.innerHTML = `
+      <div class="upgrade-left">
+        <div class="upgrade-title">${u.name} <span class="small"> (Lvl ${u.amount})</span></div>
+        <div class="upgrade-cost small">${u.description}</div>
+      </div>
+      <div class="actions">
+        <div class="upgrade-cost small">${cost} coins</div>
+      </div>
+    `;
+    card.addEventListener("click", ()=>{
+      if(state.ascCoins >= cost){
+        state.ascCoins -= cost;
+        u.amount++;
+        // immediate small effect (bonus points) applied on buy to show feedback
+        if(u.name === "Bonus Points") state.points += u.effect;
+        saveNow();
+        updateTop();
+        renderUpgrades();
+      } else {
+        card.animate([{transform:"scale(1)"},{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:180});
+      }
+    });
+    ascGrid.appendChild(card);
+  });
+}
+
+/* ------------------------------
+   Clicking & floats & sound
+   ------------------------------ */
+let cheatClicks = 0; // for final upgrade (hidden cheat)
+clickImg.addEventListener("click", (ev)=>{
+  const clickPower = Math.floor(state.perClick * getClickMultiplier());
+  state.points += clickPower;
+  spawnFloating(ev.clientX, ev.clientY, clickPower);
+  // tiny audio using WebAudio (short)
+  try{
+    const actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = "sine"; o.frequency.value = 700;
+    g.gain.value = 0.05;
+    o.connect(g); g.connect(actx.destination);
+    o.start(); o.stop(actx.currentTime + 0.06);
+  }catch(e){}
+  updateTop();
+  saveNow();
+});
+
+/* keyboard support */
+window.addEventListener("keydown", e=>{
+  if(e.code === "Space" || e.key === " " || e.key === "Enter"){
+    e.preventDefault();
+    clickImg.click();
   }
+});
 
-  async function getUserInfo() {
-    let ip = 'Unknown IP';
-    try {
-      const res = await fetch('https://api.ipify.org?format=json');
-      const data = await res.json();
-      ip = data.ip || ip;
-    } catch {}
+/* ------------------------------
+   Auto click loop (uses interval based on upgrades)
+   ------------------------------ */
+let autoLoopTimer = null;
+function startAutoLoop(){
+  if(autoLoopTimer) clearInterval(autoLoopTimer);
+  const interval = getAutoInterval();
+  autoLoopTimer = setInterval(()=>{
+    if(state.autoPerSec > 0){
+      const add = Math.floor(state.autoPerSec * getAutoMultiplier());
+      state.points += add;
+      if(add>0){
+        spawnFloating(window.innerWidth/2 + 40, window.innerHeight/2 + 20, add);
+      }
+      updateTop();
+      saveNow();
+    }
+  }, interval);
+}
 
-    return {
-      ip,
-      userAgent: navigator.userAgent || 'Unknown',
-      platform: navigator.platform || 'Unknown',
-      language: navigator.language || 'Unknown',
-      screenSize: `${window.screen.width}x${window.screen.height}`,
-      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Unknown',
+/* ------------------------------
+   Ascension flow & modal
+   ------------------------------ */
+ascendButton.addEventListener("click", ()=>{
+  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount || 0);
+  ascendModalText.innerHTML = `You have <b>$${fmt(state.points)}</b>.<br>Ascending will reset points and upgrade costs, but you'll get <b>${coinsEarned}</b> ascension coin(s).<br><br>Ascension upgrades remain. Proceed?`;
+  modalBackdrop.style.display = "flex";
+});
+modalClose.addEventListener("click", ()=> modalBackdrop.style.display = "none");
+modalCancel.addEventListener("click", ()=> modalBackdrop.style.display = "none");
+modalBackdrop.addEventListener("click", (e)=>{ if(e.target === modalBackdrop) modalBackdrop.style.display = "none"; });
+
+modalConfirm.addEventListener("click", ()=>{
+  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount || 0);
+  state.ascCoins += coinsEarned;
+  // bonus points upgrade gives starting money after ascend
+  const bonusUpg = state.ascensionUpgrades.find(u=>u.name==="Bonus Points");
+  const bonus = (bonusUpg?.effect || 0) * (bonusUpg?.amount || 0);
+  state.points = bonus; // reset points to bonus (could be zero)
+  // reset perClick & autoPerSec
+  state.perClick = 1;
+  state.autoPerSec = 0;
+  // reset upgrade costs to base arrays
+  for(let i=0;i<state.clickUpgrades.length;i++) state.clickUpgrades[i].baseCost = CLICK_BASE_COSTS[i];
+  for(let i=0;i<state.autoUpgrades.length;i++) state.autoUpgrades[i].baseCost = AUTO_BASE_COSTS[i];
+  saveNow();
+  renderUpgrades();
+  updateTop();
+  modalBackdrop.style.display = "none";
+  startAutoLoop();
+  alert(`Ascended! +${coinsEarned} ascension coin(s).`);
+});
+
+/* ------------------------------
+   Save / load flow & import/export
+   ------------------------------ */
+function saveNow(){ saveState(); } // alias for readability
+exportBtn.addEventListener("click", ()=>{
+  const content = JSON.stringify(state);
+  const blob = new Blob([content], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "clickAJude_save.json"; a.click();
+  URL.revokeObjectURL(url);
+});
+importBtn.addEventListener("click", ()=>{
+  const input = document.createElement("input");
+  input.type = "file"; input.accept = "application/json";
+  input.onchange = (e)=>{
+    const file = e.target.files[0];
+    if(!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try{
+        const parsed = JSON.parse(reader.result);
+        state = {...state, ...parsed};
+        initDefaults(); renderUpgrades(); updateTop(); saveNow(); startAutoLoop();
+        alert("Save imported.");
+      }catch(err){ alert("Invalid save file."); }
     };
-  }
+    reader.readAsText(file);
+  };
+  input.click();
+});
 
-  async function sendMessage() {
-    const msg = inputEl.value.trim();
-    if (!msg) return;
-    inputEl.value = '';
-    sendBtn.disabled = true;
-
-    addMessage(msg, 'user');
-    statusEl.textContent = 'Getting user info…';
-
-    const userInfo = await getUserInfo();
-
-    statusEl.textContent = 'Waiting for AI reply…';
-
-    try {
-      // Call Gemini API (may fail due to CORS)
-      const geminiResponse = await fetch('https://gemini.googleapis.com/v1alpha2/models/gemini-chat:generateMessage', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${GEMINI_API_KEY}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gemini-2.5-chat',
-          messages: [{ text: msg }],
-        }),
-      });
-
-      const geminiData = await geminiResponse.json();
-      const reply = geminiData?.candidates?.[0]?.message?.text || 'No reply';
-
-      addMessage(reply, 'ai');
-      statusEl.textContent = 'Sending messages to Telegram…';
-
-      const telegramText = `User message: ${msg}\nUser IP: ${userInfo.ip}\nUser Agent: ${userInfo.userAgent}\nPlatform: ${userInfo.platform}\nLanguage: ${userInfo.language}\nScreen: ${userInfo.screenSize}\nTimezone: ${userInfo.timezone}\nAI reply: ${reply}`;
-
-      await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TELEGRAM_CHAT_ID,
-          text: telegramText,
-        }),
-      });
-
-      statusEl.textContent = 'Message and reply sent to Telegram!';
-    } catch (e) {
-      statusEl.textContent = 'Error: ' + e.message;
-      addMessage('Error: ' + e.message, 'ai');
-    }
-
-    sendBtn.disabled = false;
-    inputEl.focus();
-  }
-
-  sendBtn.addEventListener('click', sendMessage);
-  inputEl.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !sendBtn.disabled) {
-      sendMessage();
-    }
-  });
+/* ------------------------------
+   Init everything
+   ------------------------------ */
+function boot(){
+  loadState();
+  initDefaults();
+  renderUpgrades();
+  updateTop();
+  startAutoLoop();
+  // autosave every 5s
+  setInterval(saveNow, 5000);
+}
+boot();
 </script>
-
 </body>
 </html>

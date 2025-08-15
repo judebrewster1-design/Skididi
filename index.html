@@ -3,571 +3,297 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Click a Jude — Polished</title>
+<title>Click a Jude — Hyper</title>
 <style>
-  :root{
-    --bg:#0b0c0f; --panel:#0f1113; --accent:#00e6ff; --muted:#667; --glass: rgba(255,255,255,0.03);
-    --glass-2: rgba(0,0,0,0.35);
-  }
-  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#060607 0%, #0b0c0f 100%);color:#e9fbff}
-  .container{max-width:1200px;margin:18px auto;padding:16px;display:flex;flex-direction:column;gap:14px}
-  header{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .brand{display:flex;align-items:center;gap:12px}
-  .logo{width:64px;height:64px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.12);display:flex;align-items:center;justify-content:center;background:#081015}
-  .logo img{width:100%;height:100%;object-fit:cover}
-  h1{font-size:20px;margin:0;letter-spacing:0.6px}
-  .top-stats{display:flex;gap:12px;align-items:center}
-  .stat{background:var(--panel);padding:10px 14px;border-radius:10px;min-width:140px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-  .stat .label{font-size:12px;color:var(--muted)}
-  .stat .value{font-weight:700;font-size:18px;color:var(--accent);margin-top:4px}
-  main{display:flex;gap:18px}
-  .left{flex:0 0 360px;display:flex;flex-direction:column;gap:12px;align-items:center}
-  .center{flex:1;display:flex;flex-direction:column;gap:12px}
-  .right{flex:0 0 360px}
-  .click-area{background:linear-gradient(180deg,#0f1720,#0b0f14);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-  #clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:6px solid rgba(0,230,255,0.06);cursor:pointer;box-shadow:0 8px 40px rgba(0,230,255,0.06);transition:transform .08s ease}
-  #clickImg:active{transform:scale(.96) rotate(-1deg)}
-  .big-number{font-size:28px;color:#fff;margin:0}
-  .sub{font-size:13px;color:var(--muted);margin:0}
-  .panel{background:var(--panel);padding:12px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
-  .upgrades-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-height:480px;overflow:auto;padding-right:6px}
-  @media(min-width:880px){.upgrades-grid{grid-template-columns:repeat(2,1fr)} .left{flex:0 0 380px}}
-  .upgrade-card{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
-  .upgrade-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
-  .upgrade-left{display:flex;flex-direction:column;gap:4px}
-  .upgrade-title{font-weight:700}
-  .upgrade-cost{font-size:13px;color:var(--muted)}
-  .upgrade-amount{font-weight:700;color:var(--accent)}
-  .glow{box-shadow:0 0 18px rgba(0,230,255,0.12),0 0 50px rgba(0,230,255,0.06) !important;border-color:rgba(0,230,255,0.12) !important}
-  .disabled{opacity:.38}
-  .actions{display:flex;gap:8px;align-items:center}
-  .btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--accent);cursor:pointer;font-weight:700}
-  .btn.secondary{color:#fff;border-color:rgba(255,255,255,0.04);background:rgba(255,255,255,0.02)}
-  .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:999}
-  .modal{background:var(--panel);padding:20px;border-radius:14px;min-width:320px;max-width:640px;box-shadow:0 30px 80px rgba(0,0,0,0.7)}
-  .modal h3{margin:0 0 8px 0}
-  .floating-plus{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 8px 30px rgba(0,0,0,0.6)}
-  .small{font-size:12px;color:var(--muted)}
-  footer{display:flex;justify-content:center;color:var(--muted);font-size:12px;padding:8px}
-  /* scrollbar mini */
-  .upgrades-grid::-webkit-scrollbar{width:8px}
-  .upgrades-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:8px}
+:root{
+--bg:#0b0c0f;--panel:#0f1113;--accent:#00e6ff;--muted:#667;
+}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:linear-gradient(180deg,#060607 0%,#0b0c0f 100%);color:#e9fbff}
+.container{max-width:1200px;margin:18px auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:64px;height:64px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.12);display:flex;align-items:center;justify-content:center;background:#081015}
+.logo img{width:100%;height:100%;object-fit:cover}
+h1{font-size:20px;margin:0;letter-spacing:0.6px}
+.top-stats{display:flex;gap:12px;align-items:center}
+.stat{background:var(--panel);padding:10px 14px;border-radius:10px;min-width:140px;text-align:center;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+.stat .label{font-size:12px;color:var(--muted)}
+.stat .value{font-weight:700;font-size:18px;color:var(--accent);margin-top:4px}
+main{display:flex;gap:18px}
+.left{flex:0 0 360px;display:flex;flex-direction:column;gap:12px;align-items:center}
+.center{flex:1;display:flex;flex-direction:column;gap:12px}
+.right{flex:0 0 360px}
+.click-area{background:linear-gradient(180deg,#0f1720,#0b0f14);border-radius:14px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:10px;box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+#clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:6px solid rgba(0,230,255,0.06);cursor:pointer;box-shadow:0 8px 40px rgba(0,230,255,0.06);transition:transform .08s ease}
+#clickImg:active{transform:scale(.96) rotate(-1deg)}
+.big-number{font-size:28px;color:#fff;margin:0}
+.sub{font-size:13px;color:var(--muted);margin:0}
+.panel{background:var(--panel);padding:12px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,0.6)}
+.upgrades-grid{display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-height:480px;overflow:auto;padding-right:6px}
+@media(min-width:880px){.upgrades-grid{grid-template-columns:repeat(2,1fr)} .left{flex:0 0 380px}}
+.upgrade-card{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s ease, box-shadow .12s ease}
+.upgrade-card:hover{transform:translateY(-4px);box-shadow:0 10px 30px rgba(0,0,0,0.6)}
+.upgrade-left{display:flex;flex-direction:column;gap:4px}
+.upgrade-title{font-weight:700}
+.upgrade-cost{font-size:13px;color:var(--muted)}
+.upgrade-amount{font-weight:700;color:var(--accent)}
+.glow{box-shadow:0 0 18px rgba(0,230,255,0.12),0 0 50px rgba(0,230,255,0.06) !important;border-color:rgba(0,230,255,0.12) !important}
+.disabled{opacity:.38}
+.actions{display:flex;gap:8px;align-items:center}
+.btn{padding:8px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--accent);cursor:pointer;font-weight:700}
+.btn.secondary{color:#fff;border-color:rgba(255,255,255,0.04);background:rgba(255,255,255,0.02)}
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:999}
+.modal{background:var(--panel);padding:20px;border-radius:14px;min-width:320px;max-width:640px;box-shadow:0 30px 80px rgba(0,0,0,0.7)}
+.modal h3{margin:0 0 8px 0}
+.floating-plus{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 8px 30px rgba(0,0,0,0.6)}
+.small{font-size:12px;color:var(--muted)}
+footer{display:flex;justify-content:center;color:var(--muted);font-size:12px;padding:8px}
+.upgrades-grid::-webkit-scrollbar{width:8px}
+.upgrades-grid::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.03);border-radius:8px}
 </style>
 </head>
 <body>
 <div class="container">
-  <header>
-    <div class="brand">
-      <div class="logo"><img src="IMG_7281.jpeg" alt="logo" /></div>
-      <div>
-        <h1>Click a Jude</h1>
-        <div class="small">Tap, upgrade, ascend — repeat</div>
-      </div>
-    </div>
-
-    <div class="top-stats">
-      <div class="stat">
-        <div class="label">Money</div>
-        <div class="value" id="moneyDisplay">$0</div>
-      </div>
-      <div class="stat">
-        <div class="label">Per Click</div>
-        <div class="value" id="perClickDisplay">1</div>
-      </div>
-      <div class="stat">
-        <div class="label">Auto / sec</div>
-        <div class="value" id="autoDisplay">0</div>
-      </div>
-      <div class="stat">
-        <div class="label">Ascension Coins</div>
-        <div class="value" id="ascCoinsDisplay">0</div>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <div class="left">
-      <div class="click-area panel">
-        <div class="big-number">Click the Jude</div>
-        <img id="clickImg" src="IMG_7281.jpeg" alt="click" />
-        <div class="sub small">Click or press Space / Enter</div>
-      </div>
-
-      <div style="display:flex;gap:8px;margin-top:8px;width:100%;justify-content:center">
-        <button class="btn secondary" id="exportBtn">Export Save</button>
-        <button class="btn secondary" id="importBtn">Import Save</button>
-      </div>
-    </div>
-
-    <div class="center">
-      <div class="panel">
-        <h3 style="margin:0 0 8px 0">Click Upgrades</h3>
-        <div id="clickUpgradesGrid" class="upgrades-grid"></div>
-      </div>
-
-      <div class="panel" style="margin-top:12px">
-        <h3 style="margin:0 0 8px 0">Auto Upgrades</h3>
-        <div id="autoUpgradesGrid" class="upgrades-grid"></div>
-      </div>
-    </div>
-
-    <div class="right">
-      <div class="panel">
-        <h3 style="margin:0 0 8px 0">Ascension</h3>
-        <div style="display:flex;flex-direction:column;gap:8px">
-          <div class="small">Reach <b>$5,000,000</b> to unlock Ascend</div>
-          <button id="ascendButton" class="btn" style="display:none">Ascend Now</button>
-          <div class="small" style="margin-top:6px">Ascension Upgrades</div>
-          <div id="ascensionUpgradesGrid" class="upgrades-grid" style="max-height:340px"></div>
-        </div>
-      </div>
-    </div>
-  </main>
-
-  <footer>Autosave & load with localStorage — built for quick web play</footer>
+<header>
+<div class="brand">
+<div class="logo"><img src="IMG_7281.jpeg" alt="logo" /></div>
+<div>
+<h1>Click a Jude Hyper</h1>
+<div class="small">Tap, upgrade, ascend — dopamine overload</div>
+</div>
+</div>
+<div class="top-stats">
+<div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+<div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+<div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+<div class="stat"><div class="label">Ascension Coins</div><div class="value" id="ascCoinsDisplay">0</div></div>
+</div>
+</header>
+<main>
+<div class="left">
+<div class="click-area panel">
+<div class="big-number">Click the Jude</div>
+<img id="clickImg" src="IMG_7281.jpeg" alt="click" />
+<div class="sub small">Click or press Space / Enter</div>
+</div>
+<div style="display:flex;gap:8px;margin-top:8px;width:100%;justify-content:center">
+<button class="btn secondary" id="exportBtn">Export Save</button>
+<button class="btn secondary" id="importBtn">Import Save</button>
+</div>
+</div>
+<div class="center">
+<div class="panel">
+<h3 style="margin:0 0 8px 0">Click Upgrades</h3>
+<div id="clickUpgradesGrid" class="upgrades-grid"></div>
+</div>
+<div class="panel" style="margin-top:12px">
+<h3 style="margin:0 0 8px 0">Auto Upgrades</h3>
+<div id="autoUpgradesGrid" class="upgrades-grid"></div>
+</div>
+</div>
+<div class="right">
+<div class="panel">
+<h3 style="margin:0 0 8px 0">Ascension</h3>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div class="small">Reach <b>$5,000,000</b> to unlock Ascend</div>
+<button id="ascendButton" class="btn" style="display:none">Ascend Now</button>
+<div class="small" style="margin-top:6px">Ascension Upgrades</div>
+<div id="ascensionUpgradesGrid" class="upgrades-grid" style="max-height:340px"></div>
+</div>
+</div>
+<div class="panel" style="margin-top:12px">
+<h3 style="margin:0 0 8px 0">Ads</h3>
+<div style="display:flex;flex-direction:column;gap:6px">
+<button id="adButton" class="btn secondary">Watch Ad: +$50,000</button>
+<div id="adStatus" class="small"></div>
+</div>
+</div>
+</div>
+</main>
+<footer>Autosave & load with localStorage — built for quick web play</footer>
 </div>
 
-<!-- Ascension modal -->
 <div id="modalBackdrop" class="modal-backdrop">
-  <div class="modal">
-    <button id="modalClose" style="position:absolute;right:18px;top:12px;background:transparent;border:none;color:var(--accent);font-size:20px;cursor:pointer">×</button>
-    <h3>Ascend?</h3>
-    <p id="ascendModalText" class="small"></p>
-    <div style="display:flex;gap:12px;justify-content:flex-end;margin-top:12px">
-      <button class="btn secondary" id="modalCancel">Cancel</button>
-      <button class="btn" id="modalConfirm">Confirm Ascend</button>
-    </div>
-  </div>
+<div class="modal">
+<button id="modalClose" style="position:absolute;right:18px;top:12px;background:transparent;border:none;color:var(--accent);font-size:20px;cursor:pointer">×</button>
+<h3>Ascend?</h3>
+<p id="ascendModalText" class="small"></p>
+<div style="display:flex;gap:12px;justify-content:flex-end;margin-top:12px">
+<button class="btn secondary" id="modalCancel">Cancel</button>
+<button class="btn" id="modalConfirm">Confirm Ascend</button>
+</div>
+</div>
 </div>
 
-<!-- floating plus container -->
 <div id="floatRoot"></div>
 
 <script>
-/* ------------------------------
-   Game data & init
-   ------------------------------ */
-const SAVE_KEY = "clickAJude_v2_save_v1";
-
-let state = {
-  points: 0,
-  perClick: 1,
-  autoPerSec: 0,
-  ascCoins: 0,
-  // Upgrades store baseCost so cost inflates as purchased
-  clickUpgrades: [], // { name, baseCost, increase }
-  autoUpgrades: [],  // { name, baseCost, increase }
-  ascensionUpgrades: [], // { name, amount, costFunc, effect, description }
-};
-
-/* default arrays (20 each) */
-const CLICK_NAMES = [
-  "Finger Strength","Iron Finger","God Hand","Mighty Hand","Legendary Touch",
-  "Divine Strike","Final Power","Master Finger","Eternal Tap","Infinite Swipe",
-  "Cosmic Punch","Galactic Smash","Quantum Hit","Dimensional Slap","Mythic Jab",
-  "Titan's Punch","Olympian Strike","Celestial Knock","Universal Blow","Omni Punch"
-];
-const CLICK_INCREASES = [1,5,20,50,150,500,2000,7500,25000,80000,250000,800000,2500000,8000000,25000000,75000000,250000000,800000000,2500000000,8000000000];
-const CLICK_BASE_COSTS = [10,100,1000,5000,25000,100000,400000,1500000,6000000,20000000,70000000,250000000,800000000,2500000000,8000000000,25000000000,80000000000,250000000000,800000000000,2500000000000];
-
-const AUTO_NAMES = [
-  "Auto Clicker","Super Auto","Mega Auto","Ultra Auto","God Auto",
-  "Titan Auto","Olympus Auto","Celestial Auto","Galactic Auto","Quantum Auto",
-  "Dimensional Auto","Mythic Auto","Eternal Auto","Infinite Auto","Cosmic Auto",
-  "Universal Auto","Omni Auto","Supreme Auto","Ultimate Auto","Legendary Auto"
-];
-const AUTO_INCREASES = [1,5,20,100,500,2500,10000,40000,160000,600000,2000000,7000000,25000000,80000000,250000000,800000000,2500000000,7500000000,25000000000,80000000000];
-const AUTO_BASE_COSTS = [50,500,3500,15000,80000,400000,1500000,6000000,25000000,80000000,250000000,800000000,2500000000,8000000000,25000000000,80000000000,250000000000,750000000000,2500000000000,8000000000000];
-
-/* ascension upgrades:
-   each has costFunc(amount) -> cost (in asc coins)
-*/
-const ASCENSION_DEFAULTS = [
-  {name:"Click Multiplier", effect:2, amount:0, costFunc:(lvl)=>5 * Math.pow(2,lvl), description:"×2 click power per level"},
-  {name:"Auto Multiplier", effect:2, amount:0, costFunc:(lvl)=>5 * Math.pow(2,lvl), description:"×2 auto power per level"},
-  {name:"Bonus Points", effect:50000, amount:0, costFunc:(lvl)=>3 + lvl*3, description:"+50,000 points on ascend per level"},
-  {name:"Price Reduction", effect:0.5, amount:0, costFunc:(lvl)=>2 + lvl*2, description:"Halves normal upgrade prices per level"},
-  {name:"Faster Auto Clickers", effect:0.5, amount:0, costFunc:(lvl)=>4 + lvl*4, description:"Autos run 50% faster per level"},
-  {name:"Extra Ascension Coins", effect:1, amount:0, costFunc:(lvl)=>10 + lvl*10, description:"+1 extra ascension coin per ascend per level"},
-  {name:"Cheap Upgrades", effect:0.5, amount:0, costFunc:(lvl)=>10 + lvl*10, description:"Additional price-halving (stacks)"},
-  {name:"Extra Click Multiplier", effect:2, amount:0, costFunc:(lvl)=>20 + lvl*20, description:"Stacks multiplicatively with click multipliers"},
-  {name:"Extra Auto Speed", effect:0.1, amount:0, costFunc:(lvl)=>30 + lvl*30, description:"Reduce auto interval by 10% per level"}
+// --- Save / State ---
+const SAVE_KEY="clickAJude_hyper_v1";
+let state={points:0,perClick:1,autoPerSec:0,ascCoins:0,clickUpgrades:[],autoUpgrades:[],ascensionUpgrades:[],adIndex:0};
+const adLinks=[
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
 ];
 
-/* initialize default state if empty */
+const CLICK_NAMES=["Finger Strength","Iron Finger","God Hand","Mighty Hand","Legendary Touch","Divine Strike","Final Power","Master Finger","Eternal Tap","Infinite Swipe","Cosmic Punch","Galactic Smash","Quantum Hit","Dimensional Slap","Mythic Jab","Titan's Punch","Olympian Strike","Celestial Knock","Universal Blow","Omni Punch"];
+const CLICK_INCREASES=[1,5,20,50,150,500,2000,7500,25000,80000,250000,800000,2500000,8000000,25000000,75000000,250000000,800000000,2500000000,8000000000];
+const CLICK_BASE_COSTS=[10,100,1000,5000,25000,100000,400000,1500000,6000000,20000000,70000000,250000000,800000000,2500000000,8000000000,25000000000,80000000000,250000000000,800000000000,2500000000000];
+
+const AUTO_NAMES=["Auto Clicker","Super Auto","Mega Auto","Ultra Auto","God Auto","Titan Auto","Olympus Auto","Celestial Auto","Galactic Auto","Quantum Auto","Dimensional Auto","Mythic Auto","Infinite Auto","Legendary Auto","Omni Auto","Eternal Auto","Cosmic Auto","Hyper Auto","Turbo Auto","Ultimate Auto"];
+const AUTO_INCREASES=[1,5,20,50,150,500,2000,7500,25000,80000,250000,800000,2500000,8000000,25000000,75000000,250000000,800000000,2500000000,8000000000];
+const AUTO_BASE_COSTS=[50,500,4000,20000,100000,400000,1500000,6000000,25000000,90000000,300000000,1e9,3e9,1e10,3e10,1e11,1e12,3e12,1e13,1e14];
+
+const ASC_NAMES=["Bonus Points","Extra Ascension Coins","Per Click Boost","Auto Boost"];
+const ASC_EFFECTS=[1000,1,2,5];
+
+function fmt(x){if(x>=1e9)return(Math.floor(x/1e6)/1000).toFixed(3)+"B";if(x>=1e6)return(Math.floor(x/1e3)/1000).toFixed(3)+"M";if(x>=1e3)return(Math.floor(x/1e0)/1000).toFixed(3)+"K";return x}
+function saveState(){localStorage.setItem(SAVE_KEY,JSON.stringify(state))}
+function loadState(){const s=localStorage.getItem(SAVE_KEY);if(s)state=JSON.parse(s)}
+
+// --- Floating dopamine ---
+function spawnFloating(x,y,text,color){
+const f=document.createElement("div");
+f.className="floating-plus";f.textContent=text;f.style.left=x+"px";f.style.top=y+"px";f.style.color=color||"#00e6ff";
+document.body.appendChild(f);
+let t=0;
+const anim=setInterval(()=>{
+t++;f.style.transform=`translateY(${-t*1.5}px) scale(${1+t*0.02})`;f.style.opacity=1-t/30;
+if(t>30){clearInterval(anim);f.remove()}
+},16)
+}
+
+// --- Defaults / Init ---
 function initDefaults(){
-  if(state.clickUpgrades.length===0){
-    for(let i=0;i<20;i++){
-      state.clickUpgrades.push({name:CLICK_NAMES[i], baseCost:CLICK_BASE_COSTS[i], increase:CLICK_INCREASES[i]});
-    }
-  }
-  if(state.autoUpgrades.length===0){
-    for(let i=0;i<20;i++){
-      state.autoUpgrades.push({name:AUTO_NAMES[i], baseCost:AUTO_BASE_COSTS[i], increase:AUTO_INCREASES[i]});
-    }
-  }
-  if(state.ascensionUpgrades.length===0){
-    ASCENSION_DEFAULTS.forEach(d => state.ascensionUpgrades.push({...d}));
-  }
+if(!state.clickUpgrades.length){for(let i=0;i<CLICK_NAMES.length;i++){state.clickUpgrades.push({name:CLICK_NAMES[i],increase:CLICK_INCREASES[i],baseCost:CLICK_BASE_COSTS[i]})}}
+if(!state.autoUpgrades.length){for(let i=0;i<AUTO_NAMES.length;i++){state.autoUpgrades.push({name:AUTO_NAMES[i],increase:AUTO_INCREASES[i],baseCost:AUTO_BASE_COSTS[i]})}}
+if(!state.ascensionUpgrades.length){for(let i=0;i<ASC_NAMES.length;i++){state.ascensionUpgrades.push({name:ASC_NAMES[i],effect:ASC_EFFECTS[i],amount:0,costFunc:amt=>Math.floor(50*Math.pow(1.7,amt)))}}}
 }
 
-/* ------------------------------
-   Persistence
-   ------------------------------ */
-function saveState(){
-  try{
-    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
-  }catch(e){
-    console.warn("Save failed",e);
-  }
-}
-function loadState(){
-  const raw = localStorage.getItem(SAVE_KEY);
-  if(!raw) return;
-  try{
-    const parsed = JSON.parse(raw);
-    // basic merge with defaults to protect schema changes
-    state = {...state, ...parsed};
-  }catch(e){
-    console.warn("Load failed",e);
-  }
-}
+// --- Multipliers ---
+function getClickMultiplier(){return 1+(state.ascensionUpgrades.find(u=>u.name==="Per Click Boost")?.amount||0)}
+function getAutoMultiplier(){return 1+(state.ascensionUpgrades.find(u=>u.name==="Auto Boost")?.amount||0)}
+function getAutoInterval(){return 1000}
 
-/* ------------------------------
-   UI helpers
-   ------------------------------ */
-const moneyEl = document.getElementById("moneyDisplay");
-const perClickEl = document.getElementById("perClickDisplay");
-const autoEl = document.getElementById("autoDisplay");
-const ascCoinsEl = document.getElementById("ascCoinsDisplay");
-const clickImg = document.getElementById("clickImg");
-const clickGrid = document.getElementById("clickUpgradesGrid");
-const autoGrid = document.getElementById("autoUpgradesGrid");
-const ascGrid = document.getElementById("ascensionUpgradesGrid");
-const ascendButton = document.getElementById("ascendButton");
-const modalBackdrop = document.getElementById("modalBackdrop");
-const modalConfirm = document.getElementById("modalConfirm");
-const modalCancel = document.getElementById("modalCancel");
-const modalClose = document.getElementById("modalClose");
-const ascendModalText = document.getElementById("ascendModalText");
-const floatRoot = document.getElementById("floatRoot");
-const exportBtn = document.getElementById("exportBtn");
-const importBtn = document.getElementById("importBtn");
-
-/* floating +X animation */
-function spawnFloating(x,y,text){
-  const el = document.createElement("div");
-  el.className = "floating-plus";
-  el.style.left = (x - 10) + "px";
-  el.style.top = (y - 10) + "px";
-  el.style.fontSize = "16px";
-  el.textContent = `+${text.toLocaleString()}`;
-  floatRoot.appendChild(el);
-  let t=0;
-  const id = setInterval(()=>{
-    t+=16;
-    el.style.transform = `translateY(${-t/18}px)`;
-    el.style.opacity = String(1 - t/600);
-    if(t>600){ clearInterval(id); el.remove(); }
-  },16);
-}
-
-/* format */
-function fmt(n){
-  if(n>=1e12) return (n/1e12).toFixed(2)+"T";
-  if(n>=1e9) return (n/1e9).toFixed(2)+"B";
-  if(n>=1e6) return (n/1e6).toFixed(2)+"M";
-  if(n>=1e3) return (n/1e3).toFixed(1)+"k";
-  return String(Math.floor(n));
-}
-
-/* ------------------------------
-   Mechanics: multipliers / intervals
-   ------------------------------ */
-function getPriceMultiplier(){
-  // multiplicative stacking of price reductions
-  const pr = state.ascensionUpgrades.find(u=>u.name==="Price Reduction");
-  const cheap = state.ascensionUpgrades.find(u=>u.name==="Cheap Upgrades");
-  let mult = 1;
-  if(pr) mult *= Math.pow(pr.effect, pr.amount);
-  if(cheap) mult *= Math.pow(cheap.effect, cheap.amount);
-  return mult;
-}
-function getClickMultiplier(){
-  const cm = state.ascensionUpgrades.find(u=>u.name==="Click Multiplier");
-  const extra = state.ascensionUpgrades.find(u=>u.name==="Extra Click Multiplier");
-  let m = 1;
-  if(cm) m *= Math.pow(cm.effect, cm.amount);
-  if(extra) m *= Math.pow(extra.effect, extra.amount);
-  return m;
-}
-function getAutoMultiplier(){
-  const am = state.ascensionUpgrades.find(u=>u.name==="Auto Multiplier");
-  return am ? Math.pow(am.effect, am.amount) : 1;
-}
-function getAutoInterval(){
-  let base = 1000;
-  const fast = state.ascensionUpgrades.find(u=>u.name==="Faster Auto Clickers");
-  const extra = state.ascensionUpgrades.find(u=>u.name==="Extra Auto Speed");
-  if(fast) base *= Math.pow(1 - fast.effect, fast.amount);
-  if(extra) base *= Math.pow(1 - extra.effect, extra.amount);
-  return Math.max(100, Math.round(base));
-}
-
-/* ------------------------------
-   Rendering/updating UI
-   ------------------------------ */
-let lastRendered = 0;
-function updateTop(){
-  moneyEl.textContent = "$" + fmt(state.points);
-  perClickEl.textContent = fmt(Math.floor(state.perClick * getClickMultiplier()));
-  autoEl.textContent = fmt(Math.floor(state.autoPerSec * getAutoMultiplier()));
-  ascCoinsEl.textContent = state.ascCoins;
-  // show/hide ascend button
-  ascendButton.style.display = (state.points >= 5_000_000) ? "inline-block" : "none";
-}
-
+// --- Render upgrades ---
 function renderUpgrades(){
-  // Click upgrades
-  clickGrid.innerHTML = "";
-  state.clickUpgrades.forEach((u,i)=>{
-    const cost = Math.max(1, Math.floor(u.baseCost * getPriceMultiplier()));
-    const card = document.createElement("div");
-    card.className = "upgrade-card";
-    if(state.points >= cost) card.classList.add("glow");
-    if(i === state.clickUpgrades.length-1 && state.points < cost) card.classList.add("disabled"); // visually disabled but clickable for cheat
-    card.innerHTML = `
-      <div class="upgrade-left">
-        <div class="upgrade-title">${u.name}</div>
-        <div class="upgrade-cost small">+${fmt(u.increase)} per click</div>
-      </div>
-      <div class="actions">
-        <div class="upgrade-cost small">$${fmt(cost)}</div>
-      </div>
-    `;
-    card.addEventListener("click", ()=>{
-      // last upgrade should always accept clicks to allow hidden cheat
-      if(i === state.clickUpgrades.length - 1){
-        cheatClicks++;
-        if(cheatClicks >= 10){
-          state.points += 50_000_000;
-          cheatClicks = 0;
-          saveNow();
-          updateTop();
-          renderUpgrades();
-          alert("Secret unlocked: +50,000,000!");
-          return;
-        }
-      }
-      if(state.points >= cost){
-        state.points -= cost;
-        state.perClick += u.increase;
-        // inflation
-        u.baseCost = Math.floor(u.baseCost * 1.15);
-        spawnFloating(window.innerWidth/2, window.innerHeight/2 - 80, u.increase);
-        saveNow();
-        updateTop();
-        renderUpgrades();
-      } else {
-        // small shake / feedback
-        card.animate([{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],{duration:220});
-      }
-    });
-    clickGrid.appendChild(card);
-  });
-
-  // Auto upgrades
-  autoGrid.innerHTML = "";
-  state.autoUpgrades.forEach((u,i)=>{
-    const cost = Math.max(1, Math.floor(u.baseCost * getPriceMultiplier()));
-    const card = document.createElement("div");
-    card.className = "upgrade-card";
-    if(state.points >= cost) card.classList.add("glow");
-    card.innerHTML = `
-      <div class="upgrade-left">
-        <div class="upgrade-title">${u.name}</div>
-        <div class="upgrade-cost small">+${fmt(u.increase)} auto/sec</div>
-      </div>
-      <div class="actions">
-        <div class="upgrade-cost small">$${fmt(cost)}</div>
-      </div>
-    `;
-    card.addEventListener("click", ()=>{
-      if(state.points >= cost){
-        state.points -= cost;
-        state.autoPerSec += u.increase;
-        u.baseCost = Math.floor(u.baseCost * 1.15);
-        spawnFloating(window.innerWidth/2 + 30, window.innerHeight/2 - 40, u.increase);
-        saveNow();
-        updateTop();
-        renderUpgrades();
-      } else {
-        card.animate([{transform:"translateY(0)"},{transform:"translateY(-6px)"},{transform:"translateY(6px)"},{transform:"translateY(0)"}],{duration:220});
-      }
-    });
-    autoGrid.appendChild(card);
-  });
-
-  // Ascension upgrades
-  ascGrid.innerHTML = "";
-  state.ascensionUpgrades.forEach((u,i)=>{
-    const cost = u.costFunc(u.amount);
-    const card = document.createElement("div");
-    card.className = "upgrade-card";
-    if(state.ascCoins >= cost) card.classList.add("glow");
-    card.innerHTML = `
-      <div class="upgrade-left">
-        <div class="upgrade-title">${u.name} <span class="small"> (Lvl ${u.amount})</span></div>
-        <div class="upgrade-cost small">${u.description}</div>
-      </div>
-      <div class="actions">
-        <div class="upgrade-cost small">${cost} coins</div>
-      </div>
-    `;
-    card.addEventListener("click", ()=>{
-      if(state.ascCoins >= cost){
-        state.ascCoins -= cost;
-        u.amount++;
-        // immediate small effect (bonus points) applied on buy to show feedback
-        if(u.name === "Bonus Points") state.points += u.effect;
-        saveNow();
-        updateTop();
-        renderUpgrades();
-      } else {
-        card.animate([{transform:"scale(1)"},{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:180});
-      }
-    });
-    ascGrid.appendChild(card);
-  });
+// Click Upgrades
+const clickGrid=document.getElementById("clickUpgradesGrid");
+clickGrid.innerHTML="";
+state.clickUpgrades.forEach((u,i)=>{
+const cost=Math.max(1,Math.floor(u.baseCost));
+const card=document.createElement("div");
+card.className="upgrade-card";if(state.points>=cost)card.classList.add("glow");
+card.innerHTML=`<div class="upgrade-left"><div class="upgrade-title">${u.name}</div><div class="upgrade-cost small">+${fmt(u.increase)} per click</div></div><div class="actions"><div class="upgrade-cost small">$${fmt(cost)}</div></div>`;
+card.addEventListener("click",()=>{
+if(state.points>=cost){state.points-=cost;state.perClick+=u.increase;u.baseCost=Math.floor(u.baseCost*1.15);spawnFloating(window.innerWidth/2,window.innerHeight/2-80,u.increase);saveState();updateTop();renderUpgrades()}else{card.animate([{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],{duration:220})}});
+clickGrid.appendChild(card);
+});
+// Auto Upgrades
+const autoGrid=document.getElementById("autoUpgradesGrid");
+autoGrid.innerHTML="";
+state.autoUpgrades.forEach((u,i)=>{
+const cost=Math.max(1,Math.floor(u.baseCost));
+const card=document.createElement("div");
+card.className="upgrade-card";if(state.points>=cost)card.classList.add("glow");
+card.innerHTML=`<div class="upgrade-left"><div class="upgrade-title">${u.name}</div><div class="upgrade-cost small">+${fmt(u.increase)} auto/sec</div></div><div class="actions"><div class="upgrade-cost small">$${fmt(cost)}</div></div>`;
+card.addEventListener("click",()=>{
+if(state.points>=cost){state.points-=cost;state.autoPerSec+=u.increase;u.baseCost=Math.floor(u.baseCost*1.15);spawnFloating(window.innerWidth/2+30,window.innerHeight/2-40,u.increase);saveState();updateTop();renderUpgrades()}else{card.animate([{transform:"translateY(0)"},{transform:"translateY(-6px)"},{transform:"translateY(6px)"},{transform:"translateY(0)"}],{duration:220})}});
+autoGrid.appendChild(card);
+});
+// Ascension Upgrades
+const ascGrid=document.getElementById("ascensionUpgradesGrid");
+ascGrid.innerHTML="";
+state.ascensionUpgrades.forEach((u,i)=>{
+const cost=u.costFunc(u.amount);
+const card=document.createElement("div");
+card.className="upgrade-card";if(state.ascCoins>=cost)card.classList.add("glow");
+card.innerHTML=`<div class="upgrade-left"><div class="upgrade-title">${u.name} <span class="small">(Lvl ${u.amount})</span></div><div class="upgrade-cost small">${u.amount?"+":"Upgrade available"}</div></div><div class="actions"><div class="upgrade-cost small">${cost} coins</div></div>`;
+card.addEventListener("click",()=>{
+if(state.ascCoins>=cost){state.ascCoins-=cost;u.amount++;if(u.name==="Bonus Points")state.points+=u.effect;saveState();updateTop();renderUpgrades()}else{card.animate([{transform:"scale(1)"},{transform:"scale(.98)"},{transform:"scale(1)"}],{duration:180})}});
+ascGrid.appendChild(card);
+});
 }
 
-/* ------------------------------
-   Clicking & floats & sound
-   ------------------------------ */
-let cheatClicks = 0; // for final upgrade (hidden cheat)
-clickImg.addEventListener("click", (ev)=>{
-  const clickPower = Math.floor(state.perClick * getClickMultiplier());
-  state.points += clickPower;
-  spawnFloating(ev.clientX, ev.clientY, clickPower);
-  // tiny audio using WebAudio (short)
-  try{
-    const actx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = actx.createOscillator();
-    const g = actx.createGain();
-    o.type = "sine"; o.frequency.value = 700;
-    g.gain.value = 0.05;
-    o.connect(g); g.connect(actx.destination);
-    o.start(); o.stop(actx.currentTime + 0.06);
-  }catch(e){}
-  updateTop();
-  saveNow();
+// --- Click area ---
+const clickImg=document.getElementById("clickImg");
+clickImg.addEventListener("click",ev=>{
+const clickPower=Math.floor(state.perClick*getClickMultiplier());
+state.points+=clickPower;
+// Dopamine burst
+for(let i=0;i<3;i++){spawnFloating(ev.clientX+Math.random()*40-20,ev.clientY+Math.random()*40-20,clickPower,"#00e6ff")}
+try{const actx=new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator();const g=actx.createGain();o.type="sine";o.frequency.value=700;g.gain.value=.05;o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+.06);}catch(e){}
+updateTop();saveState();checkAscendButton();
 });
 
-/* keyboard support */
-window.addEventListener("keydown", e=>{
-  if(e.code === "Space" || e.key === " " || e.key === "Enter"){
-    e.preventDefault();
-    clickImg.click();
-  }
-});
+window.addEventListener("keydown",e=>{if(e.code==="Space"||e.key===" "||e.key==="Enter"){e.preventDefault();clickImg.click()}});
 
-/* ------------------------------
-   Auto click loop (uses interval based on upgrades)
-   ------------------------------ */
-let autoLoopTimer = null;
-function startAutoLoop(){
-  if(autoLoopTimer) clearInterval(autoLoopTimer);
-  const interval = getAutoInterval();
-  autoLoopTimer = setInterval(()=>{
-    if(state.autoPerSec > 0){
-      const add = Math.floor(state.autoPerSec * getAutoMultiplier());
-      state.points += add;
-      if(add>0){
-        spawnFloating(window.innerWidth/2 + 40, window.innerHeight/2 + 20, add);
-      }
-      updateTop();
-      saveNow();
-    }
-  }, interval);
+// --- Auto loop ---
+function startAutoLoop(){setInterval(()=>{if(state.autoPerSec>0){const add=Math.floor(state.autoPerSec*getAutoMultiplier());state.points+=add;if(add>0)spawnFloating(window.innerWidth/2+40,window.innerHeight/2+20,add);updateTop();saveState();checkAscendButton()}},getAutoInterval())}
+
+// --- Top stats ---
+function updateTop(){
+document.getElementById("moneyDisplay").textContent="$"+fmt(state.points);
+document.getElementById("perClickDisplay").textContent=fmt(state.perClick);
+document.getElementById("autoDisplay").textContent=fmt(state.autoPerSec);
+document.getElementById("ascCoinsDisplay").textContent=state.ascCoins;
 }
 
-/* ------------------------------
-   Ascension flow & modal
-   ------------------------------ */
-ascendButton.addEventListener("click", ()=>{
-  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount || 0);
-  ascendModalText.innerHTML = `You have <b>$${fmt(state.points)}</b>.<br>Ascending will reset points and upgrade costs, but you'll get <b>${coinsEarned}</b> ascension coin(s).<br><br>Ascension upgrades remain. Proceed?`;
-  modalBackdrop.style.display = "flex";
+// --- Ascension modal ---
+const ascendButton=document.getElementById("ascendButton");
+const modalBackdrop=document.getElementById("modalBackdrop");
+const modalClose=document.getElementById("modalClose");
+const modalCancel=document.getElementById("modalCancel");
+const modalConfirm=document.getElementById("modalConfirm");
+const ascendModalText=document.getElementById("ascendModalText");
+function checkAscendButton(){ascendButton.style.display=state.points>=5_000_000?"inline-block":"none"}
+ascendButton.addEventListener("click",()=>{
+const coinsEarned=Math.floor(state.points/5_000_000)+(state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount||0);
+ascendModalText.innerHTML=`You have <b>$${fmt(state.points)}</b>.<br>Ascending will reset points and upgrade costs, but you'll get <b>${coinsEarned}</b> ascension coin(s).<br><br>Ascension upgrades remain. Proceed?`;
+modalBackdrop.style.display="flex";
 });
-modalClose.addEventListener("click", ()=> modalBackdrop.style.display = "none");
-modalCancel.addEventListener("click", ()=> modalBackdrop.style.display = "none");
-modalBackdrop.addEventListener("click", (e)=>{ if(e.target === modalBackdrop) modalBackdrop.style.display = "none"; });
-
-modalConfirm.addEventListener("click", ()=>{
-  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount || 0);
-  state.ascCoins += coinsEarned;
-  // bonus points upgrade gives starting money after ascend
-  const bonusUpg = state.ascensionUpgrades.find(u=>u.name==="Bonus Points");
-  const bonus = (bonusUpg?.effect || 0) * (bonusUpg?.amount || 0);
-  state.points = bonus; // reset points to bonus (could be zero)
-  // reset perClick & autoPerSec
-  state.perClick = 1;
-  state.autoPerSec = 0;
-  // reset upgrade costs to base arrays
-  for(let i=0;i<state.clickUpgrades.length;i++) state.clickUpgrades[i].baseCost = CLICK_BASE_COSTS[i];
-  for(let i=0;i<state.autoUpgrades.length;i++) state.autoUpgrades[i].baseCost = AUTO_BASE_COSTS[i];
-  saveNow();
-  renderUpgrades();
-  updateTop();
-  modalBackdrop.style.display = "none";
-  startAutoLoop();
-  alert(`Ascended! +${coinsEarned} ascension coin(s).`);
+modalClose.addEventListener("click",()=>modalBackdrop.style.display="none");
+modalCancel.addEventListener("click",()=>modalBackdrop.style.display="none");
+modalBackdrop.addEventListener("click",e=>{if(e.target===modalBackdrop)modalBackdrop.style.display="none"});
+modalConfirm.addEventListener("click",()=>{
+const coinsEarned=Math.floor(state.points/5_000_000)+(state.ascensionUpgrades.find(u=>u.name==="Extra Ascension Coins")?.amount||0);
+state.ascCoins+=coinsEarned;
+const bonusUpg=state.ascensionUpgrades.find(u=>u.name==="Bonus Points");
+const bonus=(bonusUpg?.effect||0)*(bonusUpg?.amount||0);
+state.points=bonus;state.perClick=1;state.autoPerSec=0;
+for(let i=0;i<state.clickUpgrades.length;i++)state.clickUpgrades[i].baseCost=CLICK_BASE_COSTS[i];
+for(let i=0;i<state.autoUpgrades.length;i++)state.autoUpgrades[i].baseCost=AUTO_BASE_COSTS[i];
+saveState();renderUpgrades();updateTop();modalBackdrop.style.display="none";
+startAutoLoop();
+alert(`Ascended! +${coinsEarned} ascension coin(s).`);
 });
 
-/* ------------------------------
-   Save / load flow & import/export
-   ------------------------------ */
-function saveNow(){ saveState(); } // alias for readability
-exportBtn.addEventListener("click", ()=>{
-  const content = JSON.stringify(state);
-  const blob = new Blob([content], {type:"application/json"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = "clickAJude_save.json"; a.click();
-  URL.revokeObjectURL(url);
+// --- Export / Import ---
+document.getElementById("exportBtn").addEventListener("click",()=>{
+const content=JSON.stringify(state);const blob=new Blob([content],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="clickAJude_hyper_save.json";a.click();URL.revokeObjectURL(url);
 });
-importBtn.addEventListener("click", ()=>{
-  const input = document.createElement("input");
-  input.type = "file"; input.accept = "application/json";
-  input.onchange = (e)=>{
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      try{
-        const parsed = JSON.parse(reader.result);
-        state = {...state, ...parsed};
-        initDefaults(); renderUpgrades(); updateTop(); saveNow(); startAutoLoop();
-        alert("Save imported.");
-      }catch(err){ alert("Invalid save file."); }
-    };
-    reader.readAsText(file);
-  };
-  input.click();
+document.getElementById("importBtn").addEventListener("click",()=>{
+const input=document.createElement("input");input.type="file";input.accept="application/json";
+input.onchange=e=>{const file=e.target.files[0];if(!file)return;const reader=new FileReader();
+reader.onload=()=>{try{const parsed=JSON.parse(reader.result);state={...state,...parsed};initDefaults();renderUpgrades();updateTop();saveState();startAutoLoop();checkAscendButton();alert("Save imported.")}catch(err){alert("Invalid save file.")}};
+reader.readAsText(file);};input.click();
 });
 
-/* ------------------------------
-   Init everything
-   ------------------------------ */
-function boot(){
-  loadState();
-  initDefaults();
-  renderUpgrades();
-  updateTop();
-  startAutoLoop();
-  // autosave every 5s
-  setInterval(saveNow, 5000);
-}
+// --- Ads ---
+document.getElementById("adButton").addEventListener("click",()=>{
+state.points+=50000;for(let i=0;i<5;i++){spawnFloating(window.innerWidth/2+Math.random()*60-30,window.innerHeight/2-50+Math.random()*30-15,50000,"#ffea00")}
+updateTop();saveState();
+const link=adLinks[state.adIndex];state.adIndex=(state.adIndex+1)%adLinks.length;
+document.getElementById("adStatus").textContent=`Next ad: ${link}`;
+window.open(link,"_blank");
+checkAscendButton();
+});
+
+// --- Boot ---
+function boot(){loadState();initDefaults();renderUpgrades();updateTop();startAutoLoop();checkAscendButton();setInterval(saveState,5000)}
 boot();
 </script>
 </body>

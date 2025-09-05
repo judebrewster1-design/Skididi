@@ -1,278 +1,660 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Click-a-Jude</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #1d1d1d, #333);
-      color: white;
-      text-align: center;
-      overflow-x: hidden;
-    }
-    h1 { margin-top: 10px; }
-    #game-container {
-      max-width: 500px;
-      margin: auto;
-      padding: 10px;
-    }
-    #jude {
-      width: 250px;
-      height: auto;
-      cursor: pointer;
-      transition: transform 0.1s;
-      touch-action: manipulation; /* stop zoom */
-    }
-    #jude:active { transform: scale(0.9); }
-    #money { font-size: 22px; margin: 10px 0; }
-    #upgrades, #autoclickers, #ascension, #ads {
-      margin: 15px 0;
-      padding: 10px;
-      background: rgba(255,255,255,0.05);
-      border-radius: 8px;
-    }
-    button {
-      margin: 5px;
-      padding: 8px 12px;
-      font-size: 15px;
-      cursor: pointer;
-      border: none;
-      border-radius: 5px;
-      background: #444;
-      color: white;
-      transition: 0.2s;
-    }
-    button:hover { background: #555; }
-    button.affordable { box-shadow: 0 0 10px lime; }
-    #ascend-btn { display: none; background: purple; }
-    #ascension-modal {
-      display: none;
-      position: fixed;
-      top:0; left:0; width:100%; height:100%;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      color: white;
-      z-index: 1000;
-    }
-    #ascension-box {
-      background: #222;
-      padding: 20px;
-      border-radius: 8px;
-      max-width: 300px;
-    }
-    .close-btn { background: crimson; margin-top: 10px; }
-    .particle {
-      position: absolute;
-      font-size: 18px;
-      pointer-events: none;
-      animation: rise 1s ease-out forwards;
-    }
-    @keyframes rise {
-      from { opacity:1; transform: translateY(0); }
-      to { opacity:0; transform: translateY(-50px); }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Click a Jude — IDRC</title>
+<style>
+  :root {
+    --bg: #08090b;
+    --panel: #0f1316;
+    --muted: #99a3b2;
+    --accent: #00e6ff;
+    --accent-2: #7b61ff;
+    --glass: rgba(255,255,255,0.03);
+    --good: #6ef08a;
+    --bad: #ff6e6e;
+    --card-radius: 12px;
+  }
+
+  /* ---------- Reset & base ---------- */
+  html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+  * { box-sizing: border-box; }
+
+  /* ---------- App layout ---------- */
+  .app {
+    max-width:1100px;
+    margin: 10px auto;
+    padding: 12px;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  @media(min-width:900px){
+    .app { grid-template-columns: 360px 1fr 360px; align-items:start; }
+  }
+
+  header {
+    grid-column: 1/-1;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding: 8px 6px;
+  }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .logo {
+    width:56px; height:56px; border-radius:12px; overflow:hidden; border:3px solid rgba(0,230,255,0.08); background:#071018; display:flex;align-items:center;justify-content:center;
+  }
+  .logo img { width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
+
+  .title { font-weight:700; letter-spacing:0.4px; font-size:18px; margin:0; }
+  .subtitle { font-size:12px; color:var(--muted); margin-top:3px; }
+
+  /* ---------- Top stats ---------- */
+  .top-stats { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+  .stat {
+    min-width:120px;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);
+    border-radius:10px;
+    padding:8px 10px;
+    text-align:center;
+    border:1px solid rgba(255,255,255,0.03);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+  }
+  .stat .label { font-size:12px; color:var(--muted); }
+  .stat .value { font-weight:800; color:var(--accent); margin-top:6px; font-size:16px; }
+
+  /* ---------- Left (click area + utilities) ---------- */
+  .panel { background:var(--panel); border-radius:var(--card-radius); padding:12px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+  .click-area { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; }
+  #clickImg { width:220px; height:220px; border-radius:14px; object-fit:cover; border:5px solid rgba(0,230,255,0.06); transition: transform .08s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+  #clickImg:active { transform: scale(.96) rotate(-1deg); }
+  .big-number { font-size:20px; font-weight:700; color:#fff; }
+  .small { font-size:12px; color:var(--muted); }
+
+  .controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+  button.btn { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--accent); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; transition: transform .12s ease, background .12s ease; }
+  button.btn.secondary { background: rgba(255,255,255,0.02); color:#fff; }
+  button.btn:active{ transform: translateY(1px); }
+  button.btn.disabled{ opacity:.45; pointer-events:none; }
+
+  /* ---------- Center (upgrades) ---------- */
+  .upgrades { display:grid; gap:12px; }
+  .upgrid { display:grid; grid-template-columns: repeat(1,1fr); gap:8px; max-height:420px; overflow:auto; padding-right:6px; }
+  @media(min-width:1100px){ .upgrid { grid-template-columns: repeat(2,1fr);} }
+  .upgrade { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); cursor:pointer; transition: transform .12s, box-shadow .12s; }
+  .upgrade:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+  .upgrade .meta { display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left; }
+  .upgrade .title { font-weight:800; font-size:14px; }
+  .upgrade .desc { font-size:12px; color:var(--muted); }
+  .upgrade .cost { font-weight:800; color:var(--accent); }
+
+  .glow { box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; border-color: rgba(0,230,255,0.12) !important; }
+
+  /* ---------- Right (ascension + ads) ---------- */
+  .right-stack { display:flex; flex-direction:column; gap:12px; }
+  .ad-btn { width:100%; background:transparent; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:10px; cursor:pointer; font-weight:800; }
+  .ad-btn.disabled { opacity:.45; pointer-events:none; }
+
+  /* ---------- Ascension modal ---------- */
+  .modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.65); z-index:9999; }
+  .modal { background:var(--panel); padding:18px; border-radius:12px; width:min(640px,92%); border:1px solid rgba(255,255,255,0.03); }
+  .modal h3 { margin:0 0 8px 0; }
+  .modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+
+  /* ---------- Floating + particles ---------- */
+  .float { position:fixed; pointer-events:none; font-weight:800; color:var(--accent); text-shadow:0 6px 18px rgba(0,0,0,0.6); transform-origin:center; }
+  .spark { position:fixed; width:6px; height:6px; border-radius:50%; pointer-events:none; opacity:0.95; }
+
+  /* ---------- Small utilities ---------- */
+  .muted { color:var(--muted); font-size:13px; }
+  .centered { display:flex; align-items:center; justify-content:center; }
+</style>
 </head>
 <body>
-  <div id="game-container">
-    <h1>Click-a-Jude</h1>
-    <img id="jude" src="IMG_7281.jpeg" alt="Jude">
-    <div id="money">$0</div>
+  <div class="app" id="appRoot">
+    <header>
+      <div class="brand">
+        <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
+        <div>
+          <div class="title">Click a Jude — IDRC</div>
+          <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
+        </div>
+      </div>
 
-    <div id="upgrades">
-      <h2>Click Upgrades</h2>
-      <div id="click-upgrades"></div>
+      <div class="top-stats">
+        <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+        <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+        <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+        <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
+      </div>
+    </header>
+
+    <!-- left: click area & save -->
+    <div class="panel centered" id="leftCol">
+      <div class="click-area" style="width:100%">
+        <div class="big-number">Click the Jude</div>
+        <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
+        <div class="small">Tap or press Space / Enter (no holding)</div>
+
+        <div class="controls" style="margin-top:8px">
+          <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
+          <button class="btn secondary" id="importBtn" type="button">Import Save</button>
+          <button class="btn" id="resetBtn" type="button">Reset</button>
+        </div>
+      </div>
     </div>
 
-    <div id="autoclickers">
-      <h2>Auto Clickers</h2>
-      <div id="auto-upgrades"></div>
+    <!-- center: upgrades -->
+    <div class="panel upgrades" id="centerCol">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <h3 style="margin:0">Click Upgrades</h3>
+        <div class="muted">Tap to buy — costs increase after purchase</div>
+      </div>
+      <div id="clickGrid" class="upgrid"></div>
+
+      <div style="height:8px"></div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+        <h3 style="margin:0">Auto Upgrades</h3>
+        <div class="muted">Earn while away (runs every second)</div>
+      </div>
+      <div id="autoGrid" class="upgrid"></div>
     </div>
 
-    <div id="ascension">
-      <h2>Ascension</h2>
-      <button id="ascend-btn">Ascend</button>
-      <p id="ascend-coins">Ascension Coins: 0</p>
+    <!-- right: ascension, ads -->
+    <div class="panel right-stack" id="rightCol">
+      <div>
+        <h3 style="margin:0 0 8px 0">Ascension</h3>
+        <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
+        <div style="height:10px"></div>
+        <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
+        <div style="height:8px"></div>
+        <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
+      </div>
+
+      <div style="height:12px"></div>
+
+      <div>
+        <h3 style="margin:0 0 8px 0">Ads</h3>
+        <div class="muted">Click ad — +$50,000 (rotates through links)</div>
+        <div style="height:8px"></div>
+        <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
+        <div style="height:8px"></div>
+        <div id="adStatus" class="muted"></div>
+      </div>
     </div>
 
-    <div id="ads">
-      <h2>Ads</h2>
-      <button id="ad-btn">Watch Ad for $50,000</button>
+    <!-- ascension modal -->
+    <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+      <div class="modal">
+        <h3>Ascend?</h3>
+        <div id="ascModalText" class="muted" style="margin-top:6px;"></div>
+        <div class="actions" style="margin-top:12px">
+          <button id="modalCancel" class="btn secondary" type="button">Cancel</button>
+          <button id="modalConfirm" class="btn" type="button">Confirm Ascend</button>
+        </div>
+      </div>
     </div>
+
+    <!-- floating root (particles, numbers) -->
+    <div id="floatRoot" aria-hidden="true"></div>
   </div>
 
-  <div id="ascension-modal">
-    <div id="ascension-box">
-      <h2>Ascend?</h2>
-      <p id="ascension-text"></p>
-      <button id="confirm-ascend">Confirm</button>
-      <button class="close-btn" id="close-ascend">Cancel</button>
-    </div>
-  </div>
+<script>
+/* ===========================
+   IDRC — Click a Jude (index.html)
+   Mobile + Desktop optimized
+   30 unique upgrades, ascension, ads (50k), autosave
+   =========================== */
 
-  <script>
-    let money = 0;
-    let clickValue = 1;
-    let ascensionCoins = 0;
-    let adIndex = 0;
+const SAVE_KEY = "idrc_clickajude_v1";
 
-    const moneyDisplay = document.getElementById("money");
-    const clickUpgradesDiv = document.getElementById("click-upgrades");
-    const autoUpgradesDiv = document.getElementById("auto-upgrades");
-    const ascendBtn = document.getElementById("ascend-btn");
-    const ascendCoinsDisplay = document.getElementById("ascend-coins");
-    const ascModal = document.getElementById("ascension-modal");
-    const ascText = document.getElementById("ascension-text");
-    const confirmAsc = document.getElementById("confirm-ascend");
-    const closeAsc = document.getElementById("close-ascend");
-    const adBtn = document.getElementById("ad-btn");
+// ---------------- State ----------------
+let state = {
+  points: 0,
+  perClick: 1,
+  autoPerSec: 0,
+  ascCoins: 0,
+  adIndex: 0,
+  clickUpgrades: [],
+  autoUpgrades: [],
+  ascensionUpgrades: []
+};
 
-    const clickUpgrades = [
-      {name:"Finger of Power", baseCost:50, increment:1, level:0},
-      {name:"Golden Touch", baseCost:500, increment:5, level:0},
-      {name:"Diamond Ring Click", baseCost:5000, increment:25, level:0},
-      {name:"Divine Tap", baseCost:50000, increment:150, level:0}
-    ];
-    const autoUpgrades = [
-      {name:"Grandma Clicker", baseCost:100, cps:1, level:0},
-      {name:"Robot Assistant", baseCost:1000, cps:10, level:0},
-      {name:"Factory of Judes", baseCost:10000, cps:75, level:0},
-      {name:"Quantum Autoclicker", baseCost:100000, cps:500, level:0}
-    ];
+// 15 click-upgrades (cool names)
+const CLICK_DEFS = [
+  ["Finger of Doom", 5],
+  ["Titan Tap", 25],
+  ["Nuclear Thumb", 120],
+  ["Cosmic Punch", 600],
+  ["Meteor Jab", 3000],
+  ["Quantum Flick", 12000],
+  ["Dragon Snap", 50000],
+  ["Plasma Knuckle", 180000],
+  ["Galactic Push", 700000],
+  ["Stellar Slap", 2_500_000],
+  ["Eclipse Strike", 9_000_000],
+  ["Omega Jab", 35_000_000],
+  ["Void Swipe", 140_000_000],
+  ["Infinity Tap", 600_000_000],
+  ["Reality Punch", 2_500_000_000]
+];
 
-    const adLinks = [
-      "https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
-      "https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
-      "https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
-      "https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
-      "https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
-    ];
+// 15 auto-upgrades (cool names)
+const AUTO_DEFS = [
+  ["Intern on Minimum Wage", 2],
+  ["Student Temp Worker", 10],
+  ["Freelance Bot", 45],
+  ["AI Assistant", 220],
+  ["Assembly Line", 900],
+  ["Factory Farm", 4200],
+  ["Commerce Portal", 18_000],
+  ["Data Center", 75_000],
+  ["Alien Mining Rig", 320_000],
+  ["Black Hole Extractor", 1_200_000],
+  ["Orbital Driller", 5_000_000],
+  ["Planetary Mine", 20_000_000],
+  ["Stellar Forge", 90_000_000],
+  ["Cosmic Foundry", 400_000_000],
+  ["Multiverse Vault", 1_700_000_000]
+];
 
-    function updateDisplay(){
-      moneyDisplay.innerText = "$" + money.toLocaleString();
-      ascendCoinsDisplay.innerText = "Ascension Coins: " + ascensionCoins;
-      ascendBtn.style.display = money >= 5000000 ? "inline-block" : "none";
-      document.querySelectorAll("button.upgrade").forEach(btn=>{
-        let cost = parseInt(btn.dataset.cost);
-        if(money>=cost) btn.classList.add("affordable");
-        else btn.classList.remove("affordable");
-      });
+// Base costs (scaled)
+function baseClickCost(i){ return Math.round(12 * Math.pow(4.2, i)); } // increasing scale
+function baseAutoCost(i){ return Math.round(80 * Math.pow(4.0, i)); }
+
+// Ascension upgrade defs
+const ASC_DEFS = [
+  { name: "Bonus Start", effect: 100_000, desc: "Start with bonus money after Ascend", costBase: 2, amount: 0 },
+  { name: "Extra Coins", effect: 1, desc: "Gain +1 extra asc coin per Ascend", costBase: 4, amount: 0 },
+  { name: "Click Multiplier", effect: 2, desc: "×2 click power per level", costBase: 6, amount: 0 }
+];
+
+// Ads list (your links)
+const AD_LINKS = [
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
+];
+
+// ---------------- DOM refs ----------------
+const moneyEl = document.getElementById("moneyDisplay");
+const perClickEl = document.getElementById("perClickDisplay");
+const autoEl = document.getElementById("autoDisplay");
+const ascEl = document.getElementById("ascDisplay");
+const clickImg = document.getElementById("clickImg");
+const clickGrid = document.getElementById("clickGrid");
+const autoGrid = document.getElementById("autoGrid");
+const ascendBtn = document.getElementById("ascendBtn");
+const adButton = document.getElementById("adButton");
+const adStatus = document.getElementById("adStatus");
+const ascCoinsEl = document.getElementById("ascCoins");
+
+const modalBackdrop = document.getElementById("modalBackdrop");
+const modalText = document.getElementById("ascModalText");
+const modalConfirm = document.getElementById("modalConfirm");
+const modalCancel = document.getElementById("modalCancel");
+
+const exportBtn = document.getElementById("exportBtn");
+const importBtn = document.getElementById("importBtn");
+const resetBtn = document.getElementById("resetBtn");
+const floatRoot = document.getElementById("floatRoot");
+
+// disable double-tap zoom on iOS (meta viewport already sets maximum-scale=1)
+// also use touch-action: manipulation in CSS for clickImg
+
+// ---------------- Utils ----------------
+function fmt(n){
+  if (n >= 1e12) return (n/1e12).toFixed(2) + "T";
+  if (n >= 1e9) return (n/1e9).toFixed(2) + "B";
+  if (n >= 1e6) return (n/1e6).toFixed(2) + "M";
+  if (n >= 1e3) return (n/1e3).toFixed(1) + "k";
+  return String(Math.floor(n));
+}
+
+function saveState(){
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+  } catch(e) { console.warn("Save failed", e); }
+}
+function loadState(){
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // merge minimally for backwards compatibility
+      state = { ...state, ...parsed };
+      // ensure arrays exist
+      state.clickUpgrades = state.clickUpgrades || [];
+      state.autoUpgrades = state.autoUpgrades || [];
+      state.ascensionUpgrades = state.ascensionUpgrades || [];
     }
+  } catch(e) { console.warn("Load failed", e); }
+}
 
-    function spawnParticle(x,y){
-      let p = document.createElement("div");
-      p.className="particle";
-      p.innerText="+$"+clickValue;
-      p.style.left=x+"px";
-      p.style.top=y+"px";
-      document.body.appendChild(p);
-      setTimeout(()=>p.remove(),1000);
-    }
+// spawn floating number + a few colored sparks for dopamine
+function spawnFloat(x,y,text,color="#00e6ff"){
+  const el = document.createElement("div");
+  el.className = "float";
+  el.style.left = (x - 10) + "px";
+  el.style.top = (y - 12) + "px";
+  el.style.color = color;
+  el.textContent = text;
+  floatRoot.appendChild(el);
+  let t = 0;
+  const id = setInterval(()=>{
+    t++;
+    el.style.transform = `translateY(${-t*1.8}px) scale(${1 + t*0.004})`;
+    el.style.opacity = String(1 - t/40);
+    if (t > 40) { clearInterval(id); el.remove(); }
+  }, 16);
 
-    document.getElementById("jude").addEventListener("click",(e)=>{
-      money += clickValue;
-      spawnParticle(e.clientX,e.clientY);
-      saveGame();
-      updateDisplay();
-    });
+  // little particle dots
+  for (let i=0;i<6;i++){
+    const sp = document.createElement("div");
+    sp.className = "spark";
+    sp.style.left = (x + (Math.random()*80-40)) + "px";
+    sp.style.top = (y + (Math.random()*40-20)) + "px";
+    sp.style.background = `hsl(${Math.random()*60+180},80%,60%)`;
+    sp.style.transform = `translateY(0)`;
+    floatRoot.appendChild(sp);
+    let tt=0;
+    const id2 = setInterval(()=>{
+      tt++;
+      sp.style.opacity = String(1 - tt/30);
+      sp.style.transform = `translate(${(Math.random()*2-1)*tt*2}px, ${-tt*3 - Math.random()*8}px) scale(${1 - tt/60})`;
+      if (tt>30){ clearInterval(id2); sp.remove(); }
+    }, 16);
+  }
+}
 
-    function createUpgradeButtons(){
-      clickUpgrades.forEach((u,i)=>{
-        let b=document.createElement("button");
-        b.innerText=`${u.name} ($${u.baseCost})`;
-        b.className="upgrade";
-        b.dataset.type="click";
-        b.dataset.index=i;
-        b.dataset.cost=u.baseCost;
-        clickUpgradesDiv.appendChild(b);
-      });
-      autoUpgrades.forEach((u,i)=>{
-        let b=document.createElement("button");
-        b.innerText=`${u.name} ($${u.baseCost})`;
-        b.className="upgrade";
-        b.dataset.type="auto";
-        b.dataset.index=i;
-        b.dataset.cost=u.baseCost;
-        autoUpgradesDiv.appendChild(b);
-      });
-    }
+// play short tone on click
+function clickSound(){
+  try{
+    const actx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = actx.createOscillator();
+    const g = actx.createGain();
+    o.type = "sine";
+    o.frequency.value = 720 + Math.random()*120;
+    g.gain.value = 0.03;
+    o.connect(g); g.connect(actx.destination);
+    o.start();
+    o.stop(actx.currentTime + 0.06);
+  }catch(e){}
+}
 
-    document.addEventListener("click",(e)=>{
-      if(e.target.classList.contains("upgrade")){
-        let type=e.target.dataset.type;
-        let index=e.target.dataset.index;
-        let u= type==="click"?clickUpgrades[index]:autoUpgrades[index];
-        let cost=u.baseCost*Math.pow(1.15,u.level);
-        if(money>=cost){
-          money-=Math.floor(cost);
-          u.level++;
-          if(type==="click") clickValue+=u.increment;
-          e.target.dataset.cost=Math.floor(u.baseCost*Math.pow(1.15,u.level));
-          e.target.innerText=`${u.name} ($${e.target.dataset.cost}) [Lv.${u.level}]`;
-          saveGame();
-          updateDisplay();
-        }
+// ---------------- Initialization helpers ----------------
+function initDefaults(){
+  if (!state.clickUpgrades || !state.clickUpgrades.length){
+    state.clickUpgrades = CLICK_DEFS.map((d,i) => ({
+      name: d[0],
+      increase: d[1],
+      level: 0,
+      baseCost: baseClickCost(i)
+    }));
+  }
+  if (!state.autoUpgrades || !state.autoUpgrades.length){
+    state.autoUpgrades = AUTO_DEFS.map((d,i) => ({
+      name: d[0],
+      increase: d[1],
+      level: 0,
+      baseCost: baseAutoCost(i)
+    }));
+  }
+  if (!state.ascensionUpgrades || !state.ascensionUpgrades.length){
+    state.ascensionUpgrades = ASC_DEFS.map(d => ({ ...d }));
+  }
+  // ensure adIndex exists
+  state.adIndex = state.adIndex || 0;
+}
+
+// ---------------- Rendering ----------------
+function updateTop(){
+  moneyEl.textContent = "$" + fmt(state.points);
+  perClickEl.textContent = fmt(state.perClick);
+  autoEl.textContent = fmt(state.autoPerSec);
+  ascEl.textContent = state.ascCoins;
+  ascCoinsEl.textContent = state.ascCoins;
+  // Ascend button visibility
+  ascendBtn.style.display = (state.points >= 5_000_000) ? "block" : "none";
+  // ad status
+  if (state.adIndex >= AD_LINKS.length) {
+    adStatus.textContent = "No more ads available";
+    adButton.classList.add("disabled");
+    adButton.textContent = "No more ads";
+  } else {
+    adStatus.textContent = `Ads left: ${AD_LINKS.length - state.adIndex}`;
+    adButton.classList.remove("disabled");
+    adButton.textContent = `Watch Ad (+$50,000)`;
+  }
+}
+
+// render upgrades into grids
+function renderUpgrades(){
+  clickGrid.innerHTML = "";
+  state.clickUpgrades.forEach((u, i) => {
+    const cost = Math.max(1, Math.floor(u.baseCost * Math.pow(1.18, u.level)));
+    const card = document.createElement("div");
+    card.className = "upgrade";
+    if (state.points >= cost) card.classList.add("glow");
+
+    card.innerHTML = `
+      <div class="meta">
+        <div class="title">${u.name} <span style="font-weight:600;color:var(--muted);font-size:12px">Lv.${u.level}</span></div>
+        <div class="desc">${u.increase.toLocaleString()} per click</div>
+      </div>
+      <div class="cost">$${fmt(cost)}</div>
+    `;
+    card.addEventListener("click", () => {
+      if (state.points >= cost){
+        state.points -= cost;
+        u.level++;
+        state.perClick += u.increase;
+        spawnFloat(window.innerWidth/2, window.innerHeight/2 - 40, `+${fmt(u.increase)}`, "#00ffd6");
+        clickSound();
+        renderUpgrades();
+        updateTop();
+        saveState();
+      } else {
+        // shake
+        card.animate([{transform:"translateX(0)"},{transform:"translateX(-6px)"},{transform:"translateX(6px)"},{transform:"translateX(0)"}],{duration:220});
       }
     });
+    clickGrid.appendChild(card);
+  });
 
-    setInterval(()=>{
-      autoUpgrades.forEach(u=>{
-        money += u.cps*u.level;
-      });
-      saveGame();
-      updateDisplay();
-    },1000);
+  autoGrid.innerHTML = "";
+  state.autoUpgrades.forEach((u,i) => {
+    const cost = Math.max(1, Math.floor(u.baseCost * Math.pow(1.18, u.level)));
+    const card = document.createElement("div");
+    card.className = "upgrade";
+    if (state.points >= cost) card.classList.add("glow");
 
-    ascendBtn.addEventListener("click",()=>{
-      ascText.innerText=`You will reset your money and upgrades for 1 Ascension Coin. Proceed?`;
-      ascModal.style.display="flex";
-    });
-    confirmAsc.addEventListener("click",()=>{
-      money=0; clickValue=1;
-      clickUpgrades.forEach(u=>u.level=0);
-      autoUpgrades.forEach(u=>u.level=0);
-      ascensionCoins++;
-      ascModal.style.display="none";
-      saveGame();
-      updateDisplay();
-    });
-    closeAsc.addEventListener("click",()=>{ascModal.style.display="none";});
-
-    adBtn.addEventListener("click",()=>{
-      if(adIndex<adLinks.length){
-        window.open(adLinks[adIndex],"_blank");
-        money+=50000;
-        adIndex++;
-        if(adIndex>=adLinks.length) adBtn.innerText="No more ads";
-        saveGame();
-        updateDisplay();
+    card.innerHTML = `
+      <div class="meta">
+        <div class="title">${u.name} <span style="font-weight:600;color:var(--muted);font-size:12px">Lv.${u.level}</span></div>
+        <div class="desc">${fmt(u.increase)} / sec</div>
+      </div>
+      <div class="cost">$${fmt(cost)}</div>
+    `;
+    card.addEventListener("click",()=>{
+      if (state.points >= cost){
+        state.points -= cost;
+        u.level++;
+        state.autoPerSec += u.increase;
+        spawnFloat(window.innerWidth/2 + 30, window.innerHeight/2 - 20, `+${fmt(u.increase)}/s`, "#ffd66e");
+        renderUpgrades();
+        updateTop();
+        saveState();
+      } else {
+        card.animate([{transform:"translateY(0)"},{transform:"translateY(-6px)"},{transform:"translateY(6px)"},{transform:"translateY(0)"}],{duration:220});
       }
     });
+    autoGrid.appendChild(card);
+  });
 
-    function saveGame(){
-      let data={money,clickValue,ascensionCoins,clickUpgrades,autoUpgrades,adIndex};
-      localStorage.setItem("clickajude",JSON.stringify(data));
-    }
-    function loadGame(){
-      let save=localStorage.getItem("clickajude");
-      if(save){
-        let data=JSON.parse(save);
-        money=data.money;
-        clickValue=data.clickValue;
-        ascensionCoins=data.ascensionCoins;
-        adIndex=data.adIndex||0;
-        clickUpgrades.forEach((u,i)=>u.level=data.clickUpgrades[i].level);
-        autoUpgrades.forEach((u,i)=>u.level=data.autoUpgrades[i].level);
-      }
-    }
+  // ascension upgrades (in right column modal maybe later)
+}
 
-    loadGame();
-    createUpgradeButtons();
-    updateDisplay();
-  </script>
+// ---------------- Click handling ----------------
+// clicking the image
+clickImg.addEventListener("click", (ev) => {
+  const multiplier = 1 + (state.ascensionUpgrades.find(u=>u.name==="Click Multiplier")?.amount || 0);
+  const value = Math.floor(state.perClick * multiplier);
+  state.points += value;
+  spawnFloat(ev.clientX, ev.clientY, `+$${fmt(value)}`, "#00e6ff");
+  clickSound();
+  updateTop();
+  saveState();
+});
+
+// keyboard: avoid repeats (holding) — ignore event.repeat
+window.addEventListener("keydown", (e) => {
+  if ((e.code === "Space" || e.key === " " || e.key === "Enter") && !e.repeat) {
+    // avoid focusing buttons: ensure not typing in inputs (no inputs here though)
+    e.preventDefault();
+    clickImg.click();
+  }
+});
+
+// ---------------- Auto loop ----------------
+let autoTimer = null;
+function startAuto(){
+  if (autoTimer) clearInterval(autoTimer);
+  autoTimer = setInterval(()=>{
+    if (state.autoPerSec > 0){
+      const multiplier = 1 + (state.ascensionUpgrades.find(u=>u.name==="Extra Coins")?.amount || 0);
+      const gain = Math.floor(state.autoPerSec * multiplier);
+      state.points += gain;
+      if (gain > 0) spawnFloat(window.innerWidth/2 + 30, window.innerHeight/2 + 20, `+$${fmt(gain)}`, "#ffd66e");
+      updateTop();
+      saveState();
+    }
+  }, 1000);
+}
+
+// ---------------- Ascension flow ----------------
+function openAscensionModal(){
+  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Coins")?.amount || 0);
+  modalText.innerHTML = `You have <b>$${fmt(state.points)}</b>.<br>Ascending will reset money and upgrades but grant <b>${coinsEarned}</b> ascension coin(s). Ascension upgrades persist. Proceed?`;
+  modalBackdrop.style.display = "flex";
+  modalBackdrop.setAttribute("aria-hidden","false");
+}
+function closeAscModal(){ modalBackdrop.style.display = "none"; modalBackdrop.setAttribute("aria-hidden","true"); }
+
+document.getElementById("ascendBtn").addEventListener("click", openAscensionModal);
+modalCancel.addEventListener("click", closeAscModal);
+modalBackdrop.addEventListener("click", (ev) => { if (ev.target === modalBackdrop) closeAscModal(); } );
+
+modalConfirm.addEventListener("click", ()=>{
+  const coinsEarned = Math.floor(state.points / 5_000_000) + (state.ascensionUpgrades.find(u=>u.name==="Extra Coins")?.amount || 0);
+  state.ascCoins += coinsEarned;
+  // compute starting bonus from asc upgrades
+  const bonus = (state.ascensionUpgrades.find(u=>u.name==="Bonus Start")?.amount || 0) * (state.ascensionUpgrades.find(u=>u.name==="Bonus Start")?.effect || 0);
+  // reset core progress
+  state.points = bonus || 0;
+  state.perClick = 1; // reset base click value
+  state.autoPerSec = 0;
+  // reset upgrade levels and costs
+  state.clickUpgrades.forEach((u,i)=>{ u.level = 0; u.baseCost = baseClickCost(i); });
+  state.autoUpgrades.forEach((u,i)=>{ u.level = 0; u.baseCost = baseAutoCost(i); });
+  saveState();
+  renderUpgrades();
+  updateTop();
+  closeAscModal();
+  spawnFloat(window.innerWidth/2, window.innerHeight/2, `+${coinsEarned} ASC`, "#7b61ff");
+  alert(`Ascended! +${coinsEarned} ascension coin(s).`);
+});
+
+// ---------------- Ads button ----------------
+adButton.addEventListener("click", (ev) => {
+  if (state.adIndex >= AD_LINKS.length) return;
+  // reward first (immediate)
+  state.points += 50000;
+  spawnFloat(window.innerWidth/2 + (Math.random()*80-40), window.innerHeight/2 - 20, "+$50k", "#ffea00");
+  updateTop();
+  saveState();
+
+  // open ad via <a> click (should be considered user gesture)
+  const link = AD_LINKS[state.adIndex];
+  state.adIndex = (state.adIndex + 1);
+  // create anchor and programmatically click it — triggered in user click handler
+  const a = document.createElement("a");
+  a.href = link;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  a.click();
+
+  // update ad status / disable if used up
+  updateTop();
+});
+
+// ---------------- Export / Import / Reset ----------------
+exportBtn.addEventListener("click", ()=>{
+  const blob = new Blob([JSON.stringify(state)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "idrc_clickajude_save.json";
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+importBtn.addEventListener("click", ()=>{
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "application/json";
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(reader.result);
+        // basic validation/merge
+        state = { ...state, ...parsed };
+        initDefaults();
+        renderUpgrades();
+        updateTop();
+        saveState();
+        startAuto();
+        alert("Save imported.");
+      } catch(err){ alert("Invalid save file."); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+});
+
+resetBtn.addEventListener("click", ()=>{
+  if (!confirm("Reset all progress? This cannot be undone.")) return;
+  localStorage.removeItem(SAVE_KEY);
+  state = {
+    points: 0, perClick: 1, autoPerSec: 0, ascCoins: 0, adIndex: 0, clickUpgrades: [], autoUpgrades: [], ascensionUpgrades: []
+  };
+  initDefaults();
+  renderUpgrades();
+  updateTop();
+  saveState();
+});
+
+// ---------------- Boot / autosave ----------------
+function boot(){
+  loadState();
+  initDefaults();
+  renderUpgrades();
+  updateTop();
+  startAuto();
+  // small nicety: set ad status text
+  adStatus.textContent = `Ads left: ${Math.max(0, AD_LINKS.length - state.adIndex)}`;
+  setInterval(saveState, 3000); // autosave every 3s
+}
+boot();
+
+</script>
 </body>
 </html>

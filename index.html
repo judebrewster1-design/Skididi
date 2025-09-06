@@ -6,204 +6,371 @@
 <title>Click a Jude — IDRC</title>
 <style>
 :root {
-  --bg:#08090b;--panel:#0f1316;--muted:#99a3b2;--accent:#00e6ff;--accent2:#7b61ff;
-  --card-radius:12px;--good:#6ef08a;--bad:#ff6e6e;
+  --bg: #08090b;
+  --panel: #0f1316;
+  --muted: #99a3b2;
+  --accent: #00e6ff;
+  --accent-2: #7b61ff;
+  --glass: rgba(255,255,255,0.03);
+  --good: #6ef08a;
+  --bad: #ff6e6e;
+  --card-radius: 12px;
 }
-html,body{height:100%;margin:0;font-family:Inter,sans-serif;background:linear-gradient(180deg,#050506 0%,#0c0f12 100%);color:#e8f7ff;}
-*{box-sizing:border-box;}
-.app{max-width:1100px;margin:10px auto;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:900px){.app{grid-template-columns:360px 1fr 360px;align-items:start;}}
-header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px;}
-.logo{width:56px;height:56px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.08);background:#071018;display:flex;align-items:center;justify-content:center;}
-.logo img{width:100%;height:100%;object-fit:cover;}
-.stat{min-width:120px;background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:10px;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,0.03);}
-.stat .label{font-size:12px;color:var(--muted);}
-.stat .value{font-weight:800;color:var(--accent);margin-top:6px;font-size:16px;}
-.panel{background:var(--panel);border-radius:var(--card-radius);padding:12px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 12px 32px rgba(0,0,0,0.6);}
-.click-area{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;}
-#clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:5px solid rgba(0,230,255,0.06);transition: transform .12s ease;cursor:pointer;}
-#clickImg:active{transform:scale(.96) rotate(-1deg);}
-.upgrades{display:grid;gap:12px;}
-.upgrid{display:grid;grid-template-columns: repeat(1,1fr);gap:8px;max-height:420px;overflow:auto;padding-right:6px;}
-@media(min-width:1100px){.upgrid{grid-template-columns:repeat(2,1fr);}}
-.upgrade{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;border-radius:10px;background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:all .12s ease;}
-.upgrade:hover{transform: translateY(-4px);box-shadow: 0 16px 40px rgba(0,0,0,0.6);}
-.upgrade .meta{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;}
-.upgrade .title{font-weight:800;font-size:14px;}
-.upgrade .desc{font-size:12px;color:var(--muted);}
-.upgrade .cost{font-weight:800;color:var(--accent);}
-.disabled{opacity:.45;pointer-events:none;}
-.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700;transition:transform .12s ease;}
-.btn.secondary{background: rgba(255,255,255,0.02);color:#fff;}
-.float{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 6px 18px rgba(0,0,0,0.6);transform-origin:center;z-index:10000;}
-.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background: rgba(0,0,0,0.65);z-index:9999;}
-.modal{background:var(--panel);padding:18px;border-radius:12px;width:min(640px,92%);border:1px solid rgba(255,255,255,0.03);}
-.modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
-#appGuideBtn{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-weight:700;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;z-index:10000;font-size:14px;}
+html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+* { box-sizing: border-box; }
+.app { max-width:1100px; margin: 10px auto; padding: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media(min-width:900px){ .app { grid-template-columns: 360px 1fr 360px; align-items:start; } }
+header { grid-column: 1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 8px 6px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo { width:56px; height:56px; border-radius:12px; overflow:hidden; border:3px solid rgba(0,230,255,0.08); background:#071018; display:flex;align-items:center;justify-content:center; }
+.logo img { width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
+.title { font-weight:700; letter-spacing:0.4px; font-size:18px; margin:0; }
+.subtitle { font-size:12px; color:var(--muted); margin-top:3px; }
+.top-stats { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.stat { min-width:120px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:10px; padding:8px 10px; text-align:center; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+.stat .label { font-size:12px; color:var(--muted); }
+.stat .value { font-weight:800; color:var(--accent); margin-top:6px; font-size:16px; }
+.panel { background:var(--panel); border-radius:var(--card-radius); padding:12px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+.click-area { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; }
+#clickImg { width:220px; height:220px; border-radius:14px; object-fit:cover; border:5px solid rgba(0,230,255,0.06); transition: transform .08s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor:pointer; }
+#clickImg:active { transform: scale(.96) rotate(-1deg); }
+.big-number { font-size:20px; font-weight:700; color:#fff; }
+.small { font-size:12px; color:var(--muted); }
+.controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+button.btn { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--accent); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; transition: transform .12s ease, background .12s ease; }
+button.btn.secondary { background: rgba(255,255,255,0.02); color:#fff; }
+button.btn:active{ transform: translateY(1px); }
+button.btn.disabled{ opacity:.45; pointer-events:none; }
+.upgrades { display:grid; gap:12px; }
+.upgrid { display:grid; grid-template-columns: repeat(1,1fr); gap:8px; max-height:420px; overflow:auto; padding-right:6px; }
+@media(min-width:1100px){ .upgrid { grid-template-columns: repeat(2,1fr);} }
+.upgrade { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); cursor:pointer; transition: transform .12s, box-shadow .12s; }
+.upgrade:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+.upgrade .meta { display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left; }
+.upgrade .title { font-weight:800; font-size:14px; }
+.upgrade .desc { font-size:12px; color:var(--muted); }
+.upgrade .cost { font-weight:800; color:var(--accent); }
+.glow { box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; border-color: rgba(0,230,255,0.12) !important; }
+.right-stack { display:flex; flex-direction:column; gap:12px; }
+.ad-btn { width:100%; background:transparent; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:10px; cursor:pointer; font-weight:800; }
+.ad-btn.disabled { opacity:.45; pointer-events:none; }
+.modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.65); z-index:9999; }
+.modal { background:var(--panel); padding:18px; border-radius:12px; width:min(640px,92%); border:1px solid rgba(255,255,255,0.03); }
+.modal h3 { margin:0 0 8px 0; }
+.modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.float { position:fixed; pointer-events:none; font-weight:800; color:var(--accent); text-shadow:0 6px 18px rgba(0,0,0,0.6); transform-origin:center; }
+.spark { position:fixed; width:6px; height:6px; border-radius:50%; pointer-events:none; opacity:0.95; }
+.muted { color:var(--muted); font-size:13px; }
+.centered { display:flex; align-items:center; justify-content:center; }
+#appGuideBtn { position:fixed; bottom:12px; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; font-weight:700; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; z-index:10000; font-size:14px; }
+@media(max-width:600px){ #clickImg{width:160px;height:160px;} .big-number{font-size:18px;} .stat{min-width:80px;} }
 </style>
 </head>
 <body>
-<div class="app">
+<div class="app" id="appRoot">
 <header>
-<div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" /></div>
-<div class="top-stats">
-<div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
-<div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
-<div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
-<div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
-</div>
+  <div class="brand">
+    <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
+    <div>
+      <div class="title">Click a Jude — IDRC</div>
+      <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
+    </div>
+  </div>
+  <div class="top-stats">
+    <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+    <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+    <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+    <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
+  </div>
 </header>
 
-<div class="panel click-area">
-<img id="clickImg" src="IMG_7281.jpeg" />
-<div class="controls">
-<button class="btn secondary" id="exportBtn">Export</button>
-<button class="btn secondary" id="importBtn">Import</button>
-<button class="btn" id="resetBtn">Reset</button>
-</div>
-</div>
-
-<div class="panel upgrades">
-<h3>Click Upgrades</h3>
-<div id="clickGrid" class="upgrid"></div>
-<h3>Auto Upgrades</h3>
-<div id="autoGrid" class="upgrid"></div>
-<h3>Ascension Upgrades</h3>
-<div id="ascGrid" class="upgrid"></div>
-<h3>Skin Shop</h3>
-<div id="skinGrid" class="upgrid"></div>
-<h3>Gamble Box</h3>
-<div class="muted">Cost: 75 AC — Odds: 50% worst, 25% 100 AC, 15% 250 AC, 10% SUPER RARE ×10 Click</div>
-<button id="gambleBtn" class="btn">Open Gamble Box</button>
-</div>
+<div class="panel centered" id="leftCol">
+  <div class="click-area" style="width:100%">
+    <div class="big-number">Click the Jude</div>
+    <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
+    <div class="small">Tap or press Space / Enter (no holding)</div>
+    <div class="controls" style="margin-top:8px">
+      <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
+      <button class="btn secondary" id="importBtn" type="button">Import Save</button>
+      <button class="btn" id="resetBtn" type="button">Reset</button>
+    </div>
+  </div>
 </div>
 
-<div class="modal-backdrop" id="modalBackdrop">
-<div class="modal">
-<h3>Ascend?</h3>
-<div id="ascModalText"></div>
-<div class="actions">
-<button class="btn secondary" id="cancelAsc">Cancel</button>
-<button class="btn" id="confirmAsc">Ascend</button>
-</div>
-</div>
+<div class="panel upgrades" id="centerCol">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Click Upgrades</h3>
+    <div class="muted">Tap to buy — costs increase after purchase</div>
+  </div>
+  <div id="clickGrid" class="upgrid"></div>
+
+  <div style="height:8px"></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Auto Upgrades</h3>
+    <div class="muted">Earn while away (runs every second)</div>
+  </div>
+  <div id="autoGrid" class="upgrid"></div>
 </div>
 
-<button id="appGuideBtn">Make Your App!</button>
+<div class="panel right-stack" id="rightCol">
+  <div>
+    <h3 style="margin:0 0 8px 0">Ascension</h3>
+    <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
+    <div style="height:10px"></div>
+    <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
+    <div style="height:8px"></div>
+    <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
+
+    <div style="height:12px"></div>
+    <div style="margin-top:8px;">
+      <h4 style="margin:0 0 6px 0">Ascension Upgrades</h4>
+      <div class="muted" style="margin-bottom:8px">Spend Asc Coins to buy permanent boosts</div>
+      <div id="ascGrid" class="upgrid" style="max-height:240px;"></div>
+    </div>
+
+    <div style="height:12px"></div>
+    <h4 style="margin:0 0 6px 0">Skin Shop</h4>
+    <div class="muted" style="margin-bottom:8px">Preview & purchase skins (boosts)</div>
+    <div id="skinGrid" class="upgrid"></div>
+
+    <div style="height:12px"></div>
+    <h4 style="margin:0 0 6px 0">Gamble Box</h4>
+    <div class="muted" style="margin-bottom:8px">Cost: 75 ASC — Odds: 50% worst, 25% 100 ASC, 15% 250 ASC, 10% super rare ×10 click</div>
+    <button id="gambleBtn" class="btn">Open Gamble Box</button>
+  </div>
+
+  <div style="height:12px"></div>
+
+  <div>
+    <h3 style="margin:0 0 8px 0">Ads</h3>
+    <div class="muted">Click ad — +$50,000 (rotates through links)</div>
+    <div style="height:8px"></div>
+    <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
+    <div style="height:8px"></div>
+    <div id="adStatus" class="muted"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+  <div class="modal">
+    <h3>Ascend?</h3>
+    <div id="ascModalText" class="muted"></div>
+    <div class="actions">
+      <button class="btn secondary" id="cancelAsc">Cancel</button>
+      <button class="btn" id="confirmAsc">Ascend</button>
+    </div>
+  </div>
+</div>
+
+<div id="floatContainer"></div>
 
 <script>
-// ===== State =====
-let state = {money:0,perClick:1,auto:0,ascCoins:0,gambleMultiplier:1};
-const clickUpgrades=[
-{name:"Finger Tap",desc:"+1/click",cost:100,base:1,level:0},
-{name:"Double Tap",desc:"+2/click",cost:300,base:2,level:0},
-{name:"Triple Tap",desc:"+5/click",cost:800,base:5,level:0},
-{name:"Quad Tap",desc:"+10/click",cost:2500,base:10,level:0},
-{name:"Mega Tap",desc:"+25/click",cost:10000,base:25,level:0},
-{name:"Ultra Tap",desc:"+50/click",cost:40000,base:50,level:0},
-{name:"Legendary Tap",desc:"+100/click",cost:200000,base:100,level:0},
-{name:"Godly Tap",desc:"+250/click",cost:1000000,base:250,level:0},
-{name:"Divine Tap",desc:"+500/click",cost:5000000,base:500,level:0},
-{name:"Ascendant Tap",desc:"+1000/click",cost:25000000,base:1000,level:0},
-{name:"Ultra Asc Tap",desc:"+5000/click",cost:125000000,base:5000,level:0},
-{name:"God Mode Tap",desc:"+10000/click",cost:500000000,base:10000,level:0},
-{name:"Titan Tap",desc:"+50000/click",cost:2500000000,base:50000,level:0},
-{name:"Alpha Tap",desc:"+100k/click",cost:12500000000,base:100000,level:0},
-{name:"Omega Tap",desc:"+500k/click",cost:50000000000,base:500000,level:0},
-{name:"Jude Tap",desc:"+1M/click",cost:250000000000,base:1000000,level:0},
-{name:"Ultimate Tap",desc:"+5M/click",cost:1250000000000,base:5000000,level:0},
-{name:"Infinity Tap",desc:"+10M/click",cost:5000000000000,base:10000000,level:0},
-{name:"Eternal Tap",desc:"+50M/click",cost:25000000000000,base:50000000,level:0},
-{name:"God Tier Tap",desc:"+100M/click",cost:100000000000000,base:100000000,level:0}
+let state = {
+  money:0,
+  perClick:1,
+  auto:0,
+  ascCoins:0,
+  clickUpgrades:[],
+  autoUpgrades:[],
+  ascUpgrades:[],
+  skins:[],
+  activeSkin:null,
+  gambleMultiplier:1
+};
+
+// --- Upgrades
+const clickUpgradesData = [
+  {name:"Finger Flex",desc:"+1 per click",cost:100,base:1,level:0},
+  {name:"Tap Titan",desc:"+5 per click",cost:500,base:5,level:0},
+  {name:"Click Crusher",desc:"+10 per click",cost:1200,base:10,level:0},
+  {name:"Finger Fury",desc:"+25 per click",cost:3000,base:25,level:0},
+  {name:"Jude Jumper",desc:"+50 per click",cost:6000,base:50,level:0},
+  {name:"Mega Tap",desc:"+100 per click",cost:12000,base:100,level:0},
+  {name:"Ultra Swipe",desc:"+200 per click",cost:25000,base:200,level:0},
+  {name:"Hyper Hit",desc:"+400 per click",cost:50000,base:400,level:0},
+  {name:"Extreme Tap",desc:"+800 per click",cost:100000,base:800,level:0},
+  {name:"Super Smash",desc:"+1600 per click",cost:250000,base:1600,level:0},
+  {name:"Click Storm",desc:"+3200 per click",cost:500000,base:3200,level:0},
+  {name:"Fingerocalypse",desc:"+6400 per click",cost:1000000,base:6400,level:0},
+  {name:"Ultimate Jude",desc:"+12800 per click",cost:2000000,base:12800,level:0},
 ];
 
-const autoUpgrades=[
-{name:"Helper A",desc:"+1/sec",cost:500,base:1,level:0},
-{name:"Helper B",desc:"+5/sec",cost:3000,base:5,level:0},
-{name:"Helper C",desc:"+25/sec",cost:15000,base:25,level:0},
-{name:"Helper D",desc:"+100/sec",cost:75000,base:100,level:0},
-{name:"Helper E",desc:"+500/sec",cost:350000,base:500,level:0},
-{name:"Helper F",desc:"+2000/sec",cost:1500000,base:2000,level:0},
-{name:"Helper G",desc:"+10k/sec",cost:7500000,base:10000,level:0},
-{name:"Helper H",desc:"+50k/sec",cost:35000000,base:50000,level:0},
-{name:"Helper I",desc:"+250k/sec",cost:150000000,base:250000,level:0},
-{name:"Helper J",desc:"+1M/sec",cost:750000000,base:1000000,level:0},
-{name:"Helper K",desc:"+5M/sec",cost:3500000000,base:5000000,level:0},
-{name:"Helper L",desc:"+10M/sec",cost:15000000000,base:10000000,level:0},
-{name:"Helper M",desc:"+50M/sec",cost:75000000000,base:50000000,level:0},
-{name:"Helper N",desc:"+100M/sec",cost:350000000000,base:100000000,level:0},
-{name:"Helper O",desc:"+500M/sec",cost:1500000000000,base:500000000,level:0}
+// 12 auto upgrades
+const autoUpgradesData = [
+  {name:"Helper A",desc:"+1/sec",cost:200,base:1,level:0},
+  {name:"Helper B",desc:"+5/sec",cost:1000,base:5,level:0},
+  {name:"Helper C",desc:"+10/sec",cost:2500,base:10,level:0},
+  {name:"Helper D",desc:"+25/sec",cost:6000,base:25,level:0},
+  {name:"Auto Tap",desc:"+50/sec",cost:12000,base:50,level:0},
+  {name:"Click Machine",desc:"+100/sec",cost:25000,base:100,level:0},
+  {name:"Finger Droid",desc:"+200/sec",cost:50000,base:200,level:0},
+  {name:"Tap Robot",desc:"+400/sec",cost:100000,base:400,level:0},
+  {name:"Click Bot",desc:"+800/sec",cost:250000,base:800,level:0},
+  {name:"Auto Storm",desc:"+1600/sec",cost:500000,base:1600,level:0},
+  {name:"Finger Fury Bot",desc:"+3200/sec",cost:1000000,base:3200,level:0},
+  {name:"Ultimate Auto",desc:"+6400/sec",cost:2000000,base:6400,level:0},
 ];
 
-const ascUpgrades=[
-{name:"+10% Click",desc:"All clicks +10%",cost:5,level:0},
-{name:"+10% Auto",desc:"All auto +10%",cost:5,level:0},
-{name:"+25% Click",desc:"All clicks +25%",cost:15,level:0},
-{name:"+25% Auto",desc:"All auto +25%",cost:15,level:0},
-{name:"+50% Click",desc:"All clicks +50%",cost:40,level:0},
-{name:"+50% Auto",desc:"All auto +50%",cost:40,level:0},
-{name:"+100% Click",desc:"All clicks +100%",cost:100,level:0},
-{name:"+100% Auto",desc:"All auto +100%",cost:100,level:0},
-{name:"+250% Click",desc:"All clicks +250%",cost:250,level:0},
-{name:"+250% Auto",desc:"All auto +250%",cost:250,level:0}
+// 5 ascension upgrades
+const ascUpgradesData = [
+  {name:"Asc Click Boost",desc:"+1% per coin",cost:5,level:0},
+  {name:"Asc Auto Boost",desc:"+1% per coin",cost:5,level:0},
+  {name:"Click Multiplier",desc:"+2% per coin",cost:10,level:0},
+  {name:"Auto Multiplier",desc:"+2% per coin",cost:10,level:0},
+  {name:"Mega Multiplier",desc:"+5% per coin",cost:25,level:0},
 ];
 
-const skins=[{name:"Default",img:"IMG_7281.jpeg",cost:0},{name:"Purple Glow",img:"IMG_6817.jpeg",cost:50},{name:"Golden Shine",img:"IMG_6820.jpeg",cost:250},{name:"Jude Supreme",img:"IMG_6822.jpeg",cost:1000}];
+// Skin shop
+const skinData = [
+  {name:"Default",img:"IMG_7281.jpeg",cost:0},
+  {name:"Purple Glow",img:"IMG_6817.jpeg",cost:500000,rare:true},
+];
 
-// ===== Functions =====
+// --- Functions
+function saveGame(){ localStorage.setItem("judeClickSave",JSON.stringify(state)); }
+function loadGame(){ 
+  const s = JSON.parse(localStorage.getItem("judeClickSave"));
+  if(s){ state = s; updateUI(); }
+}
 function updateUI(){
-document.getElementById("moneyDisplay").textContent="$"+Math.floor(state.money).toLocaleString();
-document.getElementById("perClickDisplay").textContent=Math.floor(state.perClick*state.gambleMultiplier).toLocaleString();
-document.getElementById("autoDisplay").textContent=Math.floor(state.auto).toLocaleString();
-document.getElementById("ascDisplay").textContent=Math.floor(state.ascCoins).toLocaleString();
-renderGrid("clickGrid",clickUpgrades,"click");
-renderGrid("autoGrid",autoUpgrades,"auto");
-renderGrid("ascGrid",ascUpgrades,"asc");
-renderSkins();
+  document.getElementById("moneyDisplay").textContent="$"+formatNum(state.money);
+  document.getElementById("perClickDisplay").textContent=formatNum(state.perClick*state.gambleMultiplier);
+  document.getElementById("autoDisplay").textContent=formatNum(state.auto);
+  document.getElementById("ascDisplay").textContent=formatNum(state.ascCoins);
+  document.getElementById("ascCoins").textContent=formatNum(state.ascCoins);
+  renderGrid("clickGrid",clickUpgradesData,"click");
+  renderGrid("autoGrid",autoUpgradesData,"auto");
+  renderGrid("ascGrid",ascUpgradesData,"asc");
+  renderSkins();
+  if(state.money>=5000000) document.getElementById("ascendBtn").style.display="block";
+  else document.getElementById("ascendBtn").style.display="none";
 }
+function formatNum(n){ return Math.floor(n).toLocaleString(); }
+
 function renderGrid(containerId,data,type){
-const c=document.getElementById(containerId); c.innerHTML="";
-data.forEach((u,i)=>{
-const d=document.createElement("div"); d.className="upgrade";
-d.innerHTML=`<div class="meta"><div class="title">${u.name} (${u.level})</div><div class="desc">${u.desc}</div></div><div class="cost">${type==="asc"?u.cost+" AC":"$"+u.cost.toLocaleString()}</div>`;
-if((type==="asc"?state.ascCoins:state.money)<u.cost) d.classList.add("disabled");
-d.onclick=()=>buyUpgrade(type,i);
-c.appendChild(d);
-});
+  const container=document.getElementById(containerId);
+  container.innerHTML="";
+  data.forEach((u,i)=>{
+    const div=document.createElement("div");
+    div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${u.name} (${u.level})</div><div class="desc">${u.desc}</div></div><div class="cost">$${formatNum(u.cost)}</div>`;
+    div.onclick=()=>buyUpgrade(type,i);
+    if(type!=="asc" && state.money<u.cost) div.classList.add("disabled");
+    if(type==="asc" && state.ascCoins<u.cost) div.classList.add("disabled");
+    container.appendChild(div);
+  });
 }
-function renderSkins(){const c=document.getElementById("skinGrid");c.innerHTML="";skins.forEach((s,i)=>{const d=document.createElement("div");d.className="upgrade";d.innerHTML=`<div class="meta"><div class="title">${s.name}</div><div class="desc">${s.cost>0?"$"+s.cost:"Free"}</div></div>`;if(state.money<s.cost) d.classList.add("disabled");d.onclick=()=>{if(state.money>=s.cost){state.money-=s.cost;document.getElementById("clickImg").src=s.img;updateUI();}};c.appendChild(d);});}
+function renderSkins(){
+  const container=document.getElementById("skinGrid");
+  container.innerHTML="";
+  skinData.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${s.name}</div><div class="desc">${s.cost>0?"$"+formatNum(s.cost):"Free"}</div></div>`;
+    div.onclick=()=>buySkin(i);
+    if(s.rare || (state.money<s.cost && s.cost>0)) div.classList.add("disabled");
+    container.appendChild(div);
+  });
+}
 
 function buyUpgrade(type,i){
-let u; if(type==="click") u=clickUpgrades[i]; if(type==="auto") u=autoUpgrades[i]; if(type==="asc") u=ascUpgrades[i];
-if((type==="asc"?state.ascCoins:state.money)>=u.cost){
-if(type==="click"||type==="auto"){state.money-=u.cost;u.level++;u.cost=Math.floor(u.cost*1.3);}else{state.ascCoins-=u.cost;u.level++;}
-updateStats(); updateUI();
+  let u;
+  if(type==="click") u=clickUpgradesData[i];
+  if(type==="auto") u=autoUpgradesData[i];
+  if(type==="asc") u=ascUpgradesData[i];
+  if(type!=="asc" && state.money>=u.cost || type==="asc" && state.ascCoins>=u.cost){
+    if(type==="click"||type==="auto"){ state.money-=u.cost; u.level++; u.cost=Math.floor(u.cost*1.3); updateStats(); showFloat("+"+(type==="click"?u.base:"")+"/click"); }
+    if(type==="asc"){ state.ascCoins-=u.cost; u.level++; updateStats(); showFloat("Ascension Upgrade!"); }
+    updateUI();
+    saveGame();
+  }
 }
-}
-function updateStats(){
-state.perClick=clickUpgrades.reduce((a,c)=>a+c.base*c.level,0)||1;
-state.auto=autoUpgrades.reduce((a,c)=>a+c.base*c.level,0);
-let ascMul=1+ascUpgrades.reduce((a,c)=>a+0.01*c.level*(c.name.includes("Click")?10:0),0);
-state.perClick*=ascMul; state.auto*=ascMul;
-}
-document.getElementById("clickImg").addEventListener("click",()=>{state.money+=state.perClick*state.gambleMultiplier;updateUI();});
-setInterval(()=>{state.money+=state.auto;updateUI();},1000);
-document.getElementById("ascendBtn")?.addEventListener("click",()=>{document.getElementById("ascModalText").textContent="Ascend to gain 1% of your money as AC";document.getElementById("modalBackdrop").style.display="flex";});
-document.getElementById("cancelAsc").onclick=()=>{document.getElementById("modalBackdrop").style.display="none";};
-document.getElementById("confirmAsc").onclick=()=>{let g=Math.floor(state.money*0.01);state.ascCoins+=g;state.money=0;state.gambleMultiplier=1;updateStats();updateUI();document.getElementById("modalBackdrop").style.display="none";};
-document.getElementById("gambleBtn").onclick=()=>{
-if(state.ascCoins>=75){state.ascCoins-=75;
-let r=Math.random()*100; let reward=0; let multi=1;
-if(r<50) reward=0; else if(r<75) reward=100; else if(r<90) reward=250; else multi=10;
-state.gambleMultiplier=multi; state.ascCoins+=reward; updateUI();
-}}
-document.getElementById("resetBtn").onclick=()=>{if(confirm("Reset all progress?")){localStorage.removeItem("judeClickSave");location.reload();}};
-document.getElementById("exportBtn").onclick=()=>{navigator.clipboard.writeText(JSON.stringify(state));alert("Save copied!");};
-document.getElementById("importBtn").onclick=()=>{let s=prompt("Paste save JSON:");if(s){try{state=JSON.parse(s);updateUI();}catch(e){alert("Invalid save.");}}};
-document.getElementById("appGuideBtn").onclick=()=>{alert("Congrats! Now you can start building your app! Use your AC to unlock features.")};
 
-if(localStorage.getItem("judeClickSave")){state=JSON.parse(localStorage.getItem("judeClickSave"));updateUI();}
-setInterval(()=>{localStorage.setItem("judeClickSave",JSON.stringify(state));},2000);
+function updateStats(){
+  state.perClick=clickUpgradesData.reduce((a,c)=>a+c.base*c.level,0)||1;
+  state.auto=autoUpgradesData.reduce((a,c)=>a+c.base*c.level,0);
+  let ascMultiplier=1+ascUpgradesData.reduce((a,c)=>a+0.01*c.level,0);
+  state.perClick*=ascMultiplier;
+  state.auto*=ascMultiplier;
+}
+
+function buySkin(i){
+  const s=skinData[i];
+  if(!s.rare && state.money>=s.cost){
+    state.money-=s.cost;
+    state.activeSkin=s.img;
+    document.getElementById("clickImg").src=s.img;
+    updateUI();
+    saveGame();
+  }
+}
+
+document.getElementById("clickImg").addEventListener("click",()=>{
+  state.money+=state.perClick*state.gambleMultiplier;
+  showFloat("+"+formatNum(state.perClick*state.gambleMultiplier));
+  updateUI();
+  saveGame();
+});
+document.addEventListener("keydown",(e)=>{ if(e.code==="Space"||e.code==="Enter"){ state.money+=state.perClick*state.gambleMultiplier; showFloat("+"+formatNum(state.perClick*state.gambleMultiplier)); updateUI(); saveGame(); }});
+
+function autoTick(){ state.money+=state.auto; if(state.auto>0) showFloat("+"+formatNum(state.auto)); updateUI(); saveGame(); }
+setInterval(autoTick,1000);
+
+document.getElementById("ascendBtn").addEventListener("click",()=>{ openModal("ascModalText","Ascend now and gain Ascension Coins equal to 1% of your total money!"); });
+document.getElementById("cancelAsc").addEventListener("click",()=>{ closeModal(); });
+document.getElementById("confirmAsc").addEventListener("click",()=>{
+  const gain=Math.floor(state.money*0.01);
+  state.ascCoins+=gain; state.money=0; state.gambleMultiplier=1; closeModal(); updateStats(); updateUI(); showFloat("Gained "+formatNum(gain)+" Asc Coins"); saveGame();
+});
+
+function openModal(textId,message){ document.getElementById(textId).textContent=message; document.getElementById("modalBackdrop").style.display="flex"; }
+function closeModal(){ document.getElementById("modalBackdrop").style.display="none"; }
+
+document.getElementById("gambleBtn").addEventListener("click",()=>{
+  if(state.ascCoins>=75){
+    state.ascCoins-=75;
+    let r=Math.random()*100; let reward=0; let multiplier=1;
+    if(r<50) reward=0; 
+    else if(r<75) reward=100;
+    else if(r<90) reward=250;
+    else { reward=0; multiplier=10; showFloat("SUPER RARE! 10x per click!"); }
+    state.gambleMultiplier=multiplier;
+    state.ascCoins+=reward;
+    updateUI();
+    saveGame();
+    animateGamble();
+  }
+});
+
+function animateGamble(){
+  const img=document.getElementById("clickImg");
+  img.style.transform="scale(1.2) rotate(20deg)";
+  setTimeout(()=>{ img.style.transform="scale(1) rotate(0deg)"; },400);
+}
+
+document.getElementById("adButton").addEventListener("click",()=>{
+  state.money+=50000; updateUI(); saveGame();
+  showFloat("+50,000");
+});
+
+function showFloat(txt){
+  const f=document.createElement("div");
+  f.className="float";
+  f.textContent=txt;
+  f.style.left=(window.innerWidth/2 + (Math.random()-0.5)*200)+"px";
+  f.style.top=(window.innerHeight/2 + (Math.random()-0.5)*200)+"px";
+  document.body.appendChild(f);
+  let t=0; const id=setInterval(()=>{
+    t+=0.02; f.style.transform=`translateY(${-t*50}px)`; f.style.opacity=1-t; if(t>=1){ f.remove(); clearInterval(id); }
+  },20);
+}
+
+document.getElementById("resetBtn").addEventListener("click",()=>{ if(confirm("Reset all progress?")){ localStorage.removeItem("judeClickSave"); location.reload(); } });
+document.getElementById("exportBtn").addEventListener("click",()=>{ navigator.clipboard.writeText(JSON.stringify(state)); alert("Save copied to clipboard!"); });
+document.getElementById("importBtn").addEventListener("click",()=>{ const s=prompt("Paste your save JSON:"); if(s){ try{ state=JSON.parse(s); updateUI(); saveGame(); }catch(e){ alert("Invalid save."); } }});
+
+loadGame();
 </script>
 </body>
 </html>

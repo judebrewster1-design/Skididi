@@ -5,376 +5,301 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>Click a Jude — IDRC</title>
 <style>
-:root {
-  --bg: #08090b;
-  --panel: #0f1316;
-  --muted: #99a3b2;
-  --accent: #00e6ff;
-  --accent-2: #7b61ff;
-  --glass: rgba(255,255,255,0.03);
-  --good: #6ef08a;
-  --bad: #ff6e6e;
-  --card-radius: 12px;
-}
-html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
-* { box-sizing: border-box; }
-.app { max-width:1100px; margin: 10px auto; padding: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
-@media(min-width:900px){ .app { grid-template-columns: 360px 1fr 360px; align-items:start; } }
-header { grid-column: 1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 8px 6px; }
-.brand { display:flex; align-items:center; gap:12px; }
-.logo { width:56px; height:56px; border-radius:12px; overflow:hidden; border:3px solid rgba(0,230,255,0.08); background:#071018; display:flex;align-items:center;justify-content:center; }
-.logo img { width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
-.title { font-weight:700; letter-spacing:0.4px; font-size:18px; margin:0; }
-.subtitle { font-size:12px; color:var(--muted); margin-top:3px; }
-.top-stats { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-.stat { min-width:120px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:10px; padding:8px 10px; text-align:center; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
-.stat .label { font-size:12px; color:var(--muted); }
-.stat .value { font-weight:800; color:var(--accent); margin-top:6px; font-size:16px; }
-.panel { background:var(--panel); border-radius:var(--card-radius); padding:12px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
-.click-area { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; }
-#clickImg { width:220px; height:220px; border-radius:14px; object-fit:cover; border:5px solid rgba(0,230,255,0.06); transition: transform .08s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor:pointer; }
-#clickImg:active { transform: scale(.96) rotate(-1deg); }
-.big-number { font-size:20px; font-weight:700; color:#fff; }
-.small { font-size:12px; color:var(--muted); }
-.controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
-button.btn { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--accent); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; transition: transform .12s ease, background .12s ease; }
-button.btn.secondary { background: rgba(255,255,255,0.02); color:#fff; }
-button.btn:active{ transform: translateY(1px); }
-button.btn.disabled{ opacity:.45; pointer-events:none; }
-.upgrades { display:grid; gap:12px; }
-.upgrid { display:grid; grid-template-columns: repeat(1,1fr); gap:8px; max-height:420px; overflow:auto; padding-right:6px; }
-@media(min-width:1100px){ .upgrid { grid-template-columns: repeat(2,1fr);} }
-.upgrade { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); cursor:pointer; transition: transform .12s, box-shadow .12s; }
-.upgrade:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
-.upgrade .meta { display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left; }
-.upgrade .title { font-weight:800; font-size:14px; }
-.upgrade .desc { font-size:12px; color:var(--muted); }
-.upgrade .cost { font-weight:800; color:var(--accent); }
-.glow { box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; border-color: rgba(0,230,255,0.12) !important; }
-.right-stack { display:flex; flex-direction:column; gap:12px; }
-.ad-btn { width:100%; background:transparent; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:10px; cursor:pointer; font-weight:800; }
-.ad-btn.disabled { opacity:.45; pointer-events:none; }
-.modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.65); z-index:9999; }
-.modal { background:var(--panel); padding:18px; border-radius:12px; width:min(640px,92%); border:1px solid rgba(255,255,255,0.03); }
-.modal h3 { margin:0 0 8px 0; }
-.modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
-.float { position:fixed; pointer-events:none; font-weight:800; color:var(--accent); text-shadow:0 6px 18px rgba(0,0,0,0.6); transform-origin:center; }
-.spark { position:fixed; width:6px; height:6px; border-radius:50%; pointer-events:none; opacity:0.95; }
-.muted { color:var(--muted); font-size:13px; }
-.centered { display:flex; align-items:center; justify-content:center; }
-/* bottom guide button */
-#appGuideBtn { position:fixed; bottom:12px; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; font-weight:700; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; z-index:10000; font-size:14px; }
-@media(max-width:600px){ #clickImg{width:160px;height:160px;} .big-number{font-size:18px;} .stat{min-width:80px;} }
+:root {--bg:#08090b;--panel:#0f1316;--muted:#99a3b2;--accent:#00e6ff;--accent-2:#7b61ff;--glass:rgba(255,255,255,0.03);--good:#6ef08a;--bad:#ff6e6e;--card-radius:12px;}
+html,body{height:100%;margin:0;font-family:Inter,sans-serif;background:linear-gradient(180deg,#050506 0%,#0c0f12 100%);color:#e8f7ff;}
+*{box-sizing:border-box;}
+.app{max-width:1100px;margin:10px auto;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:900px){.app{grid-template-columns:360px 1fr 360px;align-items:start;}}
+header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.logo{width:56px;height:56px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.08);background:#071018;display:flex;align-items:center;justify-content:center;}
+.logo img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none;}
+.title{font-weight:700;letter-spacing:0.4px;font-size:18px;margin:0;}
+.subtitle{font-size:12px;color:var(--muted);margin-top:3px;}
+.top-stats{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.stat{min-width:120px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:10px;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(0,0,0,0.6);}
+.stat .label{font-size:12px;color:var(--muted);}
+.stat .value{font-weight:800;color:var(--accent);margin-top:6px;font-size:16px;}
+.panel{background:var(--panel);border-radius:var(--card-radius);padding:12px;box-shadow:0 12px 32px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03);}
+.click-area{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;}
+#clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:5px solid rgba(0,230,255,0.06);transition: transform .08s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer;}
+#clickImg:active{transform: scale(.96) rotate(-1deg);}
+.big-number{font-size:20px;font-weight:700;color:#fff;}
+.small{font-size:12px;color:var(--muted);}
+.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+button.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700;transition: transform .12s ease, background .12s ease;}
+button.btn.secondary{background: rgba(255,255,255,0.02);color:#fff;}
+button.btn:active{ transform: translateY(1px);}
+button.btn.disabled{opacity:.45;pointer-events:none;}
+.upgrades{display:grid;gap:12px;}
+.upgrid{display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-height:420px;overflow:auto;padding-right:6px;}
+@media(min-width:1100px){.upgrid{grid-template-columns:repeat(2,1fr);}}
+.upgrade{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition: transform .12s, box-shadow .12s;}
+.upgrade:hover{transform: translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.6);}
+.upgrade .meta{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left;}
+.upgrade .title{font-weight:800;font-size:14px;}
+.upgrade .desc{font-size:12px;color:var(--muted);}
+.upgrade .cost{font-weight:800;color:var(--accent);}
+.glow{box-shadow:0 0 28px rgba(0,230,255,0.15),0 0 80px rgba(0,230,255,0.06) !important;border-color: rgba(0,230,255,0.12) !important;}
+.right-stack{display:flex;flex-direction:column;gap:12px;}
+.ad-btn{width:100%;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff;padding:10px;border-radius:10px;cursor:pointer;font-weight:800;}
+.ad-btn.disabled{opacity:.45;pointer-events:none;}
+.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background: rgba(0,0,0,0.65);z-index:9999;}
+.modal{background:var(--panel);padding:18px;border-radius:12px;width:min(640px,92%);border:1px solid rgba(255,255,255,0.03);}
+.modal h3{margin:0 0 8px 0;}
+.modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px;}
+.float{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 6px 18px rgba(0,0,0,0.6);transform-origin:center;}
+.spark{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;opacity:0.95;}
+.muted{color:var(--muted);font-size:13px;}
+.centered{display:flex;align-items:center;justify-content:center;}
+#appGuideBtn{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-weight:700;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;z-index:10000;font-size:14px;}
+@media(max-width:600px){#clickImg{width:160px;height:160px;}.big-number{font-size:18px;}.stat{min-width:80px;}}
 </style>
 </head>
 <body>
 <div class="app" id="appRoot">
 <header>
-  <div class="brand">
-    <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
-    <div>
-      <div class="title">Click a Jude — IDRC</div>
-      <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
-    </div>
-  </div>
-  <div class="top-stats">
-    <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
-    <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
-    <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
-    <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
-  </div>
+<div class="brand">
+<div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
+<div><div class="title">Click a Jude — IDRC</div><div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div></div>
+</div>
+<div class="top-stats">
+<div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+<div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+<div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+<div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
+</div>
 </header>
 
 <div class="panel centered" id="leftCol">
-  <div class="click-area" style="width:100%">
-    <div class="big-number">Click the Jude</div>
-    <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
-    <div class="small">Tap or press Space / Enter (no holding)</div>
-    <div class="controls" style="margin-top:8px">
-      <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
-      <button class="btn secondary" id="importBtn" type="button">Import Save</button>
-      <button class="btn" id="resetBtn" type="button">Reset</button>
-    </div>
-  </div>
+<div class="click-area" style="width:100%">
+<div class="big-number">Click the Jude</div>
+<img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
+<div class="small">Tap or press Space / Enter (no holding)</div>
+<div class="controls" style="margin-top:8px">
+<button class="btn secondary" id="exportBtn" type="button">Export Save</button>
+<button class="btn secondary" id="importBtn" type="button">Import Save</button>
+<button class="btn" id="resetBtn" type="button">Reset</button>
+</div>
+</div>
 </div>
 
 <div class="panel upgrades" id="centerCol">
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-    <h3 style="margin:0">Click Upgrades</h3>
-    <div class="muted">Tap to buy — costs increase after purchase</div>
-  </div>
-  <div id="clickGrid" class="upgrid"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+<h3 style="margin:0">Click Upgrades</h3>
+<div class="muted">Tap to buy — costs increase after purchase</div>
+</div>
+<div id="clickGrid" class="upgrid"></div>
 
-  <div style="height:8px"></div>
+<div style="height:8px"></div>
 
-  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-    <h3 style="margin:0">Auto Upgrades</h3>
-    <div class="muted">Earn while away (runs every second)</div>
-  </div>
-  <div id="autoGrid" class="upgrid"></div>
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+<h3 style="margin:0">Auto Upgrades</h3>
+<div class="muted">Earn while away (runs every second)</div>
+</div>
+<div id="autoGrid" class="upgrid"></div>
 </div>
 
 <div class="panel right-stack" id="rightCol">
-  <div>
-    <h3 style="margin:0 0 8px 0">Ascension</h3>
-    <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
-    <div style="height:10px"></div>
-    <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
-    <div style="height:8px"></div>
-    <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
+<div>
+<h3 style="margin:0 0 8px 0">Ascension</h3>
+<div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
+<div style="height:10px"></div>
+<button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
+<div style="height:8px"></div>
+<div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
 
-    <div style="height:12px"></div>
+<div style="height:12px"></div>
+<div style="margin-top:8px;">
+<h4 style="margin:0 0 6px 0">Ascension Upgrades</h4>
+<div class="muted" style="margin-bottom:8px">Spend Asc Coins to buy permanent boosts</div>
+<div id="ascGrid" class="upgrid" style="max-height:240px;"></div>
+</div>
 
-    <!-- Ascension upgrades grid (buys with asc coins) -->
-    <div style="margin-top:8px;">
-      <h4 style="margin:0 0 6px 0">Ascension Upgrades</h4>
-      <div class="muted" style="margin-bottom:8px">Spend Asc Coins to buy permanent boosts</div>
-      <div id="ascGrid" class="upgrid" style="max-height:120px;"></div>
-    </div>
-  </div>
+<div style="height:12px"></div>
+<h3 style="margin:0 0 8px 0">Skin Shop & Gambling Box</h3>
+<div class="muted">Preview and buy skins — gambling box gives random skin</div>
+<div id="skinGrid" class="upgrid" style="max-height:200px;"></div>
+<button id="gambleBoxBtn" class="btn" style="margin-top:8px;">Buy Gamble Box (75 Coins)</button>
 
-  <div style="height:12px"></div>
+<div style="height:12px"></div>
 
-  <div>
-    <h3 style="margin:0 0 8px 0">Skin Shop</h3>
-    <div class="muted">Buy skins with Asc Coins</div>
-    <div style="height:6px"></div>
-    <div id="skinGrid" class="upgrid" style="max-height:180px;"></div>
-    <button id="inventoryBtn" class="btn secondary" style="margin-top:6px; width:100%">Open Inventory</button>
-  </div>
-
-  <div style="height:12px"></div>
-
-  <div>
-    <h3 style="margin:0 0 8px 0">Ads</h3>
-    <div class="muted">Click ad — +$50,000 (rotates through links)</div>
-    <div style="height:8px"></div>
-    <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
-    <div style="height:8px"></div>
-    <div id="adStatus" class="muted"></div>
-  </div>
+<div>
+<h3 style="margin:0 0 8px 0">Ads</h3>
+<div class="muted">Click ad — +$50,000 (rotates through links)</div>
+<div style="height:8px"></div>
+<button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
+<div style="height:8px"></div>
+<div id="adStatus" class="muted"></div>
+</div>
 </div>
 
 <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
-  <div class="modal">
-    <h3>Ascend?</h3>
-    <div id="ascModalText" class="muted" style="margin-top:6px;"></div>
-    <div class="actions" style="margin-top:12px">
-      <button id="modalCancel" class="btn secondary" type="button">Cancel</button>
-      <button id="modalConfirm" class="btn" type="button">Confirm Ascend</button>
-    </div>
-  </div>
+<div class="modal">
+<h3>Ascend?</h3>
+<div id="ascModalText" class="muted" style="margin-top:6px;"></div>
+<div class="actions" style="margin-top:12px">
+<button id="modalCancel" class="btn secondary" type="button">Cancel</button>
+<button id="modalConfirm" class="btn" type="button">Confirm Ascend</button>
 </div>
-
-<div class="modal-backdrop" id="inventoryBackdrop" role="dialog" aria-hidden="true">
-  <div class="modal" style="max-width:400px;">
-    <h3>Skin Inventory</h3>
-    <div id="inventoryGrid" class="upgrid" style="max-height:220px;"></div>
-    <div class="actions">
-      <button id="inventoryClose" class="btn secondary" type="button">Close</button>
-    </div>
-  </div>
+</div>
 </div>
 
 <div id="floatRoot" aria-hidden="true"></div>
 
-<button id="appGuideBtn" type="button" onclick="alert('iOS Safari: Tap the share icon → Add to Home Screen → Name it → Done.\\nAndroid/Chrome: Tap menu → Add to Home screen → Done.')">How to make an app</button>
+<button id="appGuideBtn" type="button" onclick="alert('iOS Safari: Tap share → Add to Home Screen.\\nAndroid: Menu → Add to Home screen.')">How to make an app</button>
 </div>
 
 <script>
-/* ====== State and defs ====== */
-const SAVE_KEY = "idrc_clickajude_v4";
+// === State ===
+const SAVE_KEY="idrc_clickajude_v5";
+let state={points:0,perClick:1,autoPerSec:0,ascCoins:0,adIndex:0,clickUpgrades:[],autoUpgrades:[],ascensionUpgrades:[],skinsOwned:[],currentSkin:null};
 
-let state = {
-  points:0, perClick:1, autoPerSec:0, ascCoins:0, adIndex:0,
-  clickUpgrades:[], autoUpgrades:[], ascensionUpgrades:[],
-  skins: [
-    {img:"IMG_7352.jpeg", cost:50, bonus:1.25, owned:false},
-    {img:"IMG_7279.jpeg", cost:100, bonus:1.5, owned:false},
-    {img:"IMG_6854.jpeg", cost:250, bonus:2, owned:false}
-  ],
-  equippedSkin: null
-};
+// === Definitions ===
+const CLICK_DEFS=[["Finger of Doom",5],["Titan Tap",25],["Nuclear Thumb",120],["Cosmic Punch",600],["Meteor Jab",3000],["Quantum Flick",12000],["Dragon Snap",50000],["Plasma Knuckle",180000],["Galactic Push",700000],["Stellar Slap",2500000],["Eclipse Strike",9000000],["Omega Jab",35000000],["Void Swipe",140000000],["Infinity Tap",600000000],["Reality Punch",2500000000]];
+const AUTO_DEFS=[["Intern on Minimum Wage",2],["Student Temp Worker",10],["Freelance Bot",45],["AI Assistant",220],["Assembly Line",900],["Factory Farm",4200],["Commerce Portal",18000],["Data Center",75000],["Alien Mining Rig",320000],["Black Hole Extractor",1200000],["Orbital Driller",5000000],["Planetary Mine",20000000],["Stellar Forge",90000000],["Cosmic Foundry",400000000],["Multiverse Vault",1700000000]];
+const ASC_DEFS=[{name:"Bonus Start",effect:100000,desc:"Start with bonus money after Ascend",costBase:2},{name:"Extra Coins",effect:1,desc:"Gain +1 extra asc coin per Ascend",costBase:4},{name:"Click Multiplier",effect:2,desc:"×2 click power per level",costBase:6}];
+const SKINS=[{img:"IMG_7352.jpeg",cost:50,bonus:1.25},{img:"IMG_7279.jpeg",cost:100,bonus:1.5},{img:"IMG_6854.jpeg",cost:250,bonus:2},{img:"IMG_6817.jpeg",cost:0,bonus:10,rare:true,desc:"Super Ultra Pyto Rare — 10x per click!"}];
+const GAMBLE_BOX={cost:75,odds:[{chance:50,skin:SKINS[0]},{chance:25,skin:SKINS[1]},{chance:15,skin:SKINS[2]},{chance:10,skin:SKINS[3]}]};
 
-/* click + auto defs */
-const CLICK_DEFS = [["Finger of Doom",5],["Titan Tap",25],["Nuclear Thumb",120],["Cosmic Punch",600],["Meteor Jab",3000],["Quantum Flick",12000],["Dragon Snap",50000],["Plasma Knuckle",180000],["Galactic Push",700000],["Stellar Slap",2500000]];
-const AUTO_DEFS = [["Auto-Finger",2],["Auto-Arm",15],["Auto-Punch",100],["Auto-Fist",600],["Auto-Knuckle",4000],["Auto-Dragon",20000]];
-const ASC_DEFS = [["Super Multiplier",5],["Ultra Bonus",15]];
+// === Utils ===
+function formatNum(n){return n.toLocaleString();}
 
-/* ====== DOM refs ====== */
-const moneyDisplay = document.getElementById("moneyDisplay");
-const perClickDisplay = document.getElementById("perClickDisplay");
-const autoDisplay = document.getElementById("autoDisplay");
-const ascDisplay = document.getElementById("ascDisplay");
-const clickGrid = document.getElementById("clickGrid");
-const autoGrid = document.getElementById("autoGrid");
-const ascGrid = document.getElementById("ascGrid");
-const skinGrid = document.getElementById("skinGrid");
-const inventoryGrid = document.getElementById("inventoryGrid");
-const clickImg = document.getElementById("clickImg");
-const ascendBtn = document.getElementById("ascendBtn");
-const ascCoinsSpan = document.getElementById("ascCoins");
-const adButton = document.getElementById("adButton");
-const adStatus = document.getElementById("adStatus");
+// === DOM ===
+const moneyD=document.getElementById("moneyDisplay");
+const perClickD=document.getElementById("perClickDisplay");
+const autoD=document.getElementById("autoDisplay");
+const ascD=document.getElementById("ascDisplay");
+const clickImg=document.getElementById("clickImg");
+const clickGrid=document.getElementById("clickGrid");
+const autoGrid=document.getElementById("autoGrid");
+const ascGrid=document.getElementById("ascGrid");
+const skinGrid=document.getElementById("skinGrid");
+const ascCoinsD=document.getElementById("ascCoins");
+const ascendBtn=document.getElementById("ascendBtn");
+const modalBackdrop=document.getElementById("modalBackdrop");
+const modalConfirm=document.getElementById("modalConfirm");
+const modalCancel=document.getElementById("modalCancel");
+const floatRoot=document.getElementById("floatRoot");
+const adButton=document.getElementById("adButton");
+const adStatus=document.getElementById("adStatus");
+const gambleBoxBtn=document.getElementById("gambleBoxBtn");
 
-/* ====== Render functions ====== */
-function render() {
-  moneyDisplay.textContent = "$" + Math.floor(state.points).toLocaleString();
-  perClickDisplay.textContent = (state.perClick*(state.equippedSkin?.bonus||1)).toFixed(1);
-  autoDisplay.textContent = state.autoPerSec;
-  ascDisplay.textContent = state.ascCoins;
-  ascCoinsSpan.textContent = state.ascCoins;
-  ascendBtn.style.display = state.points>=5000000?"block":"none";
+// === Save/Load ===
+function saveGame(){localStorage.setItem(SAVE_KEY,JSON.stringify(state));}
+function loadGame(){const s=localStorage.getItem(SAVE_KEY);if(s){state=JSON.parse(s);}updateUI();}
+function resetGame(){if(confirm("Reset all progress?")){state={points:0,perClick:1,autoPerSec:0,ascCoins:0,adIndex:0,clickUpgrades:[],autoUpgrades:[],ascensionUpgrades:[],skinsOwned:[],currentSkin:null};saveGame();updateUI();}}
 
-  // click upgrades
-  clickGrid.innerHTML = "";
-  CLICK_DEFS.forEach(([title, baseCost],i)=>{
-    const cost = Math.floor(baseCost * Math.pow(1.15,(state.clickUpgrades[i]||0)));
-    const div = document.createElement("div");
-    div.className="upgrade";
-    div.innerHTML=`<div class="meta"><div class="title">${title}</div><div class="desc">Adds +${5*(i+1)} per click</div></div><div class="cost">$${cost}</div>`;
-    div.onclick=()=>buyClickUpgrade(i, cost);
+// === Calculations ===
+function recalcClick(){
+  let base=1;
+  CLICK_DEFS.forEach((c,i)=>{base+=(state.clickUpgrades[i]||0)*c[1]*0.1;});
+  if(state.ascensionUpgrades[2]) base*=2**state.ascensionUpgrades[2];
+  if(state.currentSkin!=null) base*=SKINS[state.currentSkin].bonus||1;
+  state.perClick=base;
+}
+function recalcAuto(){
+  let auto=0;AUTO_DEFS.forEach((c,i)=>{auto+=(state.autoUpgrades[i]||0)*c[1]*0.1;});state.autoPerSec=auto;
+}
+
+// === Floating text ===
+function floatText(text,target){const f=document.createElement("div");f.className="float";f.textContent=text;const rect=target.getBoundingClientRect();f.style.left=rect.left+rect.width/2+"px";f.style.top=rect.top+"px";floatRoot.appendChild(f);let y=0,alpha=1;function anim(){y+=1;alpha-=0.02;f.style.transform=`translate(-50%,-${y}px)`;f.style.opacity=alpha;if(alpha>0)requestAnimationFrame(anim);else f.remove();}anim();}
+
+// === UI Update ===
+function updateUI(){
+  moneyD.textContent="$"+formatNum(state.points);
+  perClickD.textContent=formatNum(state.perClick);
+  autoD.textContent=formatNum(state.autoPerSec);
+  ascD.textContent=formatNum(state.ascCoins);
+  ascCoinsD.textContent=formatNum(state.ascCoins);
+
+  // Click Upgrades
+  clickGrid.innerHTML="";
+  CLICK_DEFS.forEach((c,i)=>{
+    const lvl=state.clickUpgrades[i]||0;
+    const cost=Math.floor(c[1]*(1.2**lvl));
+    const div=document.createElement("div");div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${c[0]}</div><div class="desc">Lvl ${lvl}</div></div><div class="cost">$${formatNum(cost)}</div>`;
+    div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.clickUpgrades[i]=lvl+1;recalcClick();updateUI();saveGame();floatText("Bought!",moneyD);}};
     clickGrid.appendChild(div);
   });
 
-  // auto upgrades
+  // Auto Upgrades
   autoGrid.innerHTML="";
-  AUTO_DEFS.forEach(([title, baseCost],i)=>{
-    const cost=Math.floor(baseCost*Math.pow(1.15,(state.autoUpgrades[i]||0)));
-    const div=document.createElement("div");
-    div.className="upgrade";
-    div.innerHTML=`<div class="meta"><div class="title">${title}</div><div class="desc">+${i+1} auto/sec</div></div><div class="cost">$${cost}</div>`;
-    div.onclick=()=>buyAutoUpgrade(i,cost);
+  AUTO_DEFS.forEach((c,i)=>{
+    const lvl=state.autoUpgrades[i]||0;
+    const cost=Math.floor(c[1]*(1.2**lvl));
+    const div=document.createElement("div");div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${c[0]}</div><div class="desc">Lvl ${lvl}</div></div><div class="cost">$${formatNum(cost)}</div>`;
+    div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.autoUpgrades[i]=lvl+1;recalcAuto();updateUI();saveGame();floatText("Bought!",moneyD);}};
     autoGrid.appendChild(div);
   });
 
-  // ascension upgrades
+  // Ascension Upgrades
   ascGrid.innerHTML="";
-  ASC_DEFS.forEach(([title, cost],i)=>{
-    const div=document.createElement("div");
-    div.className="upgrade";
-    div.innerHTML=`<div class="meta"><div class="title">${title}</div></div><div class="cost">${cost} ASC</div>`;
-    div.onclick=()=>buyAscUpgrade(i,cost);
+  ASC_DEFS.forEach((a,i)=>{
+    const lvl=state.ascensionUpgrades[i]||0;
+    const cost=Math.floor(a.costBase*(1.5**lvl));
+    const div=document.createElement("div");div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${a.name}</div><div class="desc">${a.desc} (Lvl ${lvl})</div></div><div class="cost">${cost} AC</div>`;
+    div.onclick=()=>{if(state.ascCoins>=cost){state.ascCoins-=cost;state.ascensionUpgrades[i]=lvl+1;recalcClick();updateUI();saveGame();floatText("Bought!",ascCoinsD);}};
     ascGrid.appendChild(div);
   });
 
-  // skin shop
+  // Skin Shop
   skinGrid.innerHTML="";
-  state.skins.forEach((skin,i)=>{
-    const div=document.createElement("div");
-    div.className="upgrade";
-    const ownedText = skin.owned ? "Owned" : `$${skin.cost} ASC`;
-    div.innerHTML=`<div class="meta"><div class="title">Skin ${i+1}</div><div class="desc">Bonus: ×${skin.bonus}</div></div><div class="cost">${ownedText}</div>`;
-    div.onclick=()=>buySkin(i);
+  SKINS.forEach((s,i)=>{
+    const owned=state.skinsOwned.includes(i);
+    const div=document.createElement("div");div.className="upgrade";div.style.justifyContent="space-between";
+    div.innerHTML=`<div class="meta"><div class="title">Skin ${i+1}${s.rare?" ⭐":""}</div><div class="desc">${s.desc||"Click bonus ×"+s.bonus}</div></div><div class="cost">${owned?"Owned":s.cost+" AC"}</div>`;
+    div.onclick=()=>{if(!owned && state.ascCoins>=s.cost){state.ascCoins-=s.cost;state.skinsOwned.push(i);state.currentSkin=i;recalcClick();updateUI();saveGame();floatText("Skin Purchased!",moneyD);}};
+    div.onmouseover=()=>{clickImg.src=s.img;}
+    div.onmouseleave=()=>{clickImg.src=SKINS[state.currentSkin]?.img||"IMG_7281.jpeg";}
     skinGrid.appendChild(div);
   });
 
-  // inventory
-  inventoryGrid.innerHTML="";
-  state.skins.forEach((skin,i)=>{
-    if(skin.owned){
-      const div=document.createElement("div");
-      div.className="upgrade";
-      const equippedText = (state.equippedSkin===i)?"Equipped":"Equip";
-      div.innerHTML=`<div class="meta"><div class="title">Skin ${i+1}</div><div class="desc">×${skin.bonus}</div></div><div class="cost">${equippedText}</div>`;
-      div.onclick=()=>equipSkin(i);
-      inventoryGrid.appendChild(div);
-    }
-  });
+  // Ascend button
+  ascendBtn.style.display=(state.points>=5000000)?"block":"none";
 }
 
-function buyClickUpgrade(i,cost){
-  if(state.points>=cost){
-    state.points-=cost;
-    state.clickUpgrades[i]=(state.clickUpgrades[i]||0)+1;
-    state.perClick += 5*(i+1);
-    render();
+// === Click ===
+clickImg.addEventListener("click",()=>{state.points+=state.perClick;updateUI();floatText("+"+formatNum(state.perClick),clickImg);saveGame();});
+
+// === Auto ===
+setInterval(()=>{state.points+=state.autoPerSec;updateUI();saveGame();},1000);
+
+// === Ascend ===
+ascendBtn.addEventListener("click",()=>{modalBackdrop.style.display="flex";document.getElementById("ascModalText").textContent="Ascend for "+formatNum(Math.floor(state.points/5000000))+" Ascension Coins?";});
+modalCancel.addEventListener("click",()=>{modalBackdrop.style.display="none";});
+modalConfirm.addEventListener("click",()=>{
+  const coins=Math.floor(state.points/5000000);
+  state.ascCoins+=coins;state.points=0;state.clickUpgrades=[];state.autoUpgrades=[];state.currentSkin=null;
+  recalcClick();recalcAuto();updateUI();saveGame();modalBackdrop.style.display="none";floatText("Ascended! +"+coins+" AC",moneyD);
+});
+
+// === Ads ===
+const AD_LINKS=["https://example.com/ad1","https://example.com/ad2","https://example.com/ad3"];
+adButton.addEventListener("click",()=>{state.points+=50000;updateUI();floatText("+50k",moneyD);state.adIndex=(state.adIndex+1)%AD_LINKS.length;adStatus.textContent="Next ad: "+AD_LINKS[state.adIndex];saveGame();});
+
+// === Gambling Box ===
+gambleBoxBtn.addEventListener("click",()=>{
+  if(state.ascCoins<GAMBLE_BOX.cost){alert("Not enough Asc Coins!");return;}
+  state.ascCoins-=GAMBLE_BOX.cost;updateUI();saveGame();
+  // random chance
+  let r=Math.random()*100;let acc=0;let won=null;
+  for(const o of GAMBLE_BOX.odds){acc+=o.chance;if(r<=acc){won=o.skin;break;}}
+  if(won){
+    if(!state.skinsOwned.includes(SKINS.indexOf(won))){state.skinsOwned.push(SKINS.indexOf(won));state.currentSkin=SKINS.indexOf(won);recalcClick();updateUI();}
+    floatText("Gamble Won! +" + (won.rare?"Super Rare Skin":"Skin"),moneyD);
+    clickImg.src=won.img;
   }
-}
-function buyAutoUpgrade(i,cost){
-  if(state.points>=cost){
-    state.points-=cost;
-    state.autoUpgrades[i]=(state.autoUpgrades[i]||0)+1;
-    state.autoPerSec += i+1;
-    render();
-  }
-}
-function buyAscUpgrade(i,cost){
-  if(state.ascCoins>=cost){
-    state.ascCoins-=cost;
-    // Permanent boost: +10% per upgrade
-    state.perClick *= 1.1;
-    render();
-  }
-}
-function buySkin(i){
-  const skin=state.skins[i];
-  if(!skin.owned && state.ascCoins>=skin.cost){
-    state.ascCoins-=skin.cost;
-    skin.owned=true;
-    render();
-  }
-}
-function equipSkin(i){
-  state.equippedSkin=i;
-  render();
-}
+});
 
-/* ====== Click + Auto ====== */
-clickImg.addEventListener("click",()=>{ state.points += state.perClick*(state.equippedSkin?.bonus||1); render(); });
-document.addEventListener("keydown",e=>{ if(e.code==="Space"||e.code==="Enter"){ state.points += state.perClick*(state.equippedSkin?.bonus||1); render(); } });
+// === Keyboard ===
+document.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="Enter"){clickImg.click();}});
 
-setInterval(()=>{
-  state.points += state.autoPerSec*(state.equippedSkin?.bonus||1);
-  render();
-},1000);
-
-/* ====== Ascension ====== */
-ascendBtn.onclick=()=>{
-  document.getElementById("modalBackdrop").style.display="flex";
-  document.getElementById("ascModalText").textContent=`You will convert $${Math.floor(state.points).toLocaleString()} → ${Math.floor(state.points/1000000)} ASC.`;
-};
-document.getElementById("modalCancel").onclick=()=>{document.getElementById("modalBackdrop").style.display="none";};
-document.getElementById("modalConfirm").onclick=()=>{
-  const earned=Math.floor(state.points/1000000);
-  state.ascCoins += earned;
-  state.points=0;
-  state.perClick=1;
-  state.autoPerSec=0;
-  state.clickUpgrades=[];
-  state.autoUpgrades=[];
-  state.equippedSkin=null;
-  document.getElementById("modalBackdrop").style.display="none";
-  render();
-};
-
-/* ====== Ad button ====== */
-const adLinks=["#link1","#link2","#link3","#link4","#link5"];
-adButton.onclick=()=>{
-  state.points += 50000;
-  state.adIndex = (state.adIndex+1)%adLinks.length;
-  adStatus.textContent=`Next ad: ${state.adIndex+1}/${adLinks.length}`;
-  render();
-};
-
-/* ====== Inventory modal ====== */
-document.getElementById("inventoryBtn").onclick=()=>{ document.getElementById("inventoryBackdrop").style.display="flex"; };
-document.getElementById("inventoryClose").onclick=()=>{ document.getElementById("inventoryBackdrop").style.display="none"; };
-
-/* ====== Save / Load ====== */
-function saveState(){ localStorage.setItem(SAVE_KEY,JSON.stringify(state)); }
-function loadState(){ const s=localStorage.getItem(SAVE_KEY); if(s){ state=JSON.parse(s); } }
-document.getElementById("exportBtn").onclick=()=>{ navigator.clipboard.writeText(JSON.stringify(state)); alert("Copied save to clipboard!"); };
-document.getElementById("importBtn").onclick=()=>{
-  const s=prompt("Paste save data:");
-  if(s){ try{ state=JSON.parse(s); render(); saveState(); alert("Save loaded!"); }catch(e){alert("Invalid data");} }
-};
-document.getElementById("resetBtn").onclick=()=>{ if(confirm("Reset game?")){ localStorage.removeItem(SAVE_KEY); state={points:0, perClick:1, autoPerSec:0, ascCoins:0, adIndex:0, clickUpgrades:[], autoUpgrades:[], ascensionUpgrades:[], skins: state.skins, equippedSkin:null}; render(); } };
-
-/* ====== Init ====== */
-loadState();
-render();
-setInterval(saveState,5000);
+// === Init ===
+loadGame();
 </script>
 </body>
 </html>

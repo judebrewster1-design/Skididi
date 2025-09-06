@@ -4,7 +4,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>Click a Jude — IDRC</title>
-
 <style>
 :root {
   --bg: #08090b;
@@ -17,517 +16,138 @@
   --bad: #ff6e6e;
   --card-radius: 12px;
 }
-
-/* spacer */
-html,body { 
-  height:100%; 
-  margin:0; 
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; 
-  background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); 
-  color:#e8f7ff; 
-  -webkit-font-smoothing:antialiased; 
-  -moz-osx-font-smoothing:grayscale; 
-}
-
-/* spacer */
-* { 
-  box-sizing: border-box; 
-}
-
-/* spacer */
-.app { 
-  max-width:1100px; 
-  margin: 10px auto; 
-  padding: 12px; 
-  display: grid; 
-  grid-template-columns: 1fr; 
-  gap: 12px; 
-}
-
-@media(min-width:900px){ 
-  .app { 
-    grid-template-columns: 360px 1fr 360px; 
-    align-items:start; 
-  } 
-}
-
-/* spacer */
-header { 
-  grid-column: 1/-1; 
-  display:flex; 
-  align-items:center; 
-  justify-content:space-between; 
-  gap:12px; 
-  padding: 8px 6px; 
-}
-
-/* spacer */
-.brand { 
-  display:flex; 
-  align-items:center; 
-  gap:12px; 
-}
-
-/* spacer */
-.logo { 
-  width:56px; 
-  height:56px; 
-  border-radius:12px; 
-  overflow:hidden; 
-  border:3px solid rgba(0,230,255,0.08); 
-  background:#071018; 
-  display:flex;
-  align-items:center;
-  justify-content:center; 
-}
-
-/* spacer */
-.logo img { 
-  width:100%; 
-  height:100%; 
-  object-fit:cover; 
-  display:block; 
-  user-select:none; 
-  -webkit-user-drag:none; 
-}
-
-/* spacer */
-.title { 
-  font-weight:700; 
-  letter-spacing:0.4px; 
-  font-size:18px; 
-  margin:0; 
-}
-
-/* spacer */
-.subtitle { 
-  font-size:12px; 
-  color:var(--muted); 
-  margin-top:3px; 
-}
-
-/* spacer */
-.top-stats { 
-  display:flex; 
-  gap:10px; 
-  align-items:center; 
-  flex-wrap:wrap; 
-}
-
-/* spacer */
-.stat { 
-  min-width:120px; 
-  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); 
-  border-radius:10px; 
-  padding:8px 10px; 
-  text-align:center; 
-  border:1px solid rgba(255,255,255,0.03); 
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
-}
-
-/* spacer */
-.stat .label { 
-  font-size:12px; 
-  color:var(--muted); 
-}
-
-/* spacer */
-.stat .value { 
-  font-weight:800; 
-  color:var(--accent); 
-  margin-top:6px; 
-  font-size:16px; 
-}
-
-/* spacer */
-.panel { 
-  background:var(--panel); 
-  border-radius:var(--card-radius); 
-  padding:12px; 
-  box-shadow: 0 12px 32px rgba(0,0,0,0.6); 
-  border:1px solid rgba(255,255,255,0.03); 
-}
-
-/* spacer */
-.click-area { 
-  display:flex; 
-  flex-direction:column; 
-  align-items:center; 
-  gap:10px; 
-  padding:16px; 
-}
-
-/* spacer */
-#clickImg { 
-  width:220px; 
-  height:220px; 
-  border-radius:14px; 
-  object-fit:cover; 
-  border:5px solid rgba(0,230,255,0.06); 
-  transition: transform .08s ease; 
-  touch-action: manipulation; 
-  -webkit-tap-highlight-color: transparent; 
-}
-
-/* spacer */
-#clickImg:active { 
-  transform: scale(.96) rotate(-1deg); 
-}
-
-/* spacer */
-.big-number { 
-  font-size:20px; 
-  font-weight:700; 
-  color:#fff; 
-}
-
-/* spacer */
-.small { 
-  font-size:12px; 
-  color:var(--muted); 
-}
-
-/* spacer */
-.controls { 
-  display:flex; 
-  gap:8px; 
-  flex-wrap:wrap; 
-  justify-content:center; 
-  margin-top:6px; 
-}
-
-/* spacer */
-button.btn { 
-  background:transparent; 
-  border:1px solid rgba(255,255,255,0.04); 
-  color:var(--accent); 
-  padding:8px 12px; 
-  border-radius:8px; 
-  cursor:pointer; 
-  font-weight:700; 
-  transition: transform .12s ease, background .12s ease; 
-}
-
-/* spacer */
-button.btn.secondary { 
-  background: rgba(255,255,255,0.02); 
-  color:#fff; 
-}
-
-/* spacer */
-button.btn:active{ 
-  transform: translateY(1px); 
-}
-
-/* spacer */
-button.btn.disabled{ 
-  opacity:.45; 
-  pointer-events:none; 
-}
-
-/* spacer */
-.upgrades { 
-  display:grid; 
-  gap:12px; 
-}
-
-/* spacer */
-.upgrid { 
-  display:grid; 
-  grid-template-columns: repeat(1,1fr); 
-  gap:8px; 
-  max-height:420px; 
-  overflow:auto; 
-  padding-right:6px; 
-}
-
-/* spacer */
-@media(min-width:1100px){ 
-  .upgrid { 
-    grid-template-columns: repeat(2,1fr);
-  } 
-}
-
-/* spacer */
-.upgrade { 
-  display:flex; 
-  justify-content:space-between; 
-  align-items:center; 
-  gap:12px; 
-  padding:10px; 
-  border-radius:10px; 
-  background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); 
-  border:1px solid rgba(255,255,255,0.03); 
-  cursor:pointer; 
-  transition: transform .12s, box-shadow .12s; 
-}
-
-/* spacer */
-.upgrade:hover{ 
-  transform: translateY(-4px); 
-  box-shadow: 0 16px 40px rgba(0,0,0,0.6); 
-}
-
-/* spacer */
-.upgrade .meta { 
-  display:flex; 
-  flex-direction:column; 
-  gap:4px; 
-  align-items:flex-start; 
-  text-align:left; 
-}
-
-/* spacer */
-.upgrade .title { 
-  font-weight:800; 
-  font-size:14px; 
-}
-
-/* spacer */
-.upgrade .desc { 
-  font-size:12px; 
-  color:var(--muted); 
-}
-
-/* spacer */
-.upgrade .cost { 
-  font-weight:800; 
-  color:var(--accent); 
-}
-
-/* spacer */
-.glow { 
-  box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; 
-  border-color: rgba(0,230,255,0.12) !important; 
-}
-
-/* spacer */
-.right-stack { 
-  display:flex; 
-  flex-direction:column; 
-  gap:12px; 
-}
-
-/* spacer */
-.ad-btn { 
-  width:100%; 
-  background:transparent; 
-  border:1px solid rgba(255,255,255,0.04); 
-  color:#fff; 
-  padding:10px; 
-  border-radius:10px; 
-  cursor:pointer; 
-  font-weight:800; 
-}
-
-/* spacer */
-.ad-btn.disabled { 
-  opacity:.45; 
-  pointer-events:none; 
-}
-
-/* spacer */
-.modal-backdrop { 
-  position:fixed; 
-  inset:0; 
-  display:none; 
-  align-items:center; 
-  justify-content:center; 
-  background: rgba(0,0,0,0.65); 
-  z-index:9999; 
-}
-
-/* spacer */
-.modal { 
-  background:var(--panel); 
-  padding:18px; 
-  border-radius:12px; 
-  width:min(640px,92%); 
-  border:1px solid rgba(255,255,255,0.03); 
-}
-
-/* spacer */
-.modal h3 { 
-  margin:0 0 8px 0; 
-}
-
-/* spacer */
-.modal .actions { 
-  display:flex; 
-  gap:8px; 
-  justify-content:flex-end; 
-  margin-top:12px; 
-}
-
-/* spacer */
-.float { 
-  position:fixed; 
-  pointer-events:none; 
-  font-weight:800; 
-  color:var(--accent); 
-  text-shadow:0 6px 18px rgba(0,0,0,0.6); 
-  transform-origin:center; 
-}
-
-/* spacer */
-.spark { 
-  position:fixed; 
-  width:6px; 
-  height:6px; 
-  border-radius:50%; 
-  pointer-events:none; 
-  opacity:0.95; 
-}
-
-/* spacer */
-.muted { 
-  color:var(--muted); 
-  font-size:13px; 
-}
-
-/* spacer */
-.centered { 
-  display:flex; 
-  align-items:center; 
-  justify-content:center; 
-}
-
+html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+* { box-sizing: border-box; }
+.app { max-width:1100px; margin: 10px auto; padding: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media(min-width:900px){ .app { grid-template-columns: 360px 1fr 360px; align-items:start; } }
+header { grid-column: 1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 8px 6px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo { width:56px; height:56px; border-radius:12px; overflow:hidden; border:3px solid rgba(0,230,255,0.08); background:#071018; display:flex;align-items:center;justify-content:center; }
+.logo img { width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
+.title { font-weight:700; letter-spacing:0.4px; font-size:18px; margin:0; }
+.subtitle { font-size:12px; color:var(--muted); margin-top:3px; }
+.top-stats { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.stat { min-width:120px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:10px; padding:8px 10px; text-align:center; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+.stat .label { font-size:12px; color:var(--muted); }
+.stat .value { font-weight:800; color:var(--accent); margin-top:6px; font-size:16px; }
+.panel { background:var(--panel); border-radius:var(--card-radius); padding:12px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+.click-area { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; }
+#clickImg { width:220px; height:220px; border-radius:14px; object-fit:cover; border:5px solid rgba(0,230,255,0.06); transition: transform .08s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor:pointer; }
+#clickImg:active { transform: scale(.96) rotate(-1deg); }
+.big-number { font-size:20px; font-weight:700; color:#fff; }
+.small { font-size:12px; color:var(--muted); }
+.controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+button.btn { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--accent); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; transition: transform .12s ease, background .12s ease; }
+button.btn.secondary { background: rgba(255,255,255,0.02); color:#fff; }
+button.btn:active{ transform: translateY(1px); }
+button.btn.disabled{ opacity:.45; pointer-events:none; }
+.upgrades { display:grid; gap:12px; }
+.upgrid { display:grid; grid-template-columns: repeat(1,1fr); gap:8px; max-height:420px; overflow:auto; padding-right:6px; }
+@media(min-width:1100px){ .upgrid { grid-template-columns: repeat(2,1fr);} }
+.upgrade { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); cursor:pointer; transition: transform .12s, box-shadow .12s; }
+.upgrade:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+.upgrade .meta { display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left; }
+.upgrade .title { font-weight:800; font-size:14px; }
+.upgrade .desc { font-size:12px; color:var(--muted); }
+.upgrade .cost { font-weight:800; color:var(--accent); }
+.glow { box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; border-color: rgba(0,230,255,0.12) !important; }
+.right-stack { display:flex; flex-direction:column; gap:12px; }
+.ad-btn { width:100%; background:transparent; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:10px; cursor:pointer; font-weight:800; }
+.ad-btn.disabled { opacity:.45; pointer-events:none; }
+.modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.65); z-index:9999; }
+.modal { background:var(--panel); padding:18px; border-radius:12px; width:min(640px,92%); border:1px solid rgba(255,255,255,0.03); }
+.modal h3 { margin:0 0 8px 0; }
+.modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.float { position:fixed; pointer-events:none; font-weight:800; color:var(--accent); text-shadow:0 6px 18px rgba(0,0,0,0.6); transform-origin:center; }
+.spark { position:fixed; width:6px; height:6px; border-radius:50%; pointer-events:none; opacity:0.95; }
+.muted { color:var(--muted); font-size:13px; }
+.centered { display:flex; align-items:center; justify-content:center; }
 /* bottom guide button */
-#appGuideBtn { 
-  position:fixed; 
-  bottom:12px; 
-  left:50%; 
-  transform:translateX(-50%); 
-  background:var(--accent); 
-  color:#000; 
-  font-weight:700; 
-  border:none; 
-  padding:8px 12px; 
-  border-radius:10px; 
-  cursor:pointer; 
-  z-index:10000; 
-  font-size:14px; 
-}
-
-/* spacer */
-@media(max-width:600px){ 
-  #clickImg{width:160px;height:160px;} 
-  .big-number{font-size:18px;} 
-  .stat{min-width:80px;} 
-}
-
-/* ===========================
-   END OF CSS
-   =========================== */
+#appGuideBtn { position:fixed; bottom:12px; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; font-weight:700; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; z-index:10000; font-size:14px; }
+@media(max-width:600px){ #clickImg{width:160px;height:160px;} .big-number{font-size:18px;} .stat{min-width:80px;} }
 </style>
-
 </head>
 <body>
-
 <div class="app" id="appRoot">
-  <!-- spacer -->
-  <header>
-    <div class="brand">
-      <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
-      <div>
-        <div class="title">Click a Jude — IDRC</div>
-        <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
-      </div>
-    </div>
-    <div class="top-stats">
-      <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
-      <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
-      <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
-      <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
-    </div>
-  </header>
-
-  <!-- spacer -->
-  <div class="panel centered" id="leftCol">
-    <div class="click-area" style="width:100%">
-      <div class="big-number">Click the Jude</div>
-      <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
-      <div class="small">Tap or press Space / Enter (no holding)</div>
-      <div class="controls" style="margin-top:8px">
-        <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
-        <button class="btn secondary" id="importBtn" type="button">Import Save</button>
-        <button class="btn" id="resetBtn" type="button">Reset</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- spacer -->
-  <div class="panel upgrades" id="centerCol">
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-      <h3 style="margin:0">Click Upgrades</h3>
-      <div class="muted">Tap to buy — costs increase after purchase</div>
-    </div>
-    <div id="clickGrid" class="upgrid"></div>
-    <div style="height:8px"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
-      <h3 style="margin:0">Auto Upgrades</h3>
-      <div class="muted">Earn while away (runs every second)</div>
-    </div>
-    <div id="autoGrid" class="upgrid"></div>
-  </div>
-
-  <!-- spacer -->
-  <div class="panel right-stack" id="rightCol">
+<header>
+  <div class="brand">
+    <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
     <div>
-      <h3 style="margin:0 0 8px 0">Ascension</h3>
-      <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
-      <div style="height:10px"></div>
-      <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
-      <div style="height:8px"></div>
-      <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
-    </div>
-    <div style="height:12px"></div>
-    <div>
-      <h3 style="margin:0 0 8px 0">Ads</h3>
-      <div class="muted">Click ad — +$50,000 (rotates through links)</div>
-      <div style="height:8px"></div>
-      <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
-      <div style="height:8px"></div>
-      <div id="adStatus" class="muted"></div>
+      <div class="title">Click a Jude — IDRC</div>
+      <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
     </div>
   </div>
-
-  <!-- spacer -->
-  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
-    <div class="modal">
-      <h3>Ascend?</h3>
-      <div id="ascModalText" class="muted" style="margin-top:6px;"></div>
-      <div class="actions" style="margin-top:12px">
-        <button id="modalCancel" class="btn secondary" type="button">Cancel</button>
-        <button id="modalConfirm" class="btn" type="button">Confirm Ascend</button>
-      </div>
+  <div class="top-stats">
+    <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+    <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+    <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+    <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
+  </div>
+</header>
+<div class="panel centered" id="leftCol">
+  <div class="click-area" style="width:100%">
+    <div class="big-number">Click the Jude</div>
+    <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
+    <div class="small">Tap or press Space / Enter (no holding)</div>
+    <div class="controls" style="margin-top:8px">
+      <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
+      <button class="btn secondary" id="importBtn" type="button">Import Save</button>
+      <button class="btn" id="resetBtn" type="button">Reset</button>
     </div>
   </div>
-
-  <div id="floatRoot" aria-hidden="true"></div>
-
-  <button id="appGuideBtn" type="button" onclick="alert('iOS Safari: Tap the share icon → Add to Home Screen → Name it → Done.\\nAndroid/Chrome: Tap menu → Add to Home screen → Done.')">How to make an app</button>
 </div>
-
+<div class="panel upgrades" id="centerCol">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Click Upgrades</h3>
+    <div class="muted">Tap to buy — costs increase after purchase</div>
+  </div>
+  <div id="clickGrid" class="upgrid"></div>
+  <div style="height:8px"></div>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Auto Upgrades</h3>
+    <div class="muted">Earn while away (runs every second)</div>
+  </div>
+  <div id="autoGrid" class="upgrid"></div>
+</div>
+<div class="panel right-stack" id="rightCol">
+  <div>
+    <h3 style="margin:0 0 8px 0">Ascension</h3>
+    <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
+    <div style="height:10px"></div>
+    <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
+    <div style="height:8px"></div>
+    <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
+  </div>
+  <div style="height:12px"></div>
+  <div>
+    <h3 style="margin:0 0 8px 0">Ads</h3>
+    <div class="muted">Click ad — +$50,000 (rotates through links)</div>
+    <div style="height:8px"></div>
+    <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
+    <div style="height:8px"></div>
+    <div id="adStatus" class="muted"></div>
+  </div>
+</div>
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+  <div class="modal">
+    <h3>Ascend?</h3>
+    <div id="ascModalText" class="muted" style="margin-top:6px;"></div>
+    <div class="actions" style="margin-top:12px">
+      <button id="modalCancel" class="btn secondary" type="button">Cancel</button>
+      <button id="modalConfirm" class="btn" type="button">Confirm Ascend</button>
+    </div>
+  </div>
+</div>
+<div id="floatRoot" aria-hidden="true"></div>
+<button id="appGuideBtn" type="button" onclick="alert('iOS Safari: Tap the share icon → Add to Home Screen → Name it → Done.\\nAndroid/Chrome: Tap menu → Add to Home screen → Done.')">How to make an app</button>
 <script>
-// ===========================
-// Full JS logic preserved
-// ===========================
-
-// spacer
-const SAVE_KEY = "idrc_clickajude_v1";
-let state = {
-  points: 0, perClick:1, autoPerSec:0, ascCoins:0, adIndex:0,
-  clickUpgrades:[], autoUpgrades:[], ascensionUpgrades:[]
-};
-
-// spacer
+const SAVE_KEY="idrc_clickajude_v2";
+let state={points:0,perClick:1,autoPerSec:0,ascCoins:0,adIndex:0,clickUpgrades:[],autoUpgrades:[],ascensionUpgrades:[]};
 const CLICK_DEFS=[["Finger of Doom",5],["Titan Tap",25],["Nuclear Thumb",120],["Cosmic Punch",600],["Meteor Jab",3000],["Quantum Flick",12000],["Dragon Snap",50000],["Plasma Knuckle",180000],["Galactic Push",700000],["Stellar Slap",2500000],["Eclipse Strike",9000000],["Omega Jab",35000000],["Void Swipe",140000000],["Infinity Tap",600000000],["Reality Punch",2500000000]];
 const AUTO_DEFS=[["Intern on Minimum Wage",2],["Student Temp Worker",10],["Freelance Bot",45],["AI Assistant",220],["Assembly Line",900],["Factory Farm",4200],["Commerce Portal",18000],["Data Center",75000],["Alien Mining Rig",320000],["Black Hole Extractor",1200000],["Orbital Driller",5000000],["Planetary Mine",20000000],["Stellar Forge",90000000],["Cosmic Foundry",400000000],["Multiverse Vault",1700000000]];
 const ASC_DEFS=[{name:"Bonus Start",effect:100000,desc:"Start with bonus money after Ascend",costBase:2,amount:0},{name:"Extra Coins",effect:1,desc:"Gain +1 extra asc coin per Ascend",costBase:4,amount:0},{name:"Click Multiplier",effect:2,desc:"×2 click power per level",costBase:6,amount:0}];
 const AD_LINKS=["https://singingfiles.com/show.php?l=0&u=2434684&id=69146","https://singingfiles.com/show.php?l=0&u=2434684&id=69339","https://singingfiles.com/show.php?l=0&u=2434684&id=66573","https://singingfiles.com/show.php?l=0&u=2434684&id=69145","https://singingfiles.com/show.php?l=0&u=2434684&id=68846"];
 
-// spacer
 const moneyEl=document.getElementById("moneyDisplay");
 const perClickEl=document.getElementById("perClickDisplay");
 const autoEl=document.getElementById("autoDisplay");
@@ -548,42 +168,63 @@ const importBtn=document.getElementById("importBtn");
 const resetBtn=document.getElementById("resetBtn");
 const floatRoot=document.getElementById("floatRoot");
 
-// spacer
-function fmt(n){if(n>=1e12)return (n/1e12).toFixed(2)+"T";if(n>=1e9)return (n/1e9).toFixed(2)+"B";if(n>=1e6)return (n/1e6).toFixed(2)+"M";if(n>=1e3)return (n/1e3).toFixed(1)+"k";return String(Math.floor(n));}
+function fmt(n){if(n>=1e12)return(n/1e12).toFixed(2)+"T";if(n>=1e9)return(n/1e9).toFixed(2)+"B";if(n>=1e6)return(n/1e6).toFixed(2)+"M";if(n>=1e3)return(n/1e3).toFixed(1)+"k";return String(Math.floor(n));}
 function saveState(){try{localStorage.setItem(SAVE_KEY,JSON.stringify(state));}catch(e){console.warn("Save failed",e);}}
 function loadState(){try{const raw=localStorage.getItem(SAVE_KEY);if(raw){const parsed=JSON.parse(raw);state={...state,...parsed};state.clickUpgrades=state.clickUpgrades||[];state.autoUpgrades=state.autoUpgrades||[];state.ascensionUpgrades=state.ascensionUpgrades||[];}}catch(e){console.warn("Load failed",e);}}
 
-// spacer
 function spawnFloat(x,y,text,color="#00e6ff"){const el=document.createElement("div");el.className="float";el.style.left=(x-10)+"px";el.style.top=(y-12)+"px";el.style.color=color;el.textContent=text;floatRoot.appendChild(el);let t=0;const id=setInterval(()=>{t++;el.style.transform=`translateY(${-t*1.8}px) scale(${1+t*0.004})`;el.style.opacity=String(1-t/40);if(t>40){clearInterval(id);el.remove();}},16);}
 function spawnSpark(x,y){const el=document.createElement("div");el.className="spark";el.style.left=(x-3)+"px";el.style.top=(y-3)+"px";el.style.backgroundColor=`hsl(${Math.random()*360},70%,60%)`;document.body.appendChild(el);let t=0;const id=setInterval(()=>{t++;el.style.transform=`translateY(${-t}px)`;el.style.opacity=String(1-t/30);if(t>30){clearInterval(id);el.remove();}},16);}
-function updateDisplay(){moneyEl.textContent=`$${fmt(state.points)}`;perClickEl.textContent=fmt(state.perClick);autoEl.textContent=fmt(state.autoPerSec);ascEl.textContent=fmt(state.ascCoins);ascCoinsEl.textContent=fmt(state.ascCoins);ascendBtn.style.display=state.points>=5000000?"block":"none";updateUpgrades();}
-function updateUpgrades(){clickGrid.innerHTML="";autoGrid.innerHTML="";CLICK_DEFS.forEach(([name,base],i)=>{const lv=state.clickUpgrades[i]||0;const cost=Math.floor(base*1.15**lv);const div=document.createElement("div");div.className="upgrade";div.innerHTML=`<div class="meta"><div class="title">${name}</div><div class="desc">+${base} per click</div></div><div class="cost">$${fmt(cost)}</div>`;if(state.points<cost)div.classList.add("disabled");div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.clickUpgrades[i]=lv+1;state.perClick+=base;updateDisplay();spawnFloat(200,200,"+"+base);saveState();}};clickGrid.appendChild(div);});AUTO_DEFS.forEach(([name,base],i)=>{const lv=state.autoUpgrades[i]||0;const cost=Math.floor(base*1.15**lv);const div=document.createElement("div");div.className="upgrade";div.innerHTML=`<div class="meta"><div class="title">${name}</div><div class="desc">+${base}/sec</div></div><div class="cost">$${fmt(cost)}</div>`;if(state.points<cost)div.classList.add("disabled");div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.autoUpgrades[i]=lv+1;state.autoPerSec+=base;updateDisplay();spawnFloat(200,200,"+"+base);saveState();}};autoGrid.appendChild(div);});
 
-// spacer
+function updateDisplay(){
+moneyEl.textContent=`$${fmt(state.points)}`;
+perClickEl.textContent=fmt(state.perClick);
+autoEl.textContent=fmt(state.autoPerSec);
+ascEl.textContent=fmt(state.ascCoins);
+ascCoinsEl.textContent=fmt(state.ascCoins);
+ascendBtn.style.display=state.points>=5000000?"block":"none";
+updateUpgrades();
+}
+
+function updateUpgrades(){
+clickGrid.innerHTML=""; autoGrid.innerHTML="";
+CLICK_DEFS.forEach(([name,base],i)=>{
+  const lv=state.clickUpgrades[i]||0;
+  const cost=Math.floor(base*1.15**lv);
+  const div=document.createElement("div");
+  div.className="upgrade"; div.innerHTML=`<div class="meta"><div class="title">${name}</div><div class="desc">+${base} per click</div></div><div class="cost">$${fmt(cost)}</div>`;
+  if(state.points<cost)div.classList.add("disabled");
+  div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.clickUpgrades[i]=lv+1;state.perClick+=base;updateDisplay();spawnFloat(200,200,"+"+base);saveState();}};
+  clickGrid.appendChild(div);
+});
+AUTO_DEFS.forEach(([name,base],i)=>{
+  const lv=state.autoUpgrades[i]||0;
+  const cost=Math.floor(base*1.15**lv);
+  const div=document.createElement("div");
+  div.className="upgrade"; div.innerHTML=`<div class="meta"><div class="title">${name}</div><div class="desc">+${base}/sec</div></div><div class="cost">$${fmt(cost)}</div>`;
+  if(state.points<cost)div.classList.add("disabled");
+  div.onclick=()=>{if(state.points>=cost){state.points-=cost;state.autoUpgrades[i]=lv+1;state.autoPerSec+=base;updateDisplay();spawnFloat(200,200,"+"+base);saveState();}};
+  autoGrid.appendChild(div);
+});
+
+}
+
 clickImg.onclick=(e)=>{state.points+=state.perClick;spawnFloat(e.clientX,e.clientY,"+"+state.perClick);spawnSpark(e.clientX,e.clientY);updateDisplay();saveState();}
 document.addEventListener("keydown",e=>{if(e.code==="Space"||e.code==="Enter"){clickImg.click();e.preventDefault();}})
 setInterval(()=>{if(state.autoPerSec>0){state.points+=state.autoPerSec;updateDisplay();saveState();}},1000);
 
-// spacer
 ascendBtn.onclick=()=>{modalBackdrop.style.display="flex";modalText.textContent=`Ascend for +1 ascension coin? Current: ${state.ascCoins}`;}
 modalCancel.onclick=()=>{modalBackdrop.style.display="none";}
-modalConfirm.onclick=()=>{state.ascCoins++;state.points=0;state.perClick=1;state.autoPerSec=0;state.clickUpgrades=[];state.autoUpgrades=[];modalBackdrop.style.display="none";updateDisplay();saveState();}
+modalConfirm.onclick=()=>{
+state.ascCoins++;state.points=0;state.perClick=1;state.autoPerSec=0;state.clickUpgrades=[];state.autoUpgrades=[];modalBackdrop.style.display="none";updateDisplay();saveState();
+}
 
-// spacer
 adButton.onclick=()=>{const link=AD_LINKS[state.adIndex];state.adIndex=(state.adIndex+1)%AD_LINKS.length;window.open(link,"_blank");state.points+=50000;adStatus.textContent=`Last Ad +$50k`;updateDisplay();saveState();}
 
-// spacer
 exportBtn.onclick=()=>{const blob=new Blob([JSON.stringify(state)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="clickajude_save.json";a.click();URL.revokeObjectURL(url);}
 importBtn.onclick=()=>{const inp=document.createElement("input");inp.type="file";inp.accept=".json";inp.onchange=e=>{const file=e.target.files[0];const reader=new FileReader();reader.onload=ev=>{try{state=JSON.parse(ev.target.result);updateDisplay();saveState();}catch(err){alert("Invalid file")}};reader.readAsText(file);};inp.click();}
 resetBtn.onclick=()=>{if(confirm("Reset game?")){state={points:0,perClick:1,autoPerSec:0,ascCoins:0,adIndex:0,clickUpgrades:[],autoUpgrades:[],ascensionUpgrades:[]};updateDisplay();saveState();}}
 
-// spacer
 loadState();updateDisplay();
-
-// ===========================
-// End of JS
-// ===========================
 </script>
-
 </body>
 </html>

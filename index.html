@@ -5,153 +5,376 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
 <title>Click a Jude — IDRC</title>
 <style>
-/* Same CSS as before */
-:root{--bg:#08090b;--panel:#0f1316;--muted:#99a3b2;--accent:#00e6ff;--accent-2:#7b61ff;--glass:rgba(255,255,255,0.03);--good:#6ef08a;--bad:#ff6e6e;--card-radius:12px}html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial;background:linear-gradient(180deg,#050506 0%,#0c0f12 100%);color:#e8f7ff;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}*{box-sizing:border-box}.app{max-width:1100px;margin:10px auto;padding:12px;display:grid;grid-template-columns:1fr;gap:12px}@media(min-width:900px){.app{grid-template-columns:360px 1fr 360px;align-items:start}}header{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px}header .brand{display:flex;align-items:center;gap:12px}.logo{width:56px;height:56px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.08);background:#071018;display:flex;align-items:center;justify-content:center}.logo img{width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none}.title{font-weight:700;letter-spacing:.4px;font-size:18px;margin:0}.subtitle{font-size:12px;color:var(--muted);margin-top:3px}.top-stats{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.stat{min-width:120px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:10px;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(0,0,0,0.6)}.stat .label{font-size:12px;color:var(--muted)}.stat .value{font-weight:800;color:var(--accent);margin-top:6px;font-size:16px;transition:all .3s ease}.panel{background:var(--panel);border-radius:var(--card-radius);padding:12px;box-shadow:0 12px 32px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03)}.click-area{display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px}#clickImg{width:220px;height:220px;border-radius:14px;object-fit:cover;border:5px solid rgba(0,230,255,0.06);transition:transform .08s ease;touch-action:manipulation;-webkit-tap-highlight-color:transparent;cursor:pointer}#clickImg:active{transform:scale(.96) rotate(-1deg)}.big-number{font-size:20px;font-weight:700;color:#fff;transition:all .3s ease}.small{font-size:12px;color:var(--muted)}.controls{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px}button.btn{background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700;transition:transform .12s ease,background .12s ease}button.btn.secondary{background:rgba(255,255,255,0.02);color:#fff}button.btn:active{transform:translateY(1px)}button.btn.disabled{opacity:.45;pointer-events:none}.upgrades{display:grid;gap:12px}.upgrid{display:grid;grid-template-columns:repeat(1,1fr);gap:8px;max-height:420px;overflow:auto;padding-right:6px}@media(min-width:1100px){.upgrid{grid-template-columns:repeat(2,1fr)}}.upgrade{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);border:1px solid rgba(255,255,255,0.03);cursor:pointer;transition:transform .12s,box-shadow .12s}.upgrade:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,0.6)}.upgrade .meta{display:flex;flex-direction:column;gap:4px;align-items:flex-start;text-align:left}.upgrade .title{font-weight:800;font-size:14px}.upgrade .desc{font-size:12px;color:var(--muted)}.upgrade .cost{font-weight:800;color:var(--accent)}.glow{box-shadow:0 0 28px rgba(0,230,255,0.15),0 0 80px rgba(0,230,255,0.06) !important;border-color:rgba(0,230,255,0.12) !important}.right-stack{display:flex;flex-direction:column;gap:12px}.ad-btn{width:100%;background:transparent;border:1px solid rgba(255,255,255,0.04);color:#fff;padding:10px;border-radius:10px;cursor:pointer;font-weight:800}.ad-btn.disabled{opacity:.45;pointer-events:none}.modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.65);z-index:9999}.modal{background:var(--panel);padding:18px;border-radius:12px;width:min(640px,92%);border:1px solid rgba(255,255,255,0.03)}.modal h3{margin:0 0 8px 0}.modal .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}.float{position:fixed;pointer-events:none;font-weight:800;color:var(--accent);text-shadow:0 6px 18px rgba(0,0,0,0.6);transform-origin:center}.spark{position:fixed;width:6px;height:6px;border-radius:50%;pointer-events:none;opacity:.95;background:var(--accent)}.muted{color:var(--muted);font-size:13px}.centered{display:flex;align-items:center;justify-content:center}#appGuideBtn{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:var(--accent);color:#000;font-weight:700;border:none;padding:8px 12px;border-radius:10px;cursor:pointer;z-index:10000;font-size:14px}@media(max-width:600px){#clickImg{width:160px;height:160px}.big-number{font-size:18px}.stat{min-width:80px}}
+:root {
+  --bg: #08090b;
+  --panel: #0f1316;
+  --muted: #99a3b2;
+  --accent: #00e6ff;
+  --accent-2: #7b61ff;
+  --glass: rgba(255,255,255,0.03);
+  --good: #6ef08a;
+  --bad: #ff6e6e;
+  --card-radius: 12px;
+}
+html,body {height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff;}
+* {box-sizing:border-box;}
+.app {max-width:1100px;margin:10px auto;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;}
+@media(min-width:900px){.app{grid-template-columns:360px 1fr 360px;align-items:start;}}
+header {grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px;}
+.brand {display:flex;align-items:center;gap:12px;}
+.logo {width:56px;height:56px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.08);background:#071018;display:flex;align-items:center;justify-content:center;}
+.logo img {width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none;}
+.title {font-weight:700;letter-spacing:0.4px;font-size:18px;margin:0;}
+.subtitle {font-size:12px;color:var(--muted);margin-top:3px;}
+.top-stats {display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.stat {min-width:120px;background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:10px;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(0,0,0,0.6);}
+.stat .label {font-size:12px;color:var(--muted);}
+.stat .value {font-weight:800;color:var(--accent);margin-top:6px;font-size:16px;}
+.panel {background:var(--panel);border-radius:var(--card-radius);padding:12px;box-shadow:0 12px 32px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03);}
+.click-area {display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;}
+#clickImg {width:220px;height:220px;border-radius:14px;object-fit:cover;border:5px solid rgba(0,230,255,0.06);transition: transform .08s ease;touch-action: manipulation;-webkit-tap-highlight-color: transparent;cursor:pointer;}
+#clickImg:active {transform: scale(.96) rotate(-1deg);}
+.big-number {font-size:20px;font-weight:700;color:#fff;}
+.small {font-size:12px;color:var(--muted);}
+.controls {display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
+button.btn {background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700;transition: transform .12s ease, background .12s ease;}
+button.btn.secondary {background: rgba(255,255,255,0.02);color:#fff;}
+button.btn:active{ transform: translateY(1px); }
+button.btn.disabled{ opacity:.45; pointer-events:none; }
+.upgrades { display:grid; gap:12px; }
+.upgrid { display:grid; grid-template-columns: repeat(1,1fr); gap:8px; max-height:420px; overflow:auto; padding-right:6px; }
+@media(min-width:1100px){ .upgrid { grid-template-columns: repeat(2,1fr);} }
+.upgrade { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:10px; border-radius:10px; background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); border:1px solid rgba(255,255,255,0.03); cursor:pointer; transition: transform .12s, box-shadow .12s; }
+.upgrade:hover{ transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.6); }
+.upgrade .meta { display:flex; flex-direction:column; gap:4px; align-items:flex-start; text-align:left; }
+.upgrade .title { font-weight:800; font-size:14px; }
+.upgrade .desc { font-size:12px; color:var(--muted); }
+.upgrade .cost { font-weight:800; color:var(--accent); }
+.glow { box-shadow: 0 0 28px rgba(0,230,255,0.15), 0 0 80px rgba(0,230,255,0.06) !important; border-color: rgba(0,230,255,0.12) !important; }
+.right-stack { display:flex; flex-direction:column; gap:12px; }
+.ad-btn { width:100%; background:transparent; border:1px solid rgba(255,255,255,0.04); color:#fff; padding:10px; border-radius:10px; cursor:pointer; font-weight:800; }
+.ad-btn.disabled { opacity:.45; pointer-events:none; }
+.modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; background: rgba(0,0,0,0.65); z-index:9999; }
+.modal { background:var(--panel); padding:18px; border-radius:12px; width:min(640px,92%); border:1px solid rgba(255,255,255,0.03); }
+.modal h3 { margin:0 0 8px 0; }
+.modal .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:12px; }
+.float { position:fixed; pointer-events:none; font-weight:800; color:var(--accent); text-shadow:0 6px 18px rgba(0,0,0,0.6); transform-origin:center; }
+.spark { position:fixed; width:6px; height:6px; border-radius:50%; pointer-events:none; opacity:0.95; }
+.muted { color:var(--muted); font-size:13px; }
+.centered { display:flex; align-items:center; justify-content:center; }
+#appGuideBtn { position:fixed; bottom:12px; left:50%; transform:translateX(-50%); background:var(--accent); color:#000; font-weight:700; border:none; padding:8px 12px; border-radius:10px; cursor:pointer; z-index:10000; font-size:14px; }
+@media(max-width:600px){ #clickImg{width:160px;height:160px;} .big-number{font-size:18px;} .stat{min-width:80px;} }
 </style>
 </head>
 <body>
 <div class="app" id="appRoot">
-  <!-- HTML content from previous snippet here (panels, upgrades, skins, etc.) -->
+<header>
+  <div class="brand">
+    <div class="logo"><img id="logoImg" src="IMG_7281.jpeg" alt="logo" draggable="false" /></div>
+    <div>
+      <div class="title">Click a Jude — IDRC</div>
+      <div class="subtitle">Tap, upgrade, ascend — mobile + desktop optimized</div>
+    </div>
+  </div>
+  <div class="top-stats">
+    <div class="stat"><div class="label">Money</div><div class="value" id="moneyDisplay">$0</div></div>
+    <div class="stat"><div class="label">Per Click</div><div class="value" id="perClickDisplay">1</div></div>
+    <div class="stat"><div class="label">Auto / sec</div><div class="value" id="autoDisplay">0</div></div>
+    <div class="stat"><div class="label">Asc Coins</div><div class="value" id="ascDisplay">0</div></div>
+  </div>
+</header>
+
+<div class="panel centered" id="leftCol">
+  <div class="click-area" style="width:100%">
+    <div class="big-number">Click the Jude</div>
+    <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
+    <div class="small">Tap or press Space / Enter (single presses only)</div>
+    <div class="controls" style="margin-top:8px">
+      <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
+      <button class="btn secondary" id="importBtn" type="button">Import Save</button>
+      <button class="btn" id="resetBtn" type="button">Reset</button>
+    </div>
+  </div>
 </div>
+
+<div class="panel upgrades" id="centerCol">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Click Upgrades</h3>
+    <div class="muted">Tap to buy — costs increase after purchase</div>
+  </div>
+  <div id="clickGrid" class="upgrid"></div>
+
+  <div style="height:8px"></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;">
+    <h3 style="margin:0">Auto Upgrades</h3>
+    <div class="muted">Earn while away (runs every second)</div>
+  </div>
+  <div id="autoGrid" class="upgrid"></div>
+</div>
+
+<div class="panel right-stack" id="rightCol">
+  <div>
+    <h3 style="margin:0 0 8px 0">Ascension</h3>
+    <div class="muted">Reach <b>$5,000,000</b> to unlock Ascend</div>
+    <div style="height:10px"></div>
+    <button id="ascendBtn" class="btn" type="button" style="width:100%; display:none;">Ascend</button>
+    <div style="height:8px"></div>
+    <div class="muted">Ascension Coins: <span id="ascCoins">0</span></div>
+
+    <div style="height:12px"></div>
+    <div style="margin-top:8px;">
+      <h4 style="margin:0 0 6px 0">Ascension Upgrades</h4>
+      <div class="muted" style="margin-bottom:8px">Spend Asc Coins to buy permanent boosts</div>
+      <div id="ascGrid" class="upgrid" style="max-height:240px;"></div>
+    </div>
+
+    <div style="height:12px"></div>
+    <h4 style="margin:0 0 6px 0">Skin Shop</h4>
+    <div class="muted" style="margin-bottom:8px">Preview & purchase skins (boosts)</div>
+    <div id="skinGrid" class="upgrid"></div>
+
+    <div style="height:12px"></div>
+    <h4 style="margin:0 0 6px 0">Gamble Box</h4>
+    <div class="muted" style="margin-bottom:8px">Cost: 75 ASC — Odds: 50% worst, 25% 100 ASC, 15% 250 ASC, 10% super rare ×10 click</div>
+    <button id="gambleBtn" class="btn">Open Gamble Box</button>
+  </div>
+
+  <div style="height:12px"></div>
+
+  <div>
+    <h3 style="margin:0 0 8px 0">Ads</h3>
+    <div class="muted">Click ad — +$50,000 (rotates through links)</div>
+    <div style="height:8px"></div>
+    <button id="adButton" class="ad-btn" type="button">Watch Ad (+50k)</button>
+    <div style="height:8px"></div>
+    <div id="adStatus" class="muted"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-hidden="true">
+  <div class="modal">
+    <h3>Ascend?</h3>
+    <div id="ascModalText" class="muted"></div>
+    <div class="actions">
+      <button class="btn secondary" id="cancelAsc">Cancel</button>
+      <button class="btn" id="confirmAsc">Ascend</button>
+    </div>
+  </div>
+</div>
+
+<div id="floatContainer"></div>
+
 <script>
-// JavaScript: full final game logic
-const state = {
-  money:0,
-  perClick:1,
-  auto:0,
-  ascCoins:0,
-  clicks:0,
-  ascUpgrades:[],
-  skins:[],
-  inventory:[],
+// ====================== GAME STATE ======================
+let state = {
+  money:0, perClick:1, auto:0, ascCoins:0,
+  clickUpgrades:[], autoUpgrades:[], ascUpgrades:[], 
+  skins:[], activeSkin:null, gambleMultiplier:1,
+  lastKeyTime:0
 };
 
-const clickImg=document.getElementById('clickImg');
-const moneyDisplay=document.getElementById('moneyDisplay');
-const perClickDisplay=document.getElementById('perClickDisplay');
-const autoDisplay=document.getElementById('autoDisplay');
-const ascDisplay=document.getElementById('ascDisplay');
-const ascCoinsDisplay=document.getElementById('ascCoins');
-const clickGrid=document.getElementById('clickGrid');
-const autoGrid=document.getElementById('autoGrid');
-const ascGrid=document.getElementById('ascGrid');
-const skinGrid=document.getElementById('skinGrid');
-const floatContainer=document.getElementById('floatContainer');
-const ascendBtn=document.getElementById('ascendBtn');
-const adButton=document.getElementById('adButton');
-
-// 25 click upgrades, 25 auto upgrades, 5 asc upgrades
-const clickUpgrades=[];
-for(let i=1;i<=25;i++){clickUpgrades.push({name:`Click +${i}`,desc:`Increase click by ${i}`,cost:50*i,amount:i})}
-const autoUpgrades=[];
-for(let i=1;i<=25;i++){autoUpgrades.push({name:`Auto +${i}`,desc:`Earn ${i} per sec`,cost:100*i,amount:i})}
-const ascUpgrades=[
-  {name:'Asc +10% Click',desc:'Increase all clicks by 10%',cost:1},
-  {name:'Asc +25% Auto',desc:'Increase auto per sec by 25%',cost:1},
-  {name:'Asc +50 Money Bonus',desc:'Bonus on all clicks',cost:1},
-  {name:'Asc +Extra Gamble',desc:'Increase gamble chance',cost:1},
-  {name:'Asc +Extra Skin Slot',desc:'Unlock more skins',cost:1}
+// ====================== DATA ======================
+const clickUpgradesData = [];
+for(let i=1;i<=25;i++){ clickUpgradesData.push({name:"Click Power "+i, desc:"+"+i+" per click", cost:100*i, base:i, level:0}); }
+const autoUpgradesData = [];
+for(let i=1;i<=25;i++){ autoUpgradesData.push({name:"Auto Helper "+i, desc:"+"+i+" per sec", cost:150*i, base:i, level:0}); }
+const ascUpgradesData = [
+  {name:"Asc Click +10%", desc:"Increase click by 10%", cost:5, level:0, type:"click"}, 
+  {name:"Asc Auto +10%", desc:"Increase auto by 10%", cost:5, level:0, type:"auto"}, 
+  {name:"Asc Click +25%", desc:"Increase click by 25%", cost:15, level:0, type:"click"}, 
+  {name:"Asc Auto +25%", desc:"Increase auto by 25%", cost:15, level:0, type:"auto"}, 
+  {name:"Asc Global x2", desc:"Double all gains", cost:50, level:0, type:"both"}
+];
+const skinData = [
+  {name:"Default",img:"IMG_7281.jpeg",cost:0},
+  {name:"Purple Glow",img:"IMG_6817.jpeg",cost:50},
+  {name:"Blue Face",img:"IMG_6818.jpeg",cost:75},
+  {name:"Red Face",img:"IMG_6819.jpeg",cost:100}
 ];
 
-const skins=[
-  {name:'Jude Classic',img:'IMG_7281.jpeg',cost:0},
-  {name:'Jude Glow',img:'IMG_7282.jpeg',cost:100},
-  {name:'Jude Fire',img:'IMG_7283.jpeg',cost:250},
-  {name:'Jude Ice',img:'IMG_7284.jpeg',cost:500},
-];
-
-function updateDisplay(){
-  moneyDisplay.textContent=`$${state.money}`;
-  perClickDisplay.textContent=state.perClick;
-  autoDisplay.textContent=state.auto;
-  ascDisplay.textContent=state.ascCoins;
-  ascCoinsDisplay.textContent=state.ascCoins;
+// ====================== SAVE / LOAD ======================
+function saveGame(){ localStorage.setItem("judeClickSave",JSON.stringify(state)); }
+function loadGame(){ 
+  const s = JSON.parse(localStorage.getItem("judeClickSave"));
+  if(s){ state = s; updateUI(); }
 }
 
-function addFloat(txt,x,y){
-  const f=document.createElement('div');f.textContent=txt;f.className='float';
-  f.style.left=x+'px';f.style.top=y+'px';floatContainer.appendChild(f);
-  let top=parseInt(f.style.top);
-  const id=setInterval(()=>{top-=1;f.style.top=top+'px';f.style.opacity=parseFloat(f.style.opacity)-0.02;if(f.style.opacity<=0){clearInterval(id);f.remove();}},16);
+// ====================== UI UPDATE ======================
+function updateUI(){
+  document.getElementById("moneyDisplay").textContent="$"+formatNum(state.money);
+  document.getElementById("perClickDisplay").textContent=formatNum(state.perClick*state.gambleMultiplier);
+  document.getElementById("autoDisplay").textContent=formatNum(state.auto);
+  document.getElementById("ascDisplay").textContent=formatNum(state.ascCoins);
+  document.getElementById("ascCoins").textContent=formatNum(state.ascCoins);
+  renderGrid("clickGrid",clickUpgradesData,"click");
+  renderGrid("autoGrid",autoUpgradesData,"auto");
+  renderGrid("ascGrid",ascUpgradesData,"asc");
+  renderSkins();
+  if(state.money>=5000000) document.getElementById("ascendBtn").style.display="block";
+  else document.getElementById("ascendBtn").style.display="none";
 }
 
-clickImg.addEventListener('click',e=>{
-  state.money+=state.perClick;
-  state.clicks+=1;
-  updateDisplay();
-  addFloat(`+$${state.perClick}`,e.clientX,e.clientY);
+function formatNum(n){ return Math.floor(n).toLocaleString(); }
+
+// ====================== RENDER GRIDS ======================
+function renderGrid(containerId,data,type){
+  const container=document.getElementById(containerId);
+  container.innerHTML="";
+  data.forEach((u,i)=>{
+    const div=document.createElement("div");
+    div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${u.name} (${u.level})</div><div class="desc">${u.desc}</div></div><div class="cost">$${formatNum(u.cost)}</div>`;
+    div.onclick=()=>buyUpgrade(type,i);
+    if(type!=="asc" && state.money<u.cost) div.classList.add("disabled");
+    if(type==="asc" && state.ascCoins<u.cost) div.classList.add("disabled");
+    container.appendChild(div);
+  });
+}
+
+function renderSkins(){
+  const container=document.getElementById("skinGrid");
+  container.innerHTML="";
+  skinData.forEach((s,i)=>{
+    const div=document.createElement("div");
+    div.className="upgrade";
+    div.innerHTML=`<div class="meta"><div class="title">${s.name}</div><div class="desc">${s.cost>0?"$"+s.cost:"Free"}</div></div>`;
+    div.onclick=()=>buySkin(i);
+    if(state.money<s.cost && s.cost>0) div.classList.add("disabled");
+    if(state.activeSkin===i) div.classList.add("glow");
+    container.appendChild(div);
+  });
+}
+
+// ====================== BUY / CLICK ======================
+function buyUpgrade(type,index){
+  let u;
+  if(type==="click"){ u=clickUpgradesData[index]; if(state.money>=u.cost){ state.money-=u.cost; u.level++; state.perClick+=u.base; u.cost=Math.floor(u.cost*1.45); updateUI(); saveGame(); floatText("+"+u.base,document.getElementById("clickImg")); } }
+  else if(type==="auto"){ u=autoUpgradesData[index]; if(state.money>=u.cost){ state.money-=u.cost; u.level++; state.auto+=u.base; u.cost=Math.floor(u.cost*1.45); updateUI(); saveGame(); floatText("+"+u.base+"/s",document.getElementById("clickImg")); } }
+  else if(type==="asc"){ u=ascUpgradesData[index]; if(state.ascCoins>=u.cost){ state.ascCoins-=u.cost; u.level++; applyAscension(u); updateUI(); saveGame(); floatText("Ascension Bought!",document.getElementById("clickImg")); } }
+}
+
+function buySkin(index){
+  const s = skinData[index];
+  if(state.money>=s.cost){
+    state.money-=s.cost;
+    state.activeSkin=index;
+    document.getElementById("clickImg").src=s.img;
+    updateUI(); saveGame();
+  }
+}
+
+function applyAscension(u){
+  if(u.type==="click") state.perClick+=Math.floor(state.perClick*u.level*0.1);
+  else if(u.type==="auto") state.auto+=Math.floor(state.auto*u.level*0.1);
+  else if(u.type==="both"){ state.perClick*=2; state.auto*=2; }
+}
+
+// ====================== CLICK HANDLER ======================
+document.getElementById("clickImg").addEventListener("click",()=>{
+  state.money+=state.perClick*state.gambleMultiplier; 
+  spawnSpark(event.clientX,event.clientY,"#0ff");
+  updateUI(); saveGame(); 
 });
 
-// Generate upgrade grids
-function renderUpgrades(){
-  clickGrid.innerHTML='';
-  clickUpgrades.forEach((u,i)=>{
-    const el=document.createElement('div');el.className='upgrade';
-    el.innerHTML=`<div class="meta"><div class="title">${u.name}</div><div class="desc">${u.desc}</div></div><div class="cost">$${u.cost}</div>`;
-    el.onclick=()=>{
-      if(state.money>=u.cost){state.money-=u.cost;state.perClick+=u.amount;u.cost=Math.floor(u.cost*1.5);updateDisplay();renderUpgrades();}
-    };
-    clickGrid.appendChild(el);
-  });
-  autoGrid.innerHTML='';
-  autoUpgrades.forEach((u,i)=>{
-    const el=document.createElement('div');el.className='upgrade';
-    el.innerHTML=`<div class="meta"><div class="title">${u.name}</div><div class="desc">${u.desc}</div></div><div class="cost">$${u.cost}</div>`;
-    el.onclick=()=>{
-      if(state.money>=u.cost){state.money-=u.cost;state.auto+=u.amount;u.cost=Math.floor(u.cost*1.5);updateDisplay();renderUpgrades();}
-    };
-    autoGrid.appendChild(el);
-  });
-  ascGrid.innerHTML='';
-  ascUpgrades.forEach((u,i)=>{
-    const el=document.createElement('div');el.className='upgrade';
-    el.innerHTML=`<div class="meta"><div class="title">${u.name}</div><div class="desc">${u.desc}</div></div><div class="cost">${u.cost} ASC</div>`;
-    el.onclick=()=>{
-      if(state.ascCoins>=u.cost){state.ascCoins-=u.cost;state.ascUpgrades.push(u.name);updateDisplay();renderUpgrades();}
-    };
-    ascGrid.appendChild(el);
-  });
-  skinGrid.innerHTML='';
-  skins.forEach((s,i)=>{
-    const el=document.createElement('div');el.className='upgrade';
-    el.innerHTML=`<div class="meta"><div class="title">${s.name}</div></div><div class="cost">$${s.cost}</div>`;
-    el.onclick=()=>{
-      if(state.money>=s.cost){state.money-=s.cost;state.skins.push(s.name);clickImg.src=s.img;updateDisplay();renderUpgrades();}
-    };
-    skinGrid.appendChild(el);
-  });
+// prevent auto-hold
+let spacePressed=false;
+document.addEventListener("keydown",(e)=>{
+  const now=Date.now();
+  if((e.code==="Space"||e.code==="Enter") && now-state.lastKeyTime>100){ 
+    state.money+=state.perClick*state.gambleMultiplier; updateUI(); saveGame(); spawnSpark(window.innerWidth/2,window.innerHeight/2,"#0ff"); 
+    state.lastKeyTime=now;
+  }
+});
+
+// ====================== AUTO EARN ======================
+setInterval(()=>{ state.money+=state.auto; if(state.auto>0) updateUI(); },1000);
+
+// ====================== FLOAT TEXT ======================
+function floatText(text,target){
+  const f=document.createElement("div"); f.className="float"; f.textContent=text; document.body.appendChild(f);
+  const rect=target.getBoundingClientRect();
+  f.style.left=rect.left+rect.width/2+"px"; f.style.top=rect.top+rect.height/2+"px";
+  const angle=Math.random()*360; const dist=50+Math.random()*20;
+  const rad=angle*Math.PI/180; const dx=Math.cos(rad)*dist; const dy=Math.sin(rad)*dist;
+  let t=0;
+  const anim=setInterval(()=>{
+    t+=0.03;
+    f.style.transform=`translate(${dx*t}px,${dy*t}px) scale(${1-t})`;
+    f.style.opacity=1-t;
+    if(t>=1){ clearInterval(anim); f.remove(); }
+  },16);
 }
 
-// Auto income
-setInterval(()=>{state.money+=state.auto;updateDisplay();},1000);
+// ====================== SPARK ======================
+function spawnSpark(x,y,color){
+  const s=document.createElement("div"); s.className="spark"; s.style.left=x+"px"; s.style.top=y+"px"; s.style.background=color; document.body.appendChild(s);
+  const dx=(Math.random()-0.5)*40; const dy=(Math.random()-0.5)*40; let t=0;
+  const anim=setInterval(()=>{
+    t+=0.04; s.style.transform=`translate(${dx*t}px,${dy*t}px)`; s.style.opacity=1-t;
+    if(t>=1){ clearInterval(anim); s.remove(); }
+  },16);
+}
 
-// Gamble Box
-document.getElementById('gambleBtn').onclick=()=>{
-  if(state.ascCoins<75) return;
+// ====================== ASCENSION ======================
+document.getElementById("ascendBtn").onclick=()=>{
+  document.getElementById("ascModalText").textContent="You will reset money, click, auto, and upgrades but gain 1 Ascension Coin for every $5,000,000. Continue?";
+  document.getElementById("modalBackdrop").style.display="flex";
+};
+document.getElementById("cancelAsc").onclick=()=>{ document.getElementById("modalBackdrop").style.display="none"; };
+document.getElementById("confirmAsc").onclick=()=>{
+  const gained = Math.floor(state.money/5000000); state.ascCoins+=gained;
+  state.money=0; state.perClick=1; state.auto=0;
+  clickUpgradesData.forEach(u=>{ u.level=0; u.cost=u.base*100; });
+  autoUpgradesData.forEach(u=>{ u.level=0; u.cost=u.base*150; });
+  document.getElementById("modalBackdrop").style.display="none"; updateUI(); saveGame(); floatText("Ascended +"+gained+" coins",document.getElementById("clickImg"));
+};
+
+// ====================== EXPORT / IMPORT ======================
+document.getElementById("exportBtn").onclick=()=>{
+  const s=JSON.stringify(state); navigator.clipboard.writeText(s); alert("Save copied to clipboard!");
+};
+document.getElementById("importBtn").onclick=()=>{
+  const s=prompt("Paste save data:"); if(s){ try{ state=JSON.parse(s); updateUI(); saveGame(); }catch(e){alert("Invalid save!");} }
+};
+
+// ====================== RESET ======================
+document.getElementById("resetBtn").onclick=()=>{
+  if(confirm("Reset everything?")){ localStorage.removeItem("judeClickSave"); location.reload(); }
+};
+
+// ====================== GAMBLE ======================
+document.getElementById("gambleBtn").onclick=()=>{
+  if(state.ascCoins<75){ alert("Not enough Asc Coins"); return; }
   state.ascCoins-=75;
-  const r=Math.random();
-  let gain=0;
-  if(r<0.5) gain=0;
-  else if(r<0.75) gain=100;
-  else if(r<0.9) gain=250;
-  else gain=state.perClick*10;
-  state.ascCoins+=gain;
-  updateDisplay();
-  alert(`You got ${gain} ASC!`);
+  const rand=Math.random();
+  let gained=0;
+  if(rand<0.1){ gained=state.perClick*10; state.perClick+=gained; }
+  else if(rand<0.25){ gained=250; state.ascCoins+=gained; }
+  else if(rand<0.5){ gained=100; state.ascCoins+=gained; }
+  else { gained=0; }
+  updateUI(); saveGame(); floatText("Gamble +" + gained, document.getElementById("clickImg"));
 };
 
-// Ads button
-adButton.onclick=()=>{state.money+=50000;updateDisplay();adButton.classList.add('disabled');setTimeout(()=>{adButton.classList.remove('disabled');},15000);};
-
-// Ascend
-ascendBtn.onclick=()=>{
-  if(state.money>=5000000){
-    state.ascCoins+=5;state.money=0;state.perClick=1;state.auto=0;state.clicks=0;updateDisplay();renderUpgrades();
-  }else{alert('Need $5,000,000 to Ascend');}
+// ====================== ADS ======================
+const adLinks=[
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
+"https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
+];
+let adIndex=0;
+document.getElementById("adButton").onclick=()=>{
+  state.money+=50000; updateUI(); saveGame();
+  document.getElementById("adStatus").textContent="Ad watched! +"+"50,000";
+  adIndex=(adIndex+1)%adLinks.length;
+  window.open(adLinks[adIndex], "_blank");
 };
 
-renderUpgrades();
-updateDisplay();
+// ====================== INIT ======================
+loadGame();
+updateUI();
 </script>
 </body>
 </html>

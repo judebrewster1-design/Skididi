@@ -16,29 +16,29 @@
   --bad: #ff6e6e;
   --card-radius: 12px;
 }
-html,body {height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff;}
-* {box-sizing:border-box;}
-.app {max-width:1100px;margin:10px auto;padding:12px;display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:900px){.app{grid-template-columns:360px 1fr 360px;align-items:start;}}
-header {grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 6px;}
-.brand {display:flex;align-items:center;gap:12px;}
-.logo {width:56px;height:56px;border-radius:12px;overflow:hidden;border:3px solid rgba(0,230,255,0.08);background:#071018;display:flex;align-items:center;justify-content:center;}
-.logo img {width:100%;height:100%;object-fit:cover;display:block;user-select:none;-webkit-user-drag:none;}
-.title {font-weight:700;letter-spacing:0.4px;font-size:18px;margin:0;}
-.subtitle {font-size:12px;color:var(--muted);margin-top:3px;}
-.top-stats {display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
-.stat {min-width:120px;background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:10px;padding:8px 10px;text-align:center;border:1px solid rgba(255,255,255,0.03);box-shadow:0 10px 30px rgba(0,0,0,0.6);}
-.stat .label {font-size:12px;color:var(--muted);}
-.stat .value {font-weight:800;color:var(--accent);margin-top:6px;font-size:16px;}
-.panel {background:var(--panel);border-radius:var(--card-radius);padding:12px;box-shadow:0 12px 32px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03);}
-.click-area {display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;}
-#clickImg {width:220px;height:220px;border-radius:14px;object-fit:cover;border:5px solid rgba(0,230,255,0.06);transition: transform .08s ease;touch-action: manipulation;-webkit-tap-highlight-color: transparent;cursor:pointer;}
-#clickImg:active {transform: scale(.96) rotate(-1deg);}
-.big-number {font-size:20px;font-weight:700;color:#fff;}
-.small {font-size:12px;color:var(--muted);}
-.controls {display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:6px;}
-button.btn {background:transparent;border:1px solid rgba(255,255,255,0.04);color:var(--accent);padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:700;transition: transform .12s ease, background .12s ease;}
-button.btn.secondary {background: rgba(255,255,255,0.02);color:#fff;}
+html,body { height:100%; margin:0; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background: linear-gradient(180deg,#050506 0%, #0c0f12 100%); color:#e8f7ff; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; }
+* { box-sizing: border-box; }
+.app { max-width:1100px; margin: 10px auto; padding: 12px; display: grid; grid-template-columns: 1fr; gap: 12px; }
+@media(min-width:900px){ .app { grid-template-columns: 360px 1fr 360px; align-items:start; } }
+header { grid-column: 1/-1; display:flex; align-items:center; justify-content:space-between; gap:12px; padding: 8px 6px; }
+.brand { display:flex; align-items:center; gap:12px; }
+.logo { width:56px; height:56px; border-radius:12px; overflow:hidden; border:3px solid rgba(0,230,255,0.08); background:#071018; display:flex;align-items:center;justify-content:center; }
+.logo img { width:100%; height:100%; object-fit:cover; display:block; user-select:none; -webkit-user-drag:none; }
+.title { font-weight:700; letter-spacing:0.4px; font-size:18px; margin:0; }
+.subtitle { font-size:12px; color:var(--muted); margin-top:3px; }
+.top-stats { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+.stat { min-width:120px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-radius:10px; padding:8px 10px; text-align:center; border:1px solid rgba(255,255,255,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+.stat .label { font-size:12px; color:var(--muted); }
+.stat .value { font-weight:800; color:var(--accent); margin-top:6px; font-size:16px; }
+.panel { background:var(--panel); border-radius:var(--card-radius); padding:12px; box-shadow: 0 12px 32px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+.click-area { display:flex; flex-direction:column; align-items:center; gap:10px; padding:16px; }
+#clickImg { width:220px; height:220px; border-radius:14px; object-fit:cover; border:5px solid rgba(0,230,255,0.06); transition: transform .08s ease; touch-action: manipulation; -webkit-tap-highlight-color: transparent; cursor:pointer; }
+#clickImg:active { transform: scale(.96) rotate(-1deg); }
+.big-number { font-size:20px; font-weight:700; color:#fff; }
+.small { font-size:12px; color:var(--muted); }
+.controls { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin-top:6px; }
+button.btn { background:transparent; border:1px solid rgba(255,255,255,0.04); color:var(--accent); padding:8px 12px; border-radius:8px; cursor:pointer; font-weight:700; transition: transform .12s ease, background .12s ease; }
+button.btn.secondary { background: rgba(255,255,255,0.02); color:#fff; }
 button.btn:active{ transform: translateY(1px); }
 button.btn.disabled{ opacity:.45; pointer-events:none; }
 .upgrades { display:grid; gap:12px; }
@@ -88,7 +88,7 @@ button.btn.disabled{ opacity:.45; pointer-events:none; }
   <div class="click-area" style="width:100%">
     <div class="big-number">Click the Jude</div>
     <img id="clickImg" src="IMG_7281.jpeg" alt="Click Jude" draggable="false" />
-    <div class="small">Tap or press Space / Enter (single presses only)</div>
+    <div class="small">Tap or press Space / Enter (no holding)</div>
     <div class="controls" style="margin-top:8px">
       <button class="btn secondary" id="exportBtn" type="button">Export Save</button>
       <button class="btn secondary" id="importBtn" type="button">Import Save</button>
@@ -166,215 +166,323 @@ button.btn.disabled{ opacity:.45; pointer-events:none; }
 <div id="floatContainer"></div>
 
 <script>
-// ====================== GAME STATE ======================
+// ================= GAME STATE =================
 let state = {
-  money:0, perClick:1, auto:0, ascCoins:0,
-  clickUpgrades:[], autoUpgrades:[], ascUpgrades:[], 
-  skins:[], activeSkin:null, gambleMultiplier:1,
-  lastKeyTime:0
+  money:0,
+  perClick:1,
+  auto:0,
+  ascCoins:0,
+  clickUpgrades:[],
+  autoUpgrades:[],
+  ascUpgrades:[],
+  skins:[],
+  activeSkin:"IMG_7281.jpeg",
+  gambleMultiplier:1,
+  inventory:[], // store purchased skins
+  lastKeyPressTime:0
 };
 
-// ====================== DATA ======================
-const clickUpgradesData = [];
-for(let i=1;i<=25;i++){ clickUpgradesData.push({name:"Click Power "+i, desc:"+"+i+" per click", cost:100*i, base:i, level:0}); }
-const autoUpgradesData = [];
-for(let i=1;i<=25;i++){ autoUpgradesData.push({name:"Auto Helper "+i, desc:"+"+i+" per sec", cost:150*i, base:i, level:0}); }
+// ================= DATA =================
+const clickUpgradesData = [
+  {name:"Finger Flick",desc:"+1 per click",cost:100,base:1,level:0},
+  {name:"Double Tap",desc:"+5 per click",cost:500,base:5,level:0},
+  {name:"Jude Smash",desc:"+25 per click",cost:2500,base:25,level:0},
+  {name:"Mega Slap",desc:"+100 per click",cost:12000,base:100,level:0},
+  {name:"Ultra Punch",desc:"+500 per click",cost:60000,base:500,level:0},
+  {name:"Turbo Jab",desc:"+2500 per click",cost:300000,base:2500,level:0},
+  {name:"Hyper Strike",desc:"+12500 per click",cost:1500000,base:12500,level:0},
+  {name:"Omega Hit",desc:"+62500 per click",cost:8000000,base:62500,level:0},
+  {name:"Godly Tap",desc:"+312500 per click",cost:50000000,base:312500,level:0},
+  {name:"Legendary Smash",desc:"+1,562,500 per click",cost:300000000,base:1562500,level:0},
+  {name:"Ultimate Pound",desc:"+7,812,500 per click",cost:2e9,base:7812500,level:0},
+  {name:"Infinite Punch",desc:"+39,062,500 per click",cost:1e10,base:39062500,level:0},
+  {name:"Mythic Jab",desc:"+195,312,500 per click",cost:5e10,base:195312500,level:0},
+  {name:"Celestial Hit",desc:"+976,562,500 per click",cost:2.5e11,base:976562500,level:0},
+  {name:"Divine Strike",desc:"+4,882,812,500 per click",cost:1e12,base:4882812500,level:0},
+  {name:"Titanic Slam",desc:"+2.44e10 per click",cost:5e12,base:24414062500,level:0},
+  {name:"Quantum Punch",desc:"+1.22e11 per click",cost:1e13,base:122070312500,level:0},
+  {name:"Cosmic Hit",desc:"+6.10e11 per click",cost:5e13,base:610351562500,level:0},
+  {name:"Galactic Slam",desc:"+3.05e12 per click",cost:1e14,base:3051757812500,level:0},
+  {name:"Multiverse Smash",desc:"+1.52e13 per click",cost:5e14,base:15258789062500,level:0},
+  {name:"Eternal Jab",desc:"+7.62e13 per click",cost:2e15,base:76293945312500,level:0},
+  {name:"Infinite Smash",desc:"+3.81e14 per click",cost:1e16,base:381469726562500,level:0},
+  {name:"Timeless Strike",desc:"+1.90e15 per click",cost:5e16,base:1907348632812500,level:0},
+  {name:"Omnipotent Hit",desc:"+9.53e15 per click",cost:2e17,base:9536743164062500,level:0},
+  {name:"Jude God Punch",desc:"+4.77e16 per click",cost:5e17,base:47705078125000000,level:0}
+];
+
+const autoUpgradesData = [
+  {name:"Tap Assistant",desc:"+1/sec",cost:200,base:1,level:0},
+  {name:"Jude Robot",desc:"+5/sec",cost:1000,base:5,level:0},
+  {name:"Auto Clicker",desc:"+25/sec",cost:5000,base:25,level:0},
+  {name:"Mega Automator",desc:"+100/sec",cost:25000,base:100,level:0},
+  {name:"Hyper Machine",desc:"+500/sec",cost:120000,base:500,level:0},
+  {name:"Quantum Bot",desc:"+2500/sec",cost:600000,base:2500,level:0},
+  {name:"Galactic Automaton",desc:"+12500/sec",cost:3e6,base:12500,level:0},
+  {name:"Infinite Droid",desc:"+62500/sec",cost:1.5e7,base:62500,level:0},
+  {name:"Titan Machine",desc:"+312500/sec",cost:7.5e7,base:312500,level:0},
+  {name:"Cosmic Clicker",desc:"+1.56e6/sec",cost:4e8,base:1562500,level:0},
+  {name:"Ultimate Helper",desc:"+7.81e6/sec",cost:2e9,base:7812500,level:0},
+  {name:"Mythic Engine",desc:"+3.91e7/sec",cost:1e10,base:39062500,level:0},
+  {name:"Ascendant Bot",desc:"+1.95e8/sec",cost:5e10,base:195312500,level:0},
+  {name:"Divine Assistant",desc:"+9.76e8/sec",cost:2.5e11,base:976562500,level:0},
+  {name:"Omni Machine",desc:"+4.88e9/sec",cost:1e12,base:4882812500,level:0},
+  {name:"Eternal Clicker",desc:"+2.44e10/sec",cost:5e12,base:24414062500,level:0},
+  {name:"Godly Helper",desc:"+1.22e11/sec",cost:1e13,base:122070312500,level:0},
+  {name:"Quantum Automaton",desc:"+6.10e11/sec",cost:5e13,base:610351562500,level:0},
+  {name:"Cosmic Engine",desc:"+3.05e12/sec",cost:1e14,base:3051757812500,level:0},
+  {name:"Galactic Bot",desc:"+1.52e13/sec",cost:5e14,base:15258789062500,level:0},
+  {name:"Multiverse Helper",desc:"+7.62e13/sec",cost:2e15,base:76293945312500,level:0},
+  {name:"Eternal Engine",desc:"+3.81e14/sec",cost:1e16,base:381469726562500,level:0},
+  {name:"Infinite Bot",desc:"+1.90e15/sec",cost:5e16,base:1907348632812500,level:0},
+  {name:"Omnipotent Automaton",desc:"+9.53e15/sec",cost:2e17,base:9536743164062500,level:0},
+  {name:"Jude God Engine",desc:"+4.77e16/sec",cost:5e17,base:47705078125000000,level:0}
+];
+
 const ascUpgradesData = [
-  {name:"Asc Click +10%", desc:"Increase click by 10%", cost:5, level:0, type:"click"}, 
-  {name:"Asc Auto +10%", desc:"Increase auto by 10%", cost:5, level:0, type:"auto"}, 
-  {name:"Asc Click +25%", desc:"Increase click by 25%", cost:15, level:0, type:"click"}, 
-  {name:"Asc Auto +25%", desc:"Increase auto by 25%", cost:15, level:0, type:"auto"}, 
-  {name:"Asc Global x2", desc:"Double all gains", cost:50, level:0, type:"both"}
-];
-const skinData = [
-  {name:"Default",img:"IMG_7281.jpeg",cost:0},
-  {name:"Purple Glow",img:"IMG_6817.jpeg",cost:50},
-  {name:"Blue Face",img:"IMG_6818.jpeg",cost:75},
-  {name:"Red Face",img:"IMG_6819.jpeg",cost:100}
+  {name:"Eternal Clicks",desc:"+10% per click",cost:1,level:0,mult:0.1},
+  {name:"Infinite Autos",desc:"+10% auto/sec",cost:1,level:0,mult:0.1},
+  {name:"Hyper Gain",desc:"+20% money from ads",cost:2,level:0,mult:0.2},
+  {name:"Godly Luck",desc:"Increase rare drops",cost:3,level:0,mult:0.15},
+  {name:"Ascend Mastery",desc:"+25% all upgrade efficiency",cost:5,level:0,mult:0.25}
 ];
 
-// ====================== SAVE / LOAD ======================
-function saveGame(){ localStorage.setItem("judeClickSave",JSON.stringify(state)); }
-function loadGame(){ 
-  const s = JSON.parse(localStorage.getItem("judeClickSave"));
-  if(s){ state = s; updateUI(); }
+const skinsData = [
+  {name:"Classic Jude",img:"IMG_7281.jpeg",cost:0,rare:false},
+  {name:"Fire Jude",img:"fire.jpeg",cost:5000,rare:false},
+  {name:"Ice Jude",img:"ice.jpeg",cost:10000,rare:false},
+  {name:"Golden Jude",img:"gold.jpeg",cost:50000,rare:true},
+  {name:"Shadow Jude",img:"shadow.jpeg",cost:75000,rare:true}
+];
+
+// ================= DOM =================
+const moneyDisplay = document.getElementById("moneyDisplay");
+const perClickDisplay = document.getElementById("perClickDisplay");
+const autoDisplay = document.getElementById("autoDisplay");
+const ascDisplay = document.getElementById("ascDisplay");
+const clickImg = document.getElementById("clickImg");
+const clickGrid = document.getElementById("clickGrid");
+const autoGrid = document.getElementById("autoGrid");
+const ascGrid = document.getElementById("ascGrid");
+const skinGrid = document.getElementById("skinGrid");
+const ascendBtn = document.getElementById("ascendBtn");
+const ascCoinsEl = document.getElementById("ascCoins");
+const gambleBtn = document.getElementById("gambleBtn");
+const adButton = document.getElementById("adButton");
+const adStatus = document.getElementById("adStatus");
+const modalBackdrop = document.getElementById("modalBackdrop");
+const confirmAsc = document.getElementById("confirmAsc");
+const cancelAsc = document.getElementById("cancelAsc");
+const exportBtn = document.getElementById("exportBtn");
+const importBtn = document.getElementById("importBtn");
+const resetBtn = document.getElementById("resetBtn");
+const floatContainer = document.getElementById("floatContainer");
+
+// ================= UTILS =================
+function format(num){return num>1e9?(num/1e9).toFixed(2)+"B":num>1e6?(num/1e6).toFixed(2)+"M":num>1e3?(num/1e3).toFixed(2)+"K":Math.floor(num);}
+function updateDisplay(){
+  moneyDisplay.textContent = "$"+format(state.money);
+  perClickDisplay.textContent = format(state.perClick);
+  autoDisplay.textContent = format(state.auto);
+  ascDisplay.textContent = format(state.ascCoins);
+  ascCoinsEl.textContent = state.ascCoins;
+  if(state.money>=5e6) ascendBtn.style.display="block"; else ascendBtn.style.display="none";
 }
+function saveGame(){localStorage.setItem("clickAJude",JSON.stringify(state));}
+function loadGame(){let s=localStorage.getItem("clickAJude");if(s){state=JSON.parse(s);updateDisplay();renderAll();}}
+function addFloat(txt,x,y,color="#0ff"){let f=document.createElement("div");f.className="float";f.textContent=txt;f.style.left=x+"px";f.style.top=y+"px";f.style.color=color;floatContainer.appendChild(f);setTimeout(()=>f.remove(),1200);}
+function randomChance(p){return Math.random()<p;}
 
-// ====================== UI UPDATE ======================
-function updateUI(){
-  document.getElementById("moneyDisplay").textContent="$"+formatNum(state.money);
-  document.getElementById("perClickDisplay").textContent=formatNum(state.perClick*state.gambleMultiplier);
-  document.getElementById("autoDisplay").textContent=formatNum(state.auto);
-  document.getElementById("ascDisplay").textContent=formatNum(state.ascCoins);
-  document.getElementById("ascCoins").textContent=formatNum(state.ascCoins);
-  renderGrid("clickGrid",clickUpgradesData,"click");
-  renderGrid("autoGrid",autoUpgradesData,"auto");
-  renderGrid("ascGrid",ascUpgradesData,"asc");
-  renderSkins();
-  if(state.money>=5000000) document.getElementById("ascendBtn").style.display="block";
-  else document.getElementById("ascendBtn").style.display="none";
-}
-
-function formatNum(n){ return Math.floor(n).toLocaleString(); }
-
-// ====================== RENDER GRIDS ======================
-function renderGrid(containerId,data,type){
-  const container=document.getElementById(containerId);
-  container.innerHTML="";
-  data.forEach((u,i)=>{
+// ================= RENDER =================
+function renderGrid(gridEl,dataArr,isClick){
+  gridEl.innerHTML="";
+  dataArr.forEach((u,i)=>{
     const div=document.createElement("div");
     div.className="upgrade";
-    div.innerHTML=`<div class="meta"><div class="title">${u.name} (${u.level})</div><div class="desc">${u.desc}</div></div><div class="cost">$${formatNum(u.cost)}</div>`;
-    div.onclick=()=>buyUpgrade(type,i);
-    if(type!=="asc" && state.money<u.cost) div.classList.add("disabled");
-    if(type==="asc" && state.ascCoins<u.cost) div.classList.add("disabled");
-    container.appendChild(div);
+    const meta=document.createElement("div");meta.className="meta";
+    const title=document.createElement("div");title.className="title";title.textContent=u.name+" Lv."+u.level;
+    const desc=document.createElement("div");desc.className="desc";desc.textContent=u.desc;
+    meta.appendChild(title);meta.appendChild(desc);
+    const costEl=document.createElement("div");costEl.className="cost";costEl.textContent="$"+format(u.cost);
+    div.appendChild(meta);div.appendChild(costEl);
+    div.addEventListener("click",()=>{
+      if(isClick){
+        if(state.money>=u.cost){
+          state.money-=u.cost;
+          u.level++;
+          state.perClick+=u.base*(1+(state.ascUpgrades[0]?.mult||0));
+          u.cost=Math.floor(u.cost*1.35);
+          updateDisplay();renderGrid(gridEl,dataArr,isClick);
+          addFloat("+"+format(u.base),clickImg.offsetLeft+110,clickImg.offsetTop+110);
+        }
+      } else {
+        if(state.money>=u.cost){
+          state.money-=u.cost;
+          u.level++;
+          state.auto+=u.base*(1+(state.ascUpgrades[1]?.mult||0));
+          u.cost=Math.floor(u.cost*1.35);
+          updateDisplay();renderGrid(gridEl,dataArr,isClick);
+          addFloat("Auto +"+format(u.base),clickImg.offsetLeft+110,clickImg.offsetTop+110);
+        }
+      }
+    });
+    gridEl.appendChild(div);
   });
 }
 
-function renderSkins(){
-  const container=document.getElementById("skinGrid");
-  container.innerHTML="";
-  skinData.forEach((s,i)=>{
+function renderAscGrid(){
+  ascGrid.innerHTML="";
+  ascUpgradesData.forEach((u,i)=>{
     const div=document.createElement("div");
     div.className="upgrade";
-    div.innerHTML=`<div class="meta"><div class="title">${s.name}</div><div class="desc">${s.cost>0?"$"+s.cost:"Free"}</div></div>`;
-    div.onclick=()=>buySkin(i);
-    if(state.money<s.cost && s.cost>0) div.classList.add("disabled");
-    if(state.activeSkin===i) div.classList.add("glow");
-    container.appendChild(div);
+    const meta=document.createElement("div");meta.className="meta";
+    const title=document.createElement("div");title.className="title";title.textContent=u.name+" Lv."+u.level;
+    const desc=document.createElement("div");desc.className="desc";desc.textContent=u.desc;
+    meta.appendChild(title);meta.appendChild(desc);
+    const costEl=document.createElement("div");costEl.className="cost";costEl.textContent=u.cost+" ASC";
+    div.appendChild(meta);div.appendChild(costEl);
+    div.addEventListener("click",()=>{
+      if(state.ascCoins>=u.cost){
+        state.ascCoins-=u.cost;
+        u.level++;
+        state.ascUpgrades[i]=u;
+        updateDisplay();renderAscGrid();
+      }
+    });
+    ascGrid.appendChild(div);
   });
 }
 
-// ====================== BUY / CLICK ======================
-function buyUpgrade(type,index){
-  let u;
-  if(type==="click"){ u=clickUpgradesData[index]; if(state.money>=u.cost){ state.money-=u.cost; u.level++; state.perClick+=u.base; u.cost=Math.floor(u.cost*1.45); updateUI(); saveGame(); floatText("+"+u.base,document.getElementById("clickImg")); } }
-  else if(type==="auto"){ u=autoUpgradesData[index]; if(state.money>=u.cost){ state.money-=u.cost; u.level++; state.auto+=u.base; u.cost=Math.floor(u.cost*1.45); updateUI(); saveGame(); floatText("+"+u.base+"/s",document.getElementById("clickImg")); } }
-  else if(type==="asc"){ u=ascUpgradesData[index]; if(state.ascCoins>=u.cost){ state.ascCoins-=u.cost; u.level++; applyAscension(u); updateUI(); saveGame(); floatText("Ascension Bought!",document.getElementById("clickImg")); } }
+function renderSkinGrid(){
+  skinGrid.innerHTML="";
+  skinsData.forEach((s)=>{
+    const div=document.createElement("div");div.className="upgrade";
+    const meta=document.createElement("div");meta.className="meta";
+    const title=document.createElement("div");title.className="title";title.textContent=s.name;
+    const desc=document.createElement("div");desc.className="desc";desc.textContent=s.rare?"Rare":"Normal";
+    meta.appendChild(title);meta.appendChild(desc);
+    const costEl=document.createElement("div");costEl.className="cost";costEl.textContent=s.cost>0?"$"+format(s.cost):"Free";
+    div.appendChild(meta);div.appendChild(costEl);
+    div.addEventListener("click",()=>{
+      if(state.money>=s.cost && !state.inventory.includes(s.img)){
+        state.money-=s.cost;
+        state.inventory.push(s.img);
+        state.activeSkin=s.img;
+        clickImg.src=s.img;
+        updateDisplay();
+      } else if(state.inventory.includes(s.img)){
+        state.activeSkin=s.img;
+        clickImg.src=s.img;
+      }
+    });
+    skinGrid.appendChild(div);
+  });
 }
 
-function buySkin(index){
-  const s = skinData[index];
-  if(state.money>=s.cost){
-    state.money-=s.cost;
-    state.activeSkin=index;
-    document.getElementById("clickImg").src=s.img;
-    updateUI(); saveGame();
-  }
-}
-
-function applyAscension(u){
-  if(u.type==="click") state.perClick+=Math.floor(state.perClick*u.level*0.1);
-  else if(u.type==="auto") state.auto+=Math.floor(state.auto*u.level*0.1);
-  else if(u.type==="both"){ state.perClick*=2; state.auto*=2; }
-}
-
-// ====================== CLICK HANDLER ======================
-document.getElementById("clickImg").addEventListener("click",()=>{
-  state.money+=state.perClick*state.gambleMultiplier; 
-  spawnSpark(event.clientX,event.clientY,"#0ff");
-  updateUI(); saveGame(); 
+// ================= CLICK =================
+clickImg.addEventListener("click",()=>{
+  state.money+=state.perClick*(1+(state.ascUpgrades[0]?.mult||0));
+  updateDisplay();
+  addFloat("+"+format(state.perClick),clickImg.offsetLeft+110,clickImg.offsetTop+110);
 });
 
-// prevent auto-hold
-let spacePressed=false;
-document.addEventListener("keydown",(e)=>{
+// prevent holding key auto-click
+document.addEventListener("keydown",e=>{
   const now=Date.now();
-  if((e.code==="Space"||e.code==="Enter") && now-state.lastKeyTime>100){ 
-    state.money+=state.perClick*state.gambleMultiplier; updateUI(); saveGame(); spawnSpark(window.innerWidth/2,window.innerHeight/2,"#0ff"); 
-    state.lastKeyTime=now;
+  if((e.code==="Space"||e.code==="Enter") && now-state.lastKeyPressTime>150){
+    state.money+=state.perClick*(1+(state.ascUpgrades[0]?.mult||0));
+    updateDisplay();
+    addFloat("+"+format(state.perClick),clickImg.offsetLeft+110,clickImg.offsetTop+110);
+    state.lastKeyPressTime=now;
   }
 });
 
-// ====================== AUTO EARN ======================
-setInterval(()=>{ state.money+=state.auto; if(state.auto>0) updateUI(); },1000);
+// ================= AUTO INCREMENT =================
+setInterval(()=>{
+  if(state.auto>0){
+    state.money+=state.auto*(1+(state.ascUpgrades[1]?.mult||0));
+    updateDisplay();
+  }
+},1000);
 
-// ====================== FLOAT TEXT ======================
-function floatText(text,target){
-  const f=document.createElement("div"); f.className="float"; f.textContent=text; document.body.appendChild(f);
-  const rect=target.getBoundingClientRect();
-  f.style.left=rect.left+rect.width/2+"px"; f.style.top=rect.top+rect.height/2+"px";
-  const angle=Math.random()*360; const dist=50+Math.random()*20;
-  const rad=angle*Math.PI/180; const dx=Math.cos(rad)*dist; const dy=Math.sin(rad)*dist;
-  let t=0;
-  const anim=setInterval(()=>{
-    t+=0.03;
-    f.style.transform=`translate(${dx*t}px,${dy*t}px) scale(${1-t})`;
-    f.style.opacity=1-t;
-    if(t>=1){ clearInterval(anim); f.remove(); }
-  },16);
-}
+// ================= ASCEND =================
+ascendBtn.addEventListener("click",()=>{
+  modalBackdrop.style.display="flex";
+  let potential= Math.floor(state.money/1e6);
+  document.getElementById("ascModalText").textContent=`You will earn ${potential} Asc Coins`;
+});
 
-// ====================== SPARK ======================
-function spawnSpark(x,y,color){
-  const s=document.createElement("div"); s.className="spark"; s.style.left=x+"px"; s.style.top=y+"px"; s.style.background=color; document.body.appendChild(s);
-  const dx=(Math.random()-0.5)*40; const dy=(Math.random()-0.5)*40; let t=0;
-  const anim=setInterval(()=>{
-    t+=0.04; s.style.transform=`translate(${dx*t}px,${dy*t}px)`; s.style.opacity=1-t;
-    if(t>=1){ clearInterval(anim); s.remove(); }
-  },16);
-}
+cancelAsc.addEventListener("click",()=>{modalBackdrop.style.display="none";});
+confirmAsc.addEventListener("click",()=>{
+  const coins=Math.floor(state.money/1e6);
+  state.ascCoins+=coins;
+  state.money=0;
+  state.perClick=1;
+  state.auto=0;
+  clickUpgradesData.forEach(u=>{u.level=0; u.cost=u.base*100;});
+  autoUpgradesData.forEach(u=>{u.level=0; u.cost=u.base*200;});
+  modalBackdrop.style.display="none";
+  renderAll();
+  updateDisplay();
+});
 
-// ====================== ASCENSION ======================
-document.getElementById("ascendBtn").onclick=()=>{
-  document.getElementById("ascModalText").textContent="You will reset money, click, auto, and upgrades but gain 1 Ascension Coin for every $5,000,000. Continue?";
-  document.getElementById("modalBackdrop").style.display="flex";
-};
-document.getElementById("cancelAsc").onclick=()=>{ document.getElementById("modalBackdrop").style.display="none"; };
-document.getElementById("confirmAsc").onclick=()=>{
-  const gained = Math.floor(state.money/5000000); state.ascCoins+=gained;
-  state.money=0; state.perClick=1; state.auto=0;
-  clickUpgradesData.forEach(u=>{ u.level=0; u.cost=u.base*100; });
-  autoUpgradesData.forEach(u=>{ u.level=0; u.cost=u.base*150; });
-  document.getElementById("modalBackdrop").style.display="none"; updateUI(); saveGame(); floatText("Ascended +"+gained+" coins",document.getElementById("clickImg"));
-};
-
-// ====================== EXPORT / IMPORT ======================
-document.getElementById("exportBtn").onclick=()=>{
-  const s=JSON.stringify(state); navigator.clipboard.writeText(s); alert("Save copied to clipboard!");
-};
-document.getElementById("importBtn").onclick=()=>{
-  const s=prompt("Paste save data:"); if(s){ try{ state=JSON.parse(s); updateUI(); saveGame(); }catch(e){alert("Invalid save!");} }
-};
-
-// ====================== RESET ======================
-document.getElementById("resetBtn").onclick=()=>{
-  if(confirm("Reset everything?")){ localStorage.removeItem("judeClickSave"); location.reload(); }
-};
-
-// ====================== GAMBLE ======================
-document.getElementById("gambleBtn").onclick=()=>{
-  if(state.ascCoins<75){ alert("Not enough Asc Coins"); return; }
+// ================= GAMBLE =================
+gambleBtn.addEventListener("click",()=>{
+  if(state.ascCoins<75) return;
   state.ascCoins-=75;
-  const rand=Math.random();
-  let gained=0;
-  if(rand<0.1){ gained=state.perClick*10; state.perClick+=gained; }
-  else if(rand<0.25){ gained=250; state.ascCoins+=gained; }
-  else if(rand<0.5){ gained=100; state.ascCoins+=gained; }
-  else { gained=0; }
-  updateUI(); saveGame(); floatText("Gamble +" + gained, document.getElementById("clickImg"));
-};
+  let rand=Math.random();
+  let earned=0;
+  if(rand<0.5) earned=0;
+  else if(rand<0.75) earned=100;
+  else if(rand<0.9) earned=250;
+  else {earned=10*state.perClick; addFloat("SUPER RARE!",clickImg.offsetLeft+110,clickImg.offsetTop+110,"#ff0");}
+  state.money+=earned;
+  addFloat("Gamble +"+format(earned),clickImg.offsetLeft+110,clickImg.offsetTop+110,"#ff0");
+  updateDisplay();
+});
 
-// ====================== ADS ======================
+// ================= ADS =================
 const adLinks=[
-"https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
-"https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
-"https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
-"https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
-"https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69146",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69339",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=66573",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=69145",
+  "https://singingfiles.com/show.php?l=0&u=2434684&id=68846"
 ];
 let adIndex=0;
-document.getElementById("adButton").onclick=()=>{
-  state.money+=50000; updateUI(); saveGame();
-  document.getElementById("adStatus").textContent="Ad watched! +"+"50,000";
+adButton.addEventListener("click",()=>{
+  state.money+=50000*(1+(state.ascUpgrades[2]?.mult||0));
+  adStatus.textContent=`Watched ad from ${adIndex+1}`;
   adIndex=(adIndex+1)%adLinks.length;
-  window.open(adLinks[adIndex], "_blank");
-};
+  updateDisplay();
+});
 
-// ====================== INIT ======================
-loadGame();
-updateUI();
+// ================= SAVE / LOAD =================
+exportBtn.addEventListener("click",()=>{
+  const dataStr = "data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(state));
+  const dlAnchorElem = document.createElement('a');
+  dlAnchorElem.setAttribute("href",dataStr);
+  dlAnchorElem.setAttribute("download","clickAJude_save.json");
+  dlAnchorElem.click();
+});
+importBtn.addEventListener("click",()=>{
+  const input=document.createElement("input");input.type="file";input.accept=".json";
+  input.onchange=e=>{
+    const file=e.target.files[0];
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      state=JSON.parse(ev.target.result);
+      updateDisplay(); renderAll();
+    };
+    reader.readAsText(file);
+  };input.click();
+});
+resetBtn.addEventListener("click",()=>{localStorage.removeItem("clickAJude"); location.reload();});
+
+// ================= RENDER ALL =================
+function renderAll(){renderGrid(clickGrid,clickUpgradesData,true);renderGrid(autoGrid,autoUpgradesData,false);renderAscGrid();renderSkinGrid();}
+loadGame(); renderAll(); updateDisplay();
+setInterval(saveGame,5000);
 </script>
 </body>
 </html>
